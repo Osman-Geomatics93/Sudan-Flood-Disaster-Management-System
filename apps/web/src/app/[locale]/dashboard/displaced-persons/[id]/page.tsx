@@ -35,7 +35,7 @@ export default function DisplacedPersonDetailPage() {
   const router = useRouter();
 
   const personQuery = trpc.displacedPerson.getById.useQuery({ id });
-  const sheltersQuery = trpc.shelter.list.useQuery({ page: 1, limit: 200, hasCapacity: true });
+  const sheltersQuery = trpc.shelter.list.useQuery({ page: 1, limit: 100, hasCapacity: true });
   const utils = trpc.useUtils();
 
   // Assign shelter state

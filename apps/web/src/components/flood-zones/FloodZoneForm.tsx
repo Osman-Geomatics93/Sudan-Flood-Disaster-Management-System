@@ -89,8 +89,7 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
           <select
             value={data.stateId}
             onChange={(e) => {
-              update('stateId', e.target.value);
-              update('localityId', '');
+              onChange({ ...data, stateId: e.target.value, localityId: '' });
             }}
             className="w-full rounded-md border bg-background px-3 py-2 text-sm"
           >
