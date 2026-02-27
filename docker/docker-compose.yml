@@ -1,0 +1,158 @@
+# ============================================================================
+# Deliverable G — SudanFlood Local Development Docker Compose
+# ============================================================================
+# Usage:
+#   docker compose up -d          # Start all services
+#   docker compose logs -f        # Tail logs
+#   docker compose down           # Stop all services
+#   docker compose down -v        # Stop + remove volumes (fresh start)
+# ============================================================================
+
+services:
+  # --------------------------------------------------------------------------
+  # PostgreSQL 16 + PostGIS 3.4
+  # --------------------------------------------------------------------------
+  postgres:
+    image: postgis/postgis:16-3.4-alpine
+    container_name: sudanflood-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sudanflood}
+      POSTGRES_USER: ${POSTGRES_USER:-sudanflood}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sudanflood_dev_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sudanflood} -d ${POSTGRES_DB:-sudanflood}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - sudanflood-network
+
+  # --------------------------------------------------------------------------
+  # Redis 7 (Caching + BullMQ Queues + Rate Limiting)
+  # --------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: sudanflood-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: >
+      redis-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+      --appendfsync everysec
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - sudanflood-network
+
+  # --------------------------------------------------------------------------
+  # MinIO (S3-Compatible Object Storage)
+  # --------------------------------------------------------------------------
+  minio:
+    image: minio/minio:latest
+    container_name: sudanflood-minio
+    restart: unless-stopped
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-sudanflood}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-sudanflood_minio_password}
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - sudanflood-network
+
+  # --------------------------------------------------------------------------
+  # MinIO Client — Auto-create default buckets on startup
+  # --------------------------------------------------------------------------
+  minio-setup:
+    image: minio/mc:latest
+    container_name: sudanflood-minio-setup
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set sudanflood http://minio:9000 $${MINIO_ROOT_USER:-sudanflood} $${MINIO_ROOT_PASSWORD:-sudanflood_minio_password};
+      mc mb sudanflood/uploads --ignore-existing;
+      mc mb sudanflood/uav-imagery --ignore-existing;
+      mc mb sudanflood/exports --ignore-existing;
+      mc mb sudanflood/avatars --ignore-existing;
+      mc anonymous set download sudanflood/avatars;
+      echo 'MinIO buckets created successfully.';
+      exit 0;
+      "
+    networks:
+      - sudanflood-network
+
+  # --------------------------------------------------------------------------
+  # pgAdmin 4 (Database Management UI)
+  # --------------------------------------------------------------------------
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: sudanflood-pgadmin
+    restart: unless-stopped
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@sudanflood.dev}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-O", "-", "http://localhost:80/misc/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - sudanflood-network
+
+# ============================================================================
+# Named Volumes
+# ============================================================================
+volumes:
+  postgres_data:
+    name: sudanflood-postgres-data
+  redis_data:
+    name: sudanflood-redis-data
+  minio_data:
+    name: sudanflood-minio-data
+  pgadmin_data:
+    name: sudanflood-pgadmin-data
+
+# ============================================================================
+# Network
+# ============================================================================
+networks:
+  sudanflood-network:
+    name: sudanflood-network
+    driver: bridge
