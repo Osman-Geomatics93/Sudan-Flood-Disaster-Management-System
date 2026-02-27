@@ -66,17 +66,17 @@ export default function CreateEmergencyCallPage() {
   };
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
         <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-bold">{t('createCall')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('createCall')}</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="rounded-lg border bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold">{t('callerInfo')}</h2>
+        <div className="card">
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('callerInfo')}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('callerName')}</label>
@@ -84,7 +84,7 @@ export default function CreateEmergencyCallPage() {
                 type="text"
                 value={form.callerName}
                 onChange={(e) => handleChange('callerName', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
                 placeholder={t('callerName')}
               />
             </div>
@@ -94,7 +94,7 @@ export default function CreateEmergencyCallPage() {
                 type="tel"
                 value={form.callerPhone}
                 onChange={(e) => handleChange('callerPhone', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
                 placeholder="+249..."
                 required
               />
@@ -105,21 +105,21 @@ export default function CreateEmergencyCallPage() {
                 type="text"
                 value={form.callerAddress}
                 onChange={(e) => handleChange('callerAddress', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
           </div>
         </div>
 
-        <div className="rounded-lg border bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold">{t('callDetails')}</h2>
+        <div className="card">
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('callDetails')}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('number')} *</label>
               <select
                 value={form.callNumber}
                 onChange={(e) => handleChange('callNumber', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               >
                 <option value="999">999</option>
                 <option value="112">112</option>
@@ -130,7 +130,7 @@ export default function CreateEmergencyCallPage() {
               <select
                 value={form.urgency}
                 onChange={(e) => handleChange('urgency', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               >
                 {CALL_URGENCIES.map((u) => (
                   <option key={u} value={u}>{t(`urgency_${u}`)}</option>
@@ -144,7 +144,7 @@ export default function CreateEmergencyCallPage() {
                 min="0"
                 value={form.personsAtRisk}
                 onChange={(e) => handleChange('personsAtRisk', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
             <div>
@@ -152,7 +152,7 @@ export default function CreateEmergencyCallPage() {
               <select
                 value={form.stateId}
                 onChange={(e) => handleChange('stateId', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               >
                 <option value="">{t('selectState')}</option>
                 {(statesQuery.data ?? []).map((s) => (
@@ -163,8 +163,8 @@ export default function CreateEmergencyCallPage() {
           </div>
         </div>
 
-        <div className="rounded-lg border bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold">{t('description')}</h2>
+        <div className="card">
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('description')}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('descriptionEn')}</label>
@@ -172,7 +172,7 @@ export default function CreateEmergencyCallPage() {
                 rows={4}
                 value={form.description_en}
                 onChange={(e) => handleChange('description_en', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
             <div>
@@ -182,7 +182,7 @@ export default function CreateEmergencyCallPage() {
                 dir="rtl"
                 value={form.description_ar}
                 onChange={(e) => handleChange('description_ar', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
           </div>
@@ -196,14 +196,14 @@ export default function CreateEmergencyCallPage() {
           <button
             type="submit"
             disabled={createMutation.isPending}
-            className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+            className="btn-primary disabled:opacity-50"
           >
             {createMutation.isPending ? t('creating') : t('createCall')}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-md border px-6 py-2 text-sm hover:bg-accent"
+            className="btn-secondary"
           >
             {tCommon('cancel')}
           </button>

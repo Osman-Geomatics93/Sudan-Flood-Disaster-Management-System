@@ -40,12 +40,12 @@ export default function EmergencyCallsPage() {
   });
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <Link
           href="/dashboard/emergency-calls/create"
-          className="flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          className="btn-primary flex items-center gap-1.5"
         >
           <Plus className="h-4 w-4" />
           {t('create')}
@@ -56,7 +56,7 @@ export default function EmergencyCallsPage() {
         <select
           value={urgency}
           onChange={(e) => { setUrgency(e.target.value); setPage(1); }}
-          className="rounded-md border bg-card px-3 py-2 text-sm"
+          className="input-field"
         >
           <option value="">{t('allUrgencies')}</option>
           {CALL_URGENCIES.map((u) => (
@@ -66,7 +66,7 @@ export default function EmergencyCallsPage() {
         <select
           value={status}
           onChange={(e) => { setStatus(e.target.value); setPage(1); }}
-          className="rounded-md border bg-card px-3 py-2 text-sm"
+          className="input-field"
         >
           <option value="">{t('allStatuses')}</option>
           {CALL_STATUSES.map((s) => (
@@ -90,8 +90,8 @@ export default function EmergencyCallsPage() {
       {listQuery.data && listQuery.data.items.length > 0 && (
         <>
           <div className="overflow-x-auto rounded-lg border">
-            <table className="w-full text-sm">
-              <thead className="border-b bg-muted/50">
+            <table className="table-premium w-full">
+              <thead className="table-premium thead">
                 <tr>
                   <th className="px-4 py-3 text-start font-medium">{t('callCode')}</th>
                   <th className="px-4 py-3 text-start font-medium">{t('caller')}</th>
@@ -102,13 +102,13 @@ export default function EmergencyCallsPage() {
                   <th className="px-4 py-3 text-start font-medium">{t('receivedAt')}</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="table-premium tbody">
                 {listQuery.data.items.map((call) => (
                   <tr key={call.id} className="border-b hover:bg-muted/30">
                     <td className="px-4 py-3">
                       <Link
                         href={`/dashboard/emergency-calls/${call.id}`}
-                        className="font-mono text-primary hover:underline"
+                        className="font-mono text-primary dark:text-primary hover:underline"
                       >
                         {call.callCode}
                       </Link>
@@ -124,12 +124,12 @@ export default function EmergencyCallsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${URGENCY_STYLES[call.urgency] ?? ''}`}>
+                      <span className={`badge ${URGENCY_STYLES[call.urgency] ?? ''}`}>
                         {call.urgency.replace('_', ' ')}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[call.status] ?? ''}`}>
+                      <span className={`badge ${STATUS_STYLES[call.status] ?? ''}`}>
                         {call.status.replace('_', ' ')}
                       </span>
                     </td>

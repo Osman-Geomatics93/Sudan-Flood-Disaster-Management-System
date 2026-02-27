@@ -95,14 +95,14 @@ export default function EmergencyCallDetailPage() {
   };
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold">{t('callDetail')}</h1>
+            <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('callDetail')}</h1>
             <p className="font-mono text-sm text-muted-foreground">{call.callCode}</p>
           </div>
         </div>
@@ -112,8 +112,8 @@ export default function EmergencyCallDetailPage() {
         {/* Main info */}
         <div className="space-y-6 lg:col-span-2">
           {/* Caller info card */}
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t('callerInfo')}</h2>
+          <div className="card">
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('callerInfo')}</h2>
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <dt className="text-sm text-muted-foreground">{t('callerName')}</dt>
@@ -134,8 +134,8 @@ export default function EmergencyCallDetailPage() {
 
           {/* Description card */}
           {(call.description_en || call.description_ar) && (
-            <div className="rounded-lg border bg-card p-6">
-              <h2 className="mb-4 text-lg font-semibold">{t('description')}</h2>
+            <div className="card">
+              <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('description')}</h2>
               {call.description_en && (
                 <p className="mb-2 text-sm">{call.description_en}</p>
               )}
@@ -147,8 +147,8 @@ export default function EmergencyCallDetailPage() {
 
           {/* Notes card */}
           {call.notes && (
-            <div className="rounded-lg border bg-card p-6">
-              <h2 className="mb-4 text-lg font-semibold">{t('notes')}</h2>
+            <div className="card">
+              <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('notes')}</h2>
               <p className="whitespace-pre-wrap text-sm">{call.notes}</p>
             </div>
           )}
@@ -156,14 +156,14 @@ export default function EmergencyCallDetailPage() {
           {/* Triage action */}
           {call.status === 'received' && (
             <div className="rounded-lg border border-yellow-300 bg-yellow-50 p-6 dark:border-yellow-800 dark:bg-yellow-950">
-              <h2 className="mb-4 text-lg font-semibold">{t('triageCall')}</h2>
+              <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('triageCall')}</h2>
               <div className="space-y-3">
                 <div>
                   <label className="mb-1 block text-sm font-medium">{t('urgency')}</label>
                   <select
                     value={triageUrgency}
                     onChange={(e) => setTriageUrgency(e.target.value)}
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                    className="input-field w-full"
                   >
                     <option value="">{t('selectUrgency')}</option>
                     {CALL_URGENCIES.map((u) => (
@@ -177,7 +177,7 @@ export default function EmergencyCallDetailPage() {
                     rows={3}
                     value={triageNotes}
                     onChange={(e) => setTriageNotes(e.target.value)}
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                    className="input-field w-full"
                   />
                 </div>
                 {triageError && (
@@ -197,7 +197,7 @@ export default function EmergencyCallDetailPage() {
           {/* Resolve action */}
           {(call.status === 'dispatched' || call.status === 'triaged') && (
             <div className="rounded-lg border border-green-300 bg-green-50 p-6 dark:border-green-800 dark:bg-green-950">
-              <h2 className="mb-4 text-lg font-semibold">{t('resolveCall')}</h2>
+              <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('resolveCall')}</h2>
               <div className="space-y-3">
                 <div>
                   <label className="mb-1 block text-sm font-medium">{t('notes')}</label>
@@ -205,7 +205,7 @@ export default function EmergencyCallDetailPage() {
                     rows={3}
                     value={resolveNotes}
                     onChange={(e) => setResolveNotes(e.target.value)}
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                    className="input-field w-full"
                   />
                 </div>
                 <button
@@ -222,13 +222,13 @@ export default function EmergencyCallDetailPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t('callDetails')}</h2>
+          <div className="card">
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('callDetails')}</h2>
             <dl className="space-y-3">
               <div>
                 <dt className="text-sm text-muted-foreground">{t('status')}</dt>
                 <dd className="mt-1">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[call.status] ?? ''}`}>
+                  <span className={`badge ${STATUS_STYLES[call.status] ?? ''}`}>
                     {call.status.replace('_', ' ')}
                   </span>
                 </dd>
@@ -236,7 +236,7 @@ export default function EmergencyCallDetailPage() {
               <div>
                 <dt className="text-sm text-muted-foreground">{t('urgency')}</dt>
                 <dd className="mt-1">
-                  <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${URGENCY_STYLES[call.urgency] ?? ''}`}>
+                  <span className={`badge ${URGENCY_STYLES[call.urgency] ?? ''}`}>
                     <AlertTriangle className="h-3 w-3" />
                     {call.urgency.replace('_', ' ')}
                   </span>
@@ -257,8 +257,8 @@ export default function EmergencyCallDetailPage() {
             </dl>
           </div>
 
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t('timeline')}</h2>
+          <div className="card">
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('timeline')}</h2>
             <dl className="space-y-3">
               <div>
                 <dt className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -302,11 +302,11 @@ export default function EmergencyCallDetailPage() {
           </div>
 
           {call.rescueOperationId && (
-            <div className="rounded-lg border bg-card p-6">
-              <h2 className="mb-4 text-lg font-semibold">{t('linkedRescue')}</h2>
+            <div className="card">
+              <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('linkedRescue')}</h2>
               <a
                 href={`/dashboard/rescue-operations/${call.rescueOperationId}`}
-                className="text-sm text-primary hover:underline"
+                className="text-sm text-primary dark:text-primary hover:underline"
               >
                 {t('viewRescueOp')}
               </a>

@@ -11,3 +11,5 @@ export * from './tasks.js';
 export * from './emergency-calls.js';
 export * from './audit-logs.js';
 export * from './notifications.js';
+export * from './relief-supplies.js';
+export * from './comments.js';

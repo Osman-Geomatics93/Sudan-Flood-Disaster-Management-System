@@ -36,12 +36,12 @@ export default function SearchDisplacedPersonsPage() {
   };
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
         <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-bold">{t('searchTitle')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('searchTitle')}</h1>
       </div>
 
       <form onSubmit={handleSearch} className="mb-6">
@@ -58,13 +58,13 @@ export default function SearchDisplacedPersonsPage() {
                 }
               }}
               placeholder={t('searchPlaceholder')}
-              className="w-full rounded-md border bg-background py-2 pe-3 ps-10 text-sm"
+              className="input-field w-full py-2 pe-3 ps-10"
               autoFocus
             />
           </div>
           <button
             type="submit"
-            className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="btn-primary"
           >
             {tCommon('search')}
           </button>
@@ -85,8 +85,8 @@ export default function SearchDisplacedPersonsPage() {
 
       {searchQuery.data && searchQuery.data.length > 0 && (
         <div className="overflow-x-auto rounded-lg border">
-          <table className="w-full text-sm">
-            <thead className="border-b bg-muted/50">
+          <table className="table-premium w-full">
+            <thead className="table-premium thead">
               <tr>
                 <th className="px-4 py-3 text-start font-medium">{t('code')}</th>
                 <th className="px-4 py-3 text-start font-medium">{t('nameAr')}</th>
@@ -96,11 +96,11 @@ export default function SearchDisplacedPersonsPage() {
                 <th className="px-4 py-3 text-start font-medium">{t('nationalId')}</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="table-premium tbody">
               {searchQuery.data.map((person) => (
                 <tr key={person.id} className="border-b hover:bg-muted/30 cursor-pointer">
                   <td className="px-4 py-3 font-mono">
-                    <Link href={`/dashboard/displaced-persons/${person.id}`} className="text-primary hover:underline">
+                    <Link href={`/dashboard/displaced-persons/${person.id}`} className="text-primary dark:text-primary hover:underline">
                       {person.registrationCode}
                     </Link>
                   </td>
@@ -115,7 +115,7 @@ export default function SearchDisplacedPersonsPage() {
                       : '-'}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[person.status] ?? ''}`}>
+                    <span className={`badge ${STATUS_STYLES[person.status] ?? ''}`}>
                       {t(`status_${person.status}`)}
                     </span>
                   </td>

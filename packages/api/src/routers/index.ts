@@ -6,6 +6,9 @@ import { rescueRouter } from './rescue.router.js';
 import { emergencyCallRouter } from './emergency-call.router.js';
 import { shelterRouter } from './shelter.router.js';
 import { displacedPersonRouter } from './displaced-person.router.js';
+import { supplyRouter } from './supply.router.js';
+import { taskRouter } from './task.router.js';
+import { notificationRouter } from './notification.router.js';
 
 export const appRouter = router({
   auth: authRouter,
@@ -15,8 +18,10 @@ export const appRouter = router({
   emergencyCall: emergencyCallRouter,
   shelter: shelterRouter,
   displacedPerson: displacedPersonRouter,
+  supply: supplyRouter,
+  task: taskRouter,
+  notification: notificationRouter,
   // Remaining routers added in later milestones:
-  // supply, task, notification,
   // infrastructure, weather, uavSurvey, citizenReport, report, upload
 });
 

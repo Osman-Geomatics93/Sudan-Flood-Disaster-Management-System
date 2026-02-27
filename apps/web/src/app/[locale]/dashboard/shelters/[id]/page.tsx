@@ -12,7 +12,7 @@ import { Marker, Popup } from 'react-leaflet';
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), { ssr: false });
 
 const STATUS_STYLES: Record<string, string> = {
-  preparing: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  preparing: 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary',
   open: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
   at_capacity: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
   overcrowded: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
@@ -68,14 +68,14 @@ export default function ShelterDetailPage() {
   const location = shelter.location as { type: string; coordinates: [number, number] } | null;
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+          <button onClick={() => router.back()} className="btn-ghost p-2">
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold">{shelter.name_en}</h1>
+            <h1 className="font-heading text-2xl font-semibold tracking-tight">{shelter.name_en}</h1>
             {shelter.name_ar && <p className="text-sm text-muted-foreground" dir="rtl">{shelter.name_ar}</p>}
             <p className="font-mono text-sm text-muted-foreground">{shelter.shelterCode}</p>
           </div>
@@ -88,7 +88,7 @@ export default function ShelterDetailPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           {/* Occupancy bar */}
-          <div className="rounded-lg border bg-card p-6">
+          <div className="card">
             <h2 className="mb-4 text-lg font-semibold">{t('occupancy')}</h2>
             <div className="flex items-center justify-between text-sm mb-2">
               <span>{shelter.currentOccupancy} / {shelter.capacity}</span>
@@ -103,7 +103,7 @@ export default function ShelterDetailPage() {
           </div>
 
           {/* Facilities */}
-          <div className="rounded-lg border bg-card p-6">
+          <div className="card">
             <h2 className="mb-4 text-lg font-semibold">{t('facilities')}</h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {FACILITY_ICONS.map(({ key, icon: Icon }) => {
@@ -128,7 +128,7 @@ export default function ShelterDetailPage() {
 
           {/* Map */}
           {location && (
-            <div className="rounded-lg border bg-card p-6">
+            <div className="card">
               <h2 className="mb-4 text-lg font-semibold">{t('location')}</h2>
               <LeafletMap
                 center={[location.coordinates[1], location.coordinates[0]]}
@@ -145,7 +145,7 @@ export default function ShelterDetailPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="rounded-lg border bg-card p-6">
+          <div className="card">
             <h2 className="mb-4 text-lg font-semibold">{t('details')}</h2>
             <dl className="space-y-3">
               {shelter.address_en && (

@@ -48,20 +48,20 @@ export default function DisplacedPersonsPage() {
   });
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/displaced-persons/search"
-            className="flex items-center gap-1.5 rounded-md border px-4 py-1.5 text-sm hover:bg-accent"
+            className="btn-secondary flex items-center gap-1.5"
           >
             <Search className="h-4 w-4" />
             {t('search')}
           </Link>
           <Link
             href="/dashboard/displaced-persons/register"
-            className="flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="btn-primary flex items-center gap-1.5"
           >
             <Plus className="h-4 w-4" />
             {t('register')}
@@ -73,7 +73,7 @@ export default function DisplacedPersonsPage() {
         <select
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-          className="rounded-md border bg-card px-3 py-2 text-sm"
+          className="input-field"
         >
           <option value="">{t('allStatuses')}</option>
           {DISPLACED_PERSON_STATUSES.map((s) => (
@@ -83,7 +83,7 @@ export default function DisplacedPersonsPage() {
         <select
           value={healthFilter}
           onChange={(e) => { setHealthFilter(e.target.value); setPage(1); }}
-          className="rounded-md border bg-card px-3 py-2 text-sm"
+          className="input-field"
         >
           <option value="">{t('allHealthStatuses')}</option>
           {HEALTH_STATUSES.map((h) => (
@@ -95,7 +95,7 @@ export default function DisplacedPersonsPage() {
           value={searchInput}
           onChange={(e) => { setSearchInput(e.target.value); setPage(1); }}
           placeholder={t('searchPlaceholder')}
-          className="rounded-md border bg-background px-3 py-2 text-sm min-w-[200px]"
+          className="input-field min-w-[200px]"
         />
       </div>
 
@@ -114,8 +114,8 @@ export default function DisplacedPersonsPage() {
       {listQuery.data && listQuery.data.items.length > 0 && (
         <>
           <div className="overflow-x-auto rounded-lg border">
-            <table className="w-full text-sm">
-              <thead className="border-b bg-muted/50">
+            <table className="table-premium w-full">
+              <thead className="table-premium thead">
                 <tr>
                   <th className="px-4 py-3 text-start font-medium">{t('code')}</th>
                   <th className="px-4 py-3 text-start font-medium">{t('nameAr')}</th>
@@ -125,11 +125,11 @@ export default function DisplacedPersonsPage() {
                   <th className="px-4 py-3 text-start font-medium">{t('phone')}</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="table-premium tbody">
                 {listQuery.data.items.map((person) => (
                   <tr key={person.id} className="border-b hover:bg-muted/30">
                     <td className="px-4 py-3 font-mono">
-                      <Link href={`/dashboard/displaced-persons/${person.id}`} className="text-primary hover:underline">
+                      <Link href={`/dashboard/displaced-persons/${person.id}`} className="text-primary dark:text-primary hover:underline">
                         {person.registrationCode}
                       </Link>
                     </td>
@@ -144,12 +144,12 @@ export default function DisplacedPersonsPage() {
                         : '-'}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[person.status] ?? ''}`}>
+                      <span className={`badge ${STATUS_STYLES[person.status] ?? ''}`}>
                         {t(`status_${person.status}`)}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${HEALTH_STYLES[person.healthStatus] ?? ''}`}>
+                      <span className={`badge ${HEALTH_STYLES[person.healthStatus] ?? ''}`}>
                         {t(`health_${person.healthStatus}`)}
                       </span>
                     </td>

@@ -107,14 +107,14 @@ export default function DisplacedPersonDetailPage() {
   };
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold" dir="rtl">
+            <h1 className="font-heading text-2xl font-semibold tracking-tight" dir="rtl">
               {person.firstName_ar} {person.lastName_ar}
             </h1>
             {person.firstName_en && (
@@ -130,8 +130,8 @@ export default function DisplacedPersonDetailPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           {/* Personal Info */}
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t('personalInfo')}</h2>
+          <div className="card">
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('personalInfo')}</h2>
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <dt className="text-sm text-muted-foreground">{t('dateOfBirth')}</dt>
@@ -159,13 +159,13 @@ export default function DisplacedPersonDetailPage() {
           </div>
 
           {/* Health Info */}
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t('healthInfo')}</h2>
+          <div className="card">
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('healthInfo')}</h2>
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <dt className="text-sm text-muted-foreground">{t('healthStatus')}</dt>
                 <dd className="mt-1">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${HEALTH_STYLES[person.healthStatus] ?? ''}`}>
+                  <span className={`badge ${HEALTH_STYLES[person.healthStatus] ?? ''}`}>
                     {t(`health_${person.healthStatus}`)}
                   </span>
                 </dd>
@@ -189,7 +189,7 @@ export default function DisplacedPersonDetailPage() {
 
           {/* Assign Shelter Action */}
           <div className="rounded-lg border border-blue-300 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-950">
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+            <h2 className="font-heading mb-4 flex items-center gap-2 text-lg font-semibold tracking-tight">
               <Home className="h-5 w-5" />
               {t('assignShelter')}
             </h2>
@@ -197,7 +197,7 @@ export default function DisplacedPersonDetailPage() {
               <select
                 value={selectedShelterId}
                 onChange={(e) => setSelectedShelterId(e.target.value)}
-                className="flex-1 min-w-[200px] rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field flex-1 min-w-[200px]"
               >
                 <option value="">{t('selectShelter')}</option>
                 {(sheltersQuery.data?.items ?? []).map((s) => (
@@ -209,7 +209,7 @@ export default function DisplacedPersonDetailPage() {
               <button
                 onClick={handleAssignShelter}
                 disabled={!selectedShelterId || assignMutation.isPending}
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                className="btn-primary disabled:opacity-50"
               >
                 {assignMutation.isPending ? tCommon('loading') : t('assignShelter')}
               </button>
@@ -218,7 +218,7 @@ export default function DisplacedPersonDetailPage() {
 
           {/* Update Health Action */}
           <div className="rounded-lg border border-green-300 bg-green-50 p-6 dark:border-green-800 dark:bg-green-950">
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+            <h2 className="font-heading mb-4 flex items-center gap-2 text-lg font-semibold tracking-tight">
               <Heart className="h-5 w-5" />
               {t('updateHealth')}
             </h2>
@@ -227,7 +227,7 @@ export default function DisplacedPersonDetailPage() {
                 <select
                   value={healthStatus}
                   onChange={(e) => setHealthStatus(e.target.value)}
-                  className="flex-1 min-w-[200px] rounded-md border bg-background px-3 py-2 text-sm"
+                  className="input-field flex-1 min-w-[200px]"
                 >
                   <option value="">{t('selectHealthStatus')}</option>
                   {HEALTH_STATUSES.map((h) => (
@@ -240,7 +240,7 @@ export default function DisplacedPersonDetailPage() {
                 value={healthNotes}
                 onChange={(e) => setHealthNotes(e.target.value)}
                 placeholder={t('healthNotes')}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
               <button
                 onClick={handleUpdateHealth}
@@ -255,7 +255,7 @@ export default function DisplacedPersonDetailPage() {
           {/* Family Group */}
           {!person.familyGroupId && (
             <div className="rounded-lg border border-purple-300 bg-purple-50 p-6 dark:border-purple-800 dark:bg-purple-950">
-              <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+              <h2 className="font-heading mb-4 flex items-center gap-2 text-lg font-semibold tracking-tight">
                 <Users className="h-5 w-5" />
                 {t('createFamilyGroup')}
               </h2>
@@ -267,7 +267,7 @@ export default function DisplacedPersonDetailPage() {
                     min="1"
                     value={familySize}
                     onChange={(e) => setFamilySize(e.target.value)}
-                    className="w-24 rounded-md border bg-background px-3 py-2 text-sm"
+                    className="input-field w-24"
                   />
                 </div>
                 <div className="flex items-end">
@@ -286,13 +286,13 @@ export default function DisplacedPersonDetailPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t('status')}</h2>
+          <div className="card">
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('status')}</h2>
             <dl className="space-y-3">
               <div>
                 <dt className="text-sm text-muted-foreground">{t('status')}</dt>
                 <dd className="mt-1">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[person.status] ?? ''}`}>
+                  <span className={`badge ${STATUS_STYLES[person.status] ?? ''}`}>
                     {t(`status_${person.status}`)}
                   </span>
                 </dd>
@@ -306,14 +306,14 @@ export default function DisplacedPersonDetailPage() {
 
           {/* Shelter info */}
           {person.currentShelterId && (
-            <div className="rounded-lg border bg-card p-6">
-              <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+            <div className="card">
+              <h2 className="font-heading mb-4 flex items-center gap-2 text-lg font-semibold tracking-tight">
                 <Home className="h-5 w-5" />
                 {t('currentShelter')}
               </h2>
               <Link
                 href={`/dashboard/shelters/${person.currentShelterId}`}
-                className="block text-sm text-primary hover:underline"
+                className="block text-sm text-primary dark:text-primary hover:underline"
               >
                 {person.shelterName ?? person.shelterCode}
               </Link>
@@ -325,8 +325,8 @@ export default function DisplacedPersonDetailPage() {
 
           {/* Family group info */}
           {person.familyGroupId && (
-            <div className="rounded-lg border bg-card p-6">
-              <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+            <div className="card">
+              <h2 className="font-heading mb-4 flex items-center gap-2 text-lg font-semibold tracking-tight">
                 <Users className="h-5 w-5" />
                 {t('familyGroup')}
               </h2>

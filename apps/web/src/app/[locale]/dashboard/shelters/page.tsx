@@ -56,13 +56,13 @@ export default function SheltersPage() {
   );
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/shelters/create"
-            className="flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="btn-primary flex items-center gap-1.5"
           >
             <Plus className="h-4 w-4" />
             {t('createShelter')}
@@ -90,7 +90,7 @@ export default function SheltersPage() {
         <select
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-          className="rounded-md border bg-card px-3 py-2 text-sm"
+          className="input-field"
         >
           <option value="">{t('allStatuses')}</option>
           {SHELTER_STATUSES.map((s) => (
@@ -116,8 +116,8 @@ export default function SheltersPage() {
           {listQuery.data && listQuery.data.items.length > 0 && (
             <>
               <div className="overflow-x-auto rounded-lg border">
-                <table className="w-full text-sm">
-                  <thead className="border-b bg-muted/50">
+                <table className="table-premium w-full">
+                  <thead className="table-premium thead">
                     <tr>
                       <th className="px-4 py-3 text-start font-medium">{t('shelterCode')}</th>
                       <th className="px-4 py-3 text-start font-medium">{t('name')}</th>
@@ -126,11 +126,11 @@ export default function SheltersPage() {
                       <th className="px-4 py-3 text-start font-medium">{t('occupancy')}</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="table-premium tbody">
                     {listQuery.data.items.map((shelter) => (
                       <tr key={shelter.id} className="border-b hover:bg-muted/30">
                         <td className="px-4 py-3 font-mono">
-                          <Link href={`/dashboard/shelters/${shelter.id}`} className="text-primary hover:underline">
+                          <Link href={`/dashboard/shelters/${shelter.id}`} className="text-primary dark:text-primary hover:underline">
                             {shelter.shelterCode}
                           </Link>
                         </td>
@@ -140,7 +140,7 @@ export default function SheltersPage() {
                           </Link>
                         </td>
                         <td className="px-4 py-3">
-                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[shelter.status] ?? ''}`}>
+                          <span className={`badge ${STATUS_STYLES[shelter.status] ?? ''}`}>
                             {shelter.status.replace(/_/g, ' ')}
                           </span>
                         </td>

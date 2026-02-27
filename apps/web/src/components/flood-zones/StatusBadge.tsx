@@ -1,7 +1,7 @@
 'use client';
 
 const STATUS_STYLES: Record<string, string> = {
-  monitoring: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  monitoring: 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary',
   warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
   active_flood: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
   receding: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',

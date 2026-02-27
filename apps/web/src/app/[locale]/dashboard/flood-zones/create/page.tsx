@@ -83,7 +83,7 @@ export default function CreateFloodZonePage() {
   };
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
         <button
           onClick={() => router.back()}
@@ -91,11 +91,11 @@ export default function CreateFloodZonePage() {
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-bold">{t('create')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('create')}</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="rounded-lg border bg-card p-6">
+        <div className="card">
           <FloodZoneForm
             data={formData}
             onChange={setFormData}
@@ -104,11 +104,11 @@ export default function CreateFloodZonePage() {
           />
         </div>
 
-        <div className="rounded-lg border bg-card p-6">
-          <h2 className="mb-2 text-lg font-semibold">{t('mapView')}</h2>
+        <div className="card">
+          <h2 className="font-heading mb-2 text-lg font-semibold tracking-tight">{t('mapView')}</h2>
           <p className="mb-4 text-sm text-muted-foreground">{t('drawPolygon')}</p>
           {geometry && (
-            <p className="mb-2 text-sm text-green-600">Polygon drawn ({geometry.coordinates[0]?.length ?? 0} points)</p>
+            <p className="mb-2 text-sm text-green-600 dark:text-green-400">Polygon drawn ({geometry.coordinates[0]?.length ?? 0} points)</p>
           )}
           <LeafletMap className="h-[400px] w-full rounded-md">
             <DrawControl onPolygonCreated={handlePolygonCreated} />
@@ -123,14 +123,14 @@ export default function CreateFloodZonePage() {
           <button
             type="submit"
             disabled={createMutation.isPending}
-            className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+            className="btn-primary disabled:opacity-50"
           >
             {createMutation.isPending ? t('creating') : t('create')}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-md border px-6 py-2 text-sm hover:bg-accent"
+            className="btn-secondary"
           >
             {tCommon('cancel')}
           </button>

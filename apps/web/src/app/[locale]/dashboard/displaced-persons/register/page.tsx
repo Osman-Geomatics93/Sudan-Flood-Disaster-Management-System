@@ -87,18 +87,18 @@ export default function RegisterDisplacedPersonPage() {
   };
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
         <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-bold">{t('registerTitle')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('registerTitle')}</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Arabic Name */}
-        <div className="rounded-lg border bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold">{t('personalInfo')}</h2>
+        <div className="card">
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('personalInfo')}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('firstName_ar')} *</label>
@@ -107,7 +107,7 @@ export default function RegisterDisplacedPersonPage() {
                 dir="rtl"
                 value={form.firstName_ar}
                 onChange={(e) => handleChange('firstName_ar', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
                 required
               />
             </div>
@@ -118,7 +118,7 @@ export default function RegisterDisplacedPersonPage() {
                 dir="rtl"
                 value={form.lastName_ar}
                 onChange={(e) => handleChange('lastName_ar', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
                 required
               />
             </div>
@@ -128,7 +128,7 @@ export default function RegisterDisplacedPersonPage() {
                 type="text"
                 value={form.firstName_en}
                 onChange={(e) => handleChange('firstName_en', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
             <div>
@@ -137,7 +137,7 @@ export default function RegisterDisplacedPersonPage() {
                 type="text"
                 value={form.lastName_en}
                 onChange={(e) => handleChange('lastName_en', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
             <div>
@@ -146,7 +146,7 @@ export default function RegisterDisplacedPersonPage() {
                 type="date"
                 value={form.dateOfBirth}
                 onChange={(e) => handleChange('dateOfBirth', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
             <div>
@@ -154,7 +154,7 @@ export default function RegisterDisplacedPersonPage() {
               <select
                 value={form.gender}
                 onChange={(e) => handleChange('gender', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               >
                 <option value="">{t('selectGender')}</option>
                 {GENDERS.map((g) => (
@@ -168,7 +168,7 @@ export default function RegisterDisplacedPersonPage() {
                 type="text"
                 value={form.nationalId}
                 onChange={(e) => handleChange('nationalId', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
             <div>
@@ -177,7 +177,7 @@ export default function RegisterDisplacedPersonPage() {
                 type="tel"
                 value={form.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
                 placeholder="+249..."
               />
             </div>
@@ -185,15 +185,15 @@ export default function RegisterDisplacedPersonPage() {
         </div>
 
         {/* Health */}
-        <div className="rounded-lg border bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold">{t('healthInfo')}</h2>
+        <div className="card">
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('healthInfo')}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('healthStatus')}</label>
               <select
                 value={form.healthStatus}
                 onChange={(e) => handleChange('healthStatus', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               >
                 {HEALTH_STATUSES.map((h) => (
                   <option key={h} value={h}>{t(`health_${h}`)}</option>
@@ -206,7 +206,7 @@ export default function RegisterDisplacedPersonPage() {
                 type="text"
                 value={form.healthNotes}
                 onChange={(e) => handleChange('healthNotes', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
             <div className="flex items-center gap-4">
@@ -233,14 +233,14 @@ export default function RegisterDisplacedPersonPage() {
         </div>
 
         {/* Shelter Assignment */}
-        <div className="rounded-lg border bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold">{t('shelterAssignment')}</h2>
+        <div className="card">
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('shelterAssignment')}</h2>
           <div>
             <label className="mb-1 block text-sm font-medium">{t('assignToShelter')}</label>
             <select
               value={form.shelterId}
               onChange={(e) => handleChange('shelterId', e.target.value)}
-              className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+              className="input-field w-full"
             >
               <option value="">{t('noShelter')}</option>
               {(sheltersQuery.data?.items ?? []).map((s) => (
@@ -253,15 +253,15 @@ export default function RegisterDisplacedPersonPage() {
         </div>
 
         {/* Origin */}
-        <div className="rounded-lg border bg-card p-6">
-          <h2 className="mb-4 text-lg font-semibold">{t('originInfo')}</h2>
+        <div className="card">
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('originInfo')}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('originState')}</label>
               <select
                 value={form.originStateId}
                 onChange={(e) => handleChange('originStateId', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               >
                 <option value="">{t('selectState')}</option>
                 {(statesQuery.data ?? []).map((s) => (
@@ -274,7 +274,7 @@ export default function RegisterDisplacedPersonPage() {
               <select
                 value={form.originLocalityId}
                 onChange={(e) => handleChange('originLocalityId', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
                 disabled={!form.originStateId}
               >
                 <option value="">{t('selectLocality')}</option>
@@ -289,7 +289,7 @@ export default function RegisterDisplacedPersonPage() {
                 rows={3}
                 value={form.specialNeeds}
                 onChange={(e) => handleChange('specialNeeds', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field w-full"
               />
             </div>
           </div>
@@ -303,14 +303,14 @@ export default function RegisterDisplacedPersonPage() {
           <button
             type="submit"
             disabled={registerMutation.isPending}
-            className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+            className="btn-primary disabled:opacity-50"
           >
             {registerMutation.isPending ? t('registering') : t('register')}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-md border px-6 py-2 text-sm hover:bg-accent"
+            className="btn-secondary"
           >
             {tCommon('cancel')}
           </button>

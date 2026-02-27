@@ -8,3 +8,4 @@ export * from './shelter.schema.js';
 export * from './displaced-person.schema.js';
 export * from './supply.schema.js';
 export * from './task.schema.js';
+export * from './notification.schema.js';

@@ -34,41 +34,41 @@ export default function DashboardPage() {
   const totalZones = stats?.totalZones ?? 0;
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">{t('dashboard.title')}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div className="animate-in">
+      <h1 className="font-heading text-2xl font-semibold tracking-tight mb-6">{t('dashboard.title')}</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <StatCard
           label={t('dashboard.activeZones')}
           value={totalZones}
-          color="text-red-600"
+          color="text-severity-severe"
         />
         <StatCard
           label={t('dashboard.activeRescues')}
           value={rescueStats?.activeRescues ?? 0}
-          color="text-blue-600"
+          color="text-primary"
         />
         <StatCard
           label={t('dashboard.totalSheltered')}
           value={shelterStats?.totalOccupancy ?? 0}
-          color="text-green-600"
+          color="text-green-600 dark:text-green-400"
         />
         <StatCard
           label={t('dashboard.pendingCalls')}
           value={callStats?.pendingCalls ?? 0}
-          color="text-yellow-600"
+          color="text-yellow-600 dark:text-yellow-400"
         />
         <StatCard
           label={t('dashboard.totalDisplaced')}
           value={dpStats?.total ?? 0}
-          color="text-purple-600"
+          color="text-muted-foreground"
         />
       </div>
 
       {stats?.bySeverity && stats.bySeverity.length > 0 && (
         <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3">
-          {stats.bySeverity.map((s) => (
-            <div key={s.severity} className="rounded-lg border bg-card p-4">
-              <div className="text-lg font-bold">{s.count}</div>
+          {stats.bySeverity.map((s, i) => (
+            <div key={s.severity} className={`card p-4 animate-slide-up delay-${i + 1}`}>
+              <div className="text-lg font-semibold">{s.count}</div>
               <div className="text-xs text-muted-foreground capitalize">{s.severity}</div>
               <div className="text-xs text-muted-foreground">
                 {s.affectedPopulation.toLocaleString()} affected
@@ -88,9 +88,9 @@ export default function DashboardPage() {
 
 function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="rounded-lg border bg-card p-6 shadow-sm">
-      <div className={`text-3xl font-bold ${color}`}>{value.toLocaleString()}</div>
-      <div className="mt-1 text-sm text-muted-foreground">{label}</div>
+    <div className="card p-5">
+      <div className={`text-3xl font-semibold tracking-tight ${color}`}>{value.toLocaleString()}</div>
+      <div className="mt-1.5 text-sm text-muted-foreground">{label}</div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import typography from '@tailwindcss/typography';
 
 const config: Config = {
   darkMode: 'class',
@@ -8,7 +9,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // CSS variable-based semantic colors (shadcn/ui pattern)
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -42,21 +42,6 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        // SudanFlood brand palette
-        brand: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
-        },
-        // Severity colors for flood zones
         severity: {
           low: '#22c55e',
           moderate: '#eab308',
@@ -71,13 +56,20 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['Inter', 'Noto Sans Arabic', 'sans-serif'],
-        arabic: ['Noto Sans Arabic', 'Amiri', 'sans-serif'],
+        sans: ['var(--font-body)', 'var(--font-arabic)', 'sans-serif'],
+        heading: ['var(--font-heading)', 'var(--font-arabic)', 'sans-serif'],
+        arabic: ['var(--font-arabic)', 'var(--font-body)', 'sans-serif'],
+      },
+      boxShadow: {
+        xs: 'var(--shadow-xs)',
+        sm: 'var(--shadow-sm)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)',
       },
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
+    typography,
   ],
 };
 

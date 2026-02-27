@@ -22,7 +22,7 @@ const PRIORITY_STYLES: Record<string, string> = {
 
 const STATUS_STYLES: Record<string, string> = {
   pending: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
-  dispatched: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  dispatched: 'bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary',
   en_route: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
   on_site: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
   in_progress: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
@@ -131,14 +131,14 @@ export default function RescueOperationDetailPage() {
   const currentIndex = STATUS_ORDER.indexOf(op.status as OperationStatus);
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+          <button onClick={() => router.back()} className="btn-ghost p-2">
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold">{op.title_en}</h1>
+            <h1 className="font-heading text-2xl font-semibold tracking-tight">{op.title_en}</h1>
             <p className="font-mono text-sm text-muted-foreground">{op.operationCode}</p>
           </div>
         </div>
@@ -148,7 +148,7 @@ export default function RescueOperationDetailPage() {
         {/* Main content */}
         <div className="space-y-6 lg:col-span-2">
           {/* Status timeline */}
-          <div className="rounded-lg border bg-card p-6">
+          <div className="card">
             <h2 className="mb-4 text-lg font-semibold">{t('statusTimeline')}</h2>
             <div className="flex items-center gap-1">
               {STATUS_ORDER.map((s, i) => (
@@ -192,7 +192,7 @@ export default function RescueOperationDetailPage() {
 
           {/* Description */}
           {op.description && (
-            <div className="rounded-lg border bg-card p-6">
+            <div className="card">
               <h2 className="mb-2 text-lg font-semibold">{t('description')}</h2>
               <p className="whitespace-pre-wrap text-sm">{op.description}</p>
             </div>
@@ -200,7 +200,7 @@ export default function RescueOperationDetailPage() {
 
           {/* Notes */}
           {op.notes && (
-            <div className="rounded-lg border bg-card p-6">
+            <div className="card">
               <h2 className="mb-2 text-lg font-semibold">{t('notes')}</h2>
               <p className="whitespace-pre-wrap text-sm">{op.notes}</p>
             </div>
@@ -208,7 +208,7 @@ export default function RescueOperationDetailPage() {
 
           {/* Team members */}
           {op.team && op.team.length > 0 && (
-            <div className="rounded-lg border bg-card p-6">
+            <div className="card">
               <h2 className="mb-4 text-lg font-semibold">{t('teamMembers')}</h2>
               <div className="space-y-2">
                 {op.team.map((member) => (
@@ -223,12 +223,12 @@ export default function RescueOperationDetailPage() {
 
           {/* Actions */}
           {op.status === 'pending' && (
-            <div className="rounded-lg border border-blue-300 bg-blue-50 p-6 dark:border-blue-800 dark:bg-blue-950">
+            <div className="card border-primary/30 bg-primary/5 dark:bg-primary/10">
               <h2 className="mb-4 text-lg font-semibold">{t('dispatchOperation')}</h2>
               <button
                 onClick={handleDispatch}
                 disabled={dispatchMutation.isPending}
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                className="btn-primary"
               >
                 {dispatchMutation.isPending ? tCommon('loading') : t('dispatch')}
               </button>
@@ -236,7 +236,7 @@ export default function RescueOperationDetailPage() {
           )}
 
           {op.status !== 'completed' && op.status !== 'aborted' && op.status !== 'failed' && op.status !== 'pending' && (
-            <div className="rounded-lg border bg-card p-6">
+            <div className="card">
               <h2 className="mb-4 text-lg font-semibold">{t('updateStatus')}</h2>
               <div className="space-y-3">
                 <div>
@@ -244,7 +244,7 @@ export default function RescueOperationDetailPage() {
                   <select
                     value={newStatus}
                     onChange={(e) => setNewStatus(e.target.value)}
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                    className="input-field"
                   >
                     <option value="">{t('selectStatus')}</option>
                     {OPERATION_STATUSES.map((s) => (
@@ -259,7 +259,7 @@ export default function RescueOperationDetailPage() {
                     min="0"
                     value={personsRescued}
                     onChange={(e) => setPersonsRescued(e.target.value)}
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                    className="input-field"
                   />
                 </div>
                 <div>
@@ -268,21 +268,21 @@ export default function RescueOperationDetailPage() {
                     rows={3}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                    className="input-field"
                   />
                 </div>
                 <div className="flex gap-3">
                   <button
                     onClick={handleUpdateStatus}
                     disabled={updateStatusMutation.isPending || !newStatus}
-                    className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+                    className="btn-primary"
                   >
                     {updateStatusMutation.isPending ? tCommon('loading') : t('updateStatus')}
                   </button>
                   <button
                     onClick={handleComplete}
                     disabled={completeMutation.isPending}
-                    className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
+                    className="btn-secondary border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-green-950"
                   >
                     {completeMutation.isPending ? tCommon('loading') : t('markComplete')}
                   </button>
@@ -294,7 +294,7 @@ export default function RescueOperationDetailPage() {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="rounded-lg border bg-card p-6">
+          <div className="card">
             <h2 className="mb-4 text-lg font-semibold">{t('operationDetails')}</h2>
             <dl className="space-y-3">
               <div>
@@ -346,7 +346,7 @@ export default function RescueOperationDetailPage() {
             </dl>
           </div>
 
-          <div className="rounded-lg border bg-card p-6">
+          <div className="card">
             <h2 className="mb-4 text-lg font-semibold">{t('timeline')}</h2>
             <dl className="space-y-3">
               <div>

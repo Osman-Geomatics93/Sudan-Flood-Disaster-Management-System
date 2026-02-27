@@ -51,9 +51,9 @@ export default function FloodZonesPage() {
   );
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <div className="flex items-center gap-3">
           <div className="flex rounded-md border">
             <button
@@ -73,7 +73,7 @@ export default function FloodZonesPage() {
           </div>
           <Link
             href="/dashboard/flood-zones/create"
-            className="flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="btn-primary flex items-center gap-1.5"
           >
             <Plus className="h-4 w-4" />
             {t('create')}
@@ -107,8 +107,8 @@ export default function FloodZonesPage() {
           {listQuery.data && listQuery.data.items.length > 0 && (
             <>
               <div className="overflow-x-auto rounded-lg border">
-                <table className="w-full text-sm">
-                  <thead className="border-b bg-muted/50">
+                <table className="table-premium w-full">
+                  <thead className="table-premium thead">
                     <tr>
                       <th className="px-4 py-3 text-start font-medium">{t('zoneCode')}</th>
                       <th className="px-4 py-3 text-start font-medium">{t('name')}</th>
@@ -118,13 +118,13 @@ export default function FloodZonesPage() {
                       <th className="px-4 py-3 text-start font-medium">{t('affectedPopulation')}</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="table-premium tbody">
                     {listQuery.data.items.map((zone) => (
                       <tr key={zone.id} className="border-b hover:bg-muted/30">
                         <td className="px-4 py-3">
                           <Link
                             href={`/dashboard/flood-zones/${zone.id}`}
-                            className="font-mono text-primary hover:underline"
+                            className="font-mono text-primary dark:text-primary hover:underline"
                           >
                             {zone.zoneCode}
                           </Link>

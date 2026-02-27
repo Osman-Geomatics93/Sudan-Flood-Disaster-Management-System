@@ -59,7 +59,6 @@ export async function listRescueOperations(
         completedAt: rescueOperations.completedAt,
         createdAt: rescueOperations.createdAt,
         targetLocation: sql<unknown>`ST_AsGeoJSON(target_location)::json`,
-        currentLocation: sql<unknown>`ST_AsGeoJSON(current_location)::json`,
       })
       .from(rescueOperations)
       .where(whereClause)
@@ -106,7 +105,6 @@ export async function getRescueOperationById(db: Database, id: string) {
       createdAt: rescueOperations.createdAt,
       updatedAt: rescueOperations.updatedAt,
       targetLocation: sql<unknown>`ST_AsGeoJSON(target_location)::json`,
-      currentLocation: sql<unknown>`ST_AsGeoJSON(current_location)::json`,
     })
     .from(rescueOperations)
     .where(eq(rescueOperations.id, id))
@@ -136,35 +134,33 @@ export async function createRescueOperation(
   const operationCode = generateEntityCode(CODE_PREFIXES.RESCUE_OPERATION, seq);
 
   const [lng, lat] = input.targetLocation;
+  const priority = input.priority ?? 'high';
+  const title_ar = input.title_ar ?? null;
+  const description = input.description ?? null;
+  const estimatedPersonsAtRisk = input.estimatedPersonsAtRisk ?? 0;
+  const teamLeaderId = input.teamLeaderId ?? null;
+  const emergencyCall = emergencyCallId ?? null;
 
-  const [op] = await db
-    .insert(rescueOperations)
-    .values({
-      operationCode,
-      floodZoneId: input.floodZoneId,
-      assignedOrgId: input.assignedOrgId,
-      operationType: input.operationType,
-      priority: input.priority ?? 'high',
-      title_en: input.title_en,
-      title_ar: input.title_ar ?? null,
-      description: input.description ?? null,
-      estimatedPersonsAtRisk: input.estimatedPersonsAtRisk ?? 0,
-      teamLeaderId: input.teamLeaderId ?? null,
-      emergencyCallId: emergencyCallId ?? null,
-      status: 'pending',
-    })
-    .returning();
+  const result = await db.execute(
+    sql`INSERT INTO rescue_operations (
+      operation_code, flood_zone_id, assigned_org_id, operation_type,
+      status, priority, title_en, title_ar, description,
+      estimated_persons_at_risk, team_leader_id, emergency_call_id,
+      target_location
+    ) VALUES (
+      ${operationCode}, ${input.floodZoneId}, ${input.assignedOrgId}, ${input.operationType},
+      'pending', ${priority}, ${input.title_en}, ${title_ar}, ${description},
+      ${estimatedPersonsAtRisk}, ${teamLeaderId}, ${emergencyCall},
+      ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)
+    ) RETURNING id`,
+  );
 
-  if (!op) {
+  const newId = (result as unknown as { rows: { id: string }[] }).rows?.[0]?.id;
+  if (!newId) {
     throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create rescue operation' });
   }
 
-  // Set target location via raw SQL
-  await db.execute(
-    sql`UPDATE rescue_operations SET target_location = ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326) WHERE id = ${op.id}`,
-  );
-
-  return getRescueOperationById(db, op.id);
+  return getRescueOperationById(db, newId);
 }
 
 export async function dispatchRescueOperation(db: Database, id: string) {
@@ -225,17 +221,13 @@ export async function updateRescueStatus(
 }
 
 export async function updateRescueLocation(
-  db: Database,
-  input: { id: string; currentLocation: [number, number] },
+  _db: Database,
+  _input: { id: string; currentLocation: [number, number] },
 ) {
-  await getRescueOperationById(db, input.id);
-
-  const [lng, lat] = input.currentLocation;
-  await db.execute(
-    sql`UPDATE rescue_operations SET current_location = ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326), updated_at = NOW() WHERE id = ${input.id}`,
-  );
-
-  return { success: true };
+  throw new TRPCError({
+    code: 'NOT_IMPLEMENTED',
+    message: 'Real-time current_location tracking is not yet implemented. The rescue_operations table does not have a current_location column.',
+  });
 }
 
 export async function assignTeam(
@@ -309,7 +301,6 @@ export async function getActiveByZone(db: Database, zoneId: string) {
       teamSize: rescueOperations.teamSize,
       dispatchedAt: rescueOperations.dispatchedAt,
       targetLocation: sql<unknown>`ST_AsGeoJSON(target_location)::json`,
-      currentLocation: sql<unknown>`ST_AsGeoJSON(current_location)::json`,
     })
     .from(rescueOperations)
     .where(

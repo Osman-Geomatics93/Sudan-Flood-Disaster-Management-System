@@ -42,16 +42,16 @@ export default function RescueOperationsPage() {
   });
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
       </div>
 
       <div className="mb-4 flex flex-wrap gap-3">
         <select
           value={status}
           onChange={(e) => { setStatus(e.target.value); setPage(1); }}
-          className="rounded-md border bg-card px-3 py-2 text-sm"
+          className="input-field"
         >
           <option value="">{t('allStatuses')}</option>
           {OPERATION_STATUSES.map((s) => (
@@ -61,7 +61,7 @@ export default function RescueOperationsPage() {
         <select
           value={priority}
           onChange={(e) => { setPriority(e.target.value); setPage(1); }}
-          className="rounded-md border bg-card px-3 py-2 text-sm"
+          className="input-field"
         >
           <option value="">{t('allPriorities')}</option>
           {TASK_PRIORITIES.map((p) => (
@@ -85,8 +85,8 @@ export default function RescueOperationsPage() {
       {listQuery.data && listQuery.data.items.length > 0 && (
         <>
           <div className="overflow-x-auto rounded-lg border">
-            <table className="w-full text-sm">
-              <thead className="border-b bg-muted/50">
+            <table className="table-premium w-full">
+              <thead className="table-premium thead">
                 <tr>
                   <th className="px-4 py-3 text-start font-medium">{t('operationCode')}</th>
                   <th className="px-4 py-3 text-start font-medium">{t('titleLabel')}</th>
@@ -98,13 +98,13 @@ export default function RescueOperationsPage() {
                   <th className="px-4 py-3 text-start font-medium">{t('teamSize')}</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="table-premium tbody">
                 {listQuery.data.items.map((op) => (
                   <tr key={op.id} className="border-b hover:bg-muted/30">
                     <td className="px-4 py-3">
                       <Link
                         href={`/dashboard/rescue-operations/${op.id}`}
-                        className="font-mono text-primary hover:underline"
+                        className="font-mono text-primary dark:text-primary hover:underline"
                       >
                         {op.operationCode}
                       </Link>
@@ -114,12 +114,12 @@ export default function RescueOperationsPage() {
                       <span className="text-xs">{op.operationType.replace('_', ' ')}</span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${PRIORITY_STYLES[op.priority] ?? ''}`}>
+                      <span className={`badge ${PRIORITY_STYLES[op.priority] ?? ''}`}>
                         {op.priority}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[op.status] ?? ''}`}>
+                      <span className={`badge ${STATUS_STYLES[op.status] ?? ''}`}>
                         {op.status.replace('_', ' ')}
                       </span>
                     </td>

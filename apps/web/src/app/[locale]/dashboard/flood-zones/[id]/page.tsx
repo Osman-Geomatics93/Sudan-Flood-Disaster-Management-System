@@ -64,14 +64,14 @@ export default function FloodZoneDetailPage() {
     : null;
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold">{zone.name_en}</h1>
+            <h1 className="font-heading text-2xl font-semibold tracking-tight">{zone.name_en}</h1>
             <p className="text-sm text-muted-foreground font-mono">{zone.zoneCode}</p>
           </div>
         </div>
@@ -89,8 +89,8 @@ export default function FloodZoneDetailPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-lg border bg-card p-6">
-            <h2 className="mb-4 text-lg font-semibold">{t('details')}</h2>
+          <div className="card">
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('details')}</h2>
             <dl className="space-y-3">
               <div>
                 <dt className="text-sm text-muted-foreground">{t('severity')}</dt>

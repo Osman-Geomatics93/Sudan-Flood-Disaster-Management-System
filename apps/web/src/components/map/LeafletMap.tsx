@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import type { Map as LeafletMap } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -57,20 +57,38 @@ export default function LeafletMapComponent({
   className = 'h-[500px] w-full',
   mapRef,
 }: LeafletMapInnerProps) {
+  const uniqueId = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
+
+  // Wait until the container DOM node is mounted before rendering MapContainer.
+  // This prevents the "appendChild" error caused by React 18 Strict Mode
+  // double-invoking effects on a not-yet-attached DOM node.
+  useEffect(() => {
+    if (containerRef.current) {
+      setReady(true);
+    }
+  }, []);
+
   return (
-    <MapContainer
-      center={center}
-      zoom={zoom}
-      className={className}
-      scrollWheelZoom={true}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {onBoundsChange && <BoundsTracker onBoundsChange={onBoundsChange} />}
-      {mapRef && <MapRefSetter mapRef={mapRef} />}
-      {children}
-    </MapContainer>
+    <div ref={containerRef} className={className}>
+      {ready && (
+        <MapContainer
+          key={uniqueId}
+          center={center}
+          zoom={zoom}
+          className="h-full w-full"
+          scrollWheelZoom={true}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {onBoundsChange && <BoundsTracker onBoundsChange={onBoundsChange} />}
+          {mapRef && <MapRefSetter mapRef={mapRef} />}
+          {children}
+        </MapContainer>
+      )}
+    </div>
   );
 }

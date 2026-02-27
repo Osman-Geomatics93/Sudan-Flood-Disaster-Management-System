@@ -108,14 +108,14 @@ export default function CreateShelterPage() {
   return (
     <div>
       <div className="mb-6 flex items-center gap-3">
-        <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+        <button onClick={() => router.back()} className="btn-ghost p-2">
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-bold">{t('createShelter')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('createShelter')}</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="rounded-lg border bg-card p-6">
+        <div className="card">
           <h2 className="mb-4 text-lg font-semibold">{t('basicInfo')}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
@@ -124,7 +124,7 @@ export default function CreateShelterPage() {
                 type="text"
                 value={form.name_en}
                 onChange={(e) => handleChange('name_en', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field"
                 required
               />
             </div>
@@ -135,7 +135,7 @@ export default function CreateShelterPage() {
                 dir="rtl"
                 value={form.name_ar}
                 onChange={(e) => handleChange('name_ar', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field"
               />
             </div>
             <div>
@@ -144,7 +144,7 @@ export default function CreateShelterPage() {
                 type="text"
                 value={form.address_en}
                 onChange={(e) => handleChange('address_en', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field"
               />
             </div>
             <div>
@@ -154,7 +154,7 @@ export default function CreateShelterPage() {
                 dir="rtl"
                 value={form.address_ar}
                 onChange={(e) => handleChange('address_ar', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field"
               />
             </div>
             <div>
@@ -162,7 +162,7 @@ export default function CreateShelterPage() {
               <select
                 value={form.stateId}
                 onChange={(e) => handleChange('stateId', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field"
                 required
               >
                 <option value="">{t('selectState')}</option>
@@ -176,7 +176,7 @@ export default function CreateShelterPage() {
               <select
                 value={form.localityId}
                 onChange={(e) => handleChange('localityId', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field"
                 disabled={!form.stateId}
               >
                 <option value="">{t('selectLocality')}</option>
@@ -190,7 +190,7 @@ export default function CreateShelterPage() {
               <select
                 value={form.managingOrgId}
                 onChange={(e) => handleChange('managingOrgId', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field"
                 required
               >
                 <option value="">{t('selectOrg')}</option>
@@ -206,14 +206,14 @@ export default function CreateShelterPage() {
                 min="1"
                 value={form.capacity}
                 onChange={(e) => handleChange('capacity', e.target.value)}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="input-field"
                 required
               />
             </div>
           </div>
         </div>
 
-        <div className="rounded-lg border bg-card p-6">
+        <div className="card">
           <h2 className="mb-4 text-lg font-semibold">{t('facilities')}</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {(['hasWater', 'hasElectricity', 'hasMedical', 'hasSanitation', 'hasKitchen', 'hasSecurity'] as const).map(
@@ -236,12 +236,12 @@ export default function CreateShelterPage() {
               rows={3}
               value={form.facilityNotes}
               onChange={(e) => handleChange('facilityNotes', e.target.value)}
-              className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+              className="input-field"
             />
           </div>
         </div>
 
-        <div className="rounded-lg border bg-card p-6">
+        <div className="card">
           <h2 className="mb-2 text-lg font-semibold">{t('location')}</h2>
           <p className="mb-4 text-sm text-muted-foreground">{t('clickMapLocation')}</p>
           {markerPos && (
@@ -262,14 +262,14 @@ export default function CreateShelterPage() {
           <button
             type="submit"
             disabled={createMutation.isPending}
-            className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+            className="btn-primary"
           >
             {createMutation.isPending ? t('creating') : t('createShelter')}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-md border px-6 py-2 text-sm hover:bg-accent"
+            className="btn-secondary"
           >
             {tCommon('cancel')}
           </button>
