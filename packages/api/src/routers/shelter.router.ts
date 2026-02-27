@@ -18,6 +18,7 @@ import {
   updateShelter,
   updateOccupancy,
   updateShelterStatus,
+  getShelterStats,
 } from '../services/shelter.service.js';
 
 export const shelterRouter = router({
@@ -64,4 +65,8 @@ export const shelterRouter = router({
     .mutation(async ({ input, ctx }) => {
       return updateShelterStatus(ctx.db, input.id, input.status);
     }),
+
+  stats: protectedProcedure.query(async ({ ctx }) => {
+    return getShelterStats(ctx.db);
+  }),
 });

@@ -2,9 +2,10 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import dynamic from 'next/dynamic';
 import { trpc } from '@/lib/trpc-client';
-import { Map, List, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Map, List, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import type { ShelterStatus } from '@sudanflood/shared';
 import { SHELTER_STATUSES } from '@sudanflood/shared';
 
@@ -59,6 +60,13 @@ export default function SheltersPage() {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold">{t('title')}</h1>
         <div className="flex items-center gap-3">
+          <Link
+            href="/dashboard/shelters/create"
+            className="flex items-center gap-1.5 rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          >
+            <Plus className="h-4 w-4" />
+            {t('createShelter')}
+          </Link>
           <div className="flex rounded-md border">
             <button
               onClick={() => setViewMode('list')}
@@ -121,8 +129,16 @@ export default function SheltersPage() {
                   <tbody>
                     {listQuery.data.items.map((shelter) => (
                       <tr key={shelter.id} className="border-b hover:bg-muted/30">
-                        <td className="px-4 py-3 font-mono">{shelter.shelterCode}</td>
-                        <td className="px-4 py-3">{shelter.name_en}</td>
+                        <td className="px-4 py-3 font-mono">
+                          <Link href={`/dashboard/shelters/${shelter.id}`} className="text-primary hover:underline">
+                            {shelter.shelterCode}
+                          </Link>
+                        </td>
+                        <td className="px-4 py-3">
+                          <Link href={`/dashboard/shelters/${shelter.id}`} className="hover:underline">
+                            {shelter.name_en}
+                          </Link>
+                        </td>
                         <td className="px-4 py-3">
                           <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[shelter.status] ?? ''}`}>
                             {shelter.status.replace(/_/g, ' ')}

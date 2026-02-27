@@ -299,3 +299,39 @@ export async function updateShelterStatus(
 
   return getShelterById(db, id);
 }
+
+export async function getShelterStats(db: Database) {
+  const baseCondition = isNull(shelters.deletedAt);
+
+  const [totalResult, byStatusResult, capacityResult] = await Promise.all([
+    db.select({ count: drizzleCount() }).from(shelters).where(baseCondition),
+    db
+      .select({
+        status: shelters.status,
+        count: drizzleCount(),
+      })
+      .from(shelters)
+      .where(baseCondition)
+      .groupBy(shelters.status),
+    db
+      .select({
+        totalCapacity: sql<number>`COALESCE(SUM(${shelters.capacity}), 0)`,
+        totalOccupancy: sql<number>`COALESCE(SUM(${shelters.currentOccupancy}), 0)`,
+      })
+      .from(shelters)
+      .where(baseCondition),
+  ]);
+
+  const total = totalResult[0]?.count ?? 0;
+  const totalCapacity = Number(capacityResult[0]?.totalCapacity ?? 0);
+  const totalOccupancy = Number(capacityResult[0]?.totalOccupancy ?? 0);
+  const utilizationPct = totalCapacity > 0 ? Math.round((totalOccupancy / totalCapacity) * 100) : 0;
+
+  return {
+    total,
+    byStatus: byStatusResult,
+    totalCapacity,
+    totalOccupancy,
+    utilizationPct,
+  };
+}

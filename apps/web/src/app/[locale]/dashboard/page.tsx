@@ -19,17 +19,24 @@ export default function DashboardPage() {
   const callStatsQuery = trpc.emergencyCall.stats.useQuery(undefined, {
     refetchInterval: 30_000,
   });
+  const shelterStatsQuery = trpc.shelter.stats.useQuery(undefined, {
+    refetchInterval: 30_000,
+  });
+  const dpStatsQuery = trpc.displacedPerson.stats.useQuery(undefined, {
+    refetchInterval: 30_000,
+  });
 
   const stats = statsQuery.data;
   const rescueStats = rescueStatsQuery.data;
   const callStats = callStatsQuery.data;
+  const shelterStats = shelterStatsQuery.data;
+  const dpStats = dpStatsQuery.data;
   const totalZones = stats?.totalZones ?? 0;
-  const totalAffected = stats?.totalAffectedPopulation ?? 0;
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">{t('dashboard.title')}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <StatCard
           label={t('dashboard.activeZones')}
           value={totalZones}
@@ -42,13 +49,18 @@ export default function DashboardPage() {
         />
         <StatCard
           label={t('dashboard.totalSheltered')}
-          value={totalAffected}
+          value={shelterStats?.totalOccupancy ?? 0}
           color="text-green-600"
         />
         <StatCard
           label={t('dashboard.pendingCalls')}
           value={callStats?.pendingCalls ?? 0}
           color="text-yellow-600"
+        />
+        <StatCard
+          label={t('dashboard.totalDisplaced')}
+          value={dpStats?.total ?? 0}
+          color="text-purple-600"
         />
       </div>
 
