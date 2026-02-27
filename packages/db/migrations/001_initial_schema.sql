@@ -126,6 +126,7 @@ CREATE TYPE infrastructure_type AS ENUM (
 );
 
 CREATE TYPE damage_level AS ENUM (
+  'not_assessed',
   'none',
   'minor',
   'moderate',

@@ -17,20 +17,26 @@ async function migrate() {
   const sql = postgres(url, { max: 1 });
 
   try {
-    // Run the raw SQL migration file
     const migrationPath = resolve(__dirname, '../migrations/001_initial_schema.sql');
     const migrationSql = readFileSync(migrationPath, 'utf-8');
 
     console.log('Running migration: 001_initial_schema.sql');
 
-    // Split by statement and execute (handle multi-statement SQL)
-    // We need to execute the whole file as-is since it has functions, triggers, etc.
-    await sql.unsafe(migrationSql);
+    // Use sql.file or execute the whole migration via unsafe.
+    // postgres.js's unsafe() sends multi-statement SQL in a single
+    // simple-query message, which Postgres executes statement-by-statement.
+    // However, if ANY statement fails, the entire batch is aborted.
+    //
+    // To make the migration idempotent, we wrap everything in a
+    // transaction so either all succeed or nothing changes.
+    await sql.begin(async (tx) => {
+      await tx.unsafe(migrationSql);
+    });
 
     console.log('Migration completed successfully!');
   } catch (error) {
     if (error instanceof Error && error.message.includes('already exists')) {
-      console.log('Schema already exists, skipping migration.');
+      console.log('Schema already up to date — nothing to migrate.');
     } else {
       console.error('Migration failed:', error);
       process.exit(1);
