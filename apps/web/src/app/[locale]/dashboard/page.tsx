@@ -13,8 +13,16 @@ export default function DashboardPage() {
   const statsQuery = trpc.floodZone.stats.useQuery(undefined, {
     refetchInterval: 30_000,
   });
+  const rescueStatsQuery = trpc.rescue.stats.useQuery(undefined, {
+    refetchInterval: 30_000,
+  });
+  const callStatsQuery = trpc.emergencyCall.stats.useQuery(undefined, {
+    refetchInterval: 30_000,
+  });
 
   const stats = statsQuery.data;
+  const rescueStats = rescueStatsQuery.data;
+  const callStats = callStatsQuery.data;
   const totalZones = stats?.totalZones ?? 0;
   const totalAffected = stats?.totalAffectedPopulation ?? 0;
 
@@ -29,7 +37,7 @@ export default function DashboardPage() {
         />
         <StatCard
           label={t('dashboard.activeRescues')}
-          value={0}
+          value={rescueStats?.activeRescues ?? 0}
           color="text-blue-600"
         />
         <StatCard
@@ -39,7 +47,7 @@ export default function DashboardPage() {
         />
         <StatCard
           label={t('dashboard.pendingCalls')}
-          value={0}
+          value={callStats?.pendingCalls ?? 0}
           color="text-yellow-600"
         />
       </div>

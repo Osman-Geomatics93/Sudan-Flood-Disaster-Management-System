@@ -7,41 +7,59 @@ import {
   listEmergencyCallsSchema,
   idParamSchema,
 } from '@sudanflood/shared';
+import {
+  listEmergencyCalls,
+  getEmergencyCallById,
+  createEmergencyCall,
+  triageEmergencyCall,
+  dispatchEmergencyCall,
+  resolveEmergencyCall,
+  getActiveCalls,
+  getEmergencyCallStats,
+} from '../services/emergency-call.service.js';
 
 export const emergencyCallRouter = router({
-  list: protectedProcedure.input(listEmergencyCallsSchema).query(async ({ input }) => {
-    return { items: [], total: 0, page: input.page, limit: input.limit, totalPages: 0 };
+  list: protectedProcedure.input(listEmergencyCallsSchema).query(async ({ input, ctx }) => {
+    return listEmergencyCalls(ctx.db, input);
   }),
 
-  getById: protectedProcedure.input(idParamSchema).query(async ({ input: _input }) => {
-    throw new Error('Not implemented');
+  getById: protectedProcedure.input(idParamSchema).query(async ({ input, ctx }) => {
+    return getEmergencyCallById(ctx.db, input.id);
   }),
 
   create: protectedProcedure
     .use(requirePermission('emergency_call:create'))
     .input(createEmergencyCallSchema)
-    .mutation(async ({ input: _input }) => {
-      throw new Error('Not implemented');
+    .mutation(async ({ input, ctx }) => {
+      return createEmergencyCall(ctx.db, input, ctx.user.id);
     }),
 
   triage: adminProcedure
     .use(requirePermission('emergency_call:triage'))
     .input(triageCallSchema)
-    .mutation(async ({ input: _input }) => {
-      throw new Error('Not implemented');
+    .mutation(async ({ input, ctx }) => {
+      return triageEmergencyCall(ctx.db, input);
     }),
 
   dispatch: adminProcedure
     .use(requirePermission('emergency_call:dispatch'))
     .input(dispatchCallSchema)
-    .mutation(async ({ input: _input }) => {
-      throw new Error('Not implemented');
+    .mutation(async ({ input, ctx }) => {
+      return dispatchEmergencyCall(ctx.db, input);
     }),
 
   resolve: adminProcedure
     .use(requirePermission('emergency_call:resolve'))
     .input(resolveCallSchema)
-    .mutation(async ({ input: _input }) => {
-      throw new Error('Not implemented');
+    .mutation(async ({ input, ctx }) => {
+      return resolveEmergencyCall(ctx.db, input);
     }),
+
+  getActive: protectedProcedure.query(async ({ ctx }) => {
+    return getActiveCalls(ctx.db);
+  }),
+
+  stats: protectedProcedure.query(async ({ ctx }) => {
+    return getEmergencyCallStats(ctx.db);
+  }),
 });
