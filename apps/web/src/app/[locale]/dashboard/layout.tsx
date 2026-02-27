@@ -14,6 +14,7 @@ import {
   Package,
   CheckSquare,
   Building2,
+  FileText,
   Sun,
   Moon,
   LogOut,
@@ -43,6 +44,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/dashboard/supplies', labelKey: 'supplies', icon: Package, roles: ['super_admin', 'agency_admin', 'field_worker'] },
   { href: '/dashboard/tasks', labelKey: 'tasks', icon: CheckSquare, roles: ['super_admin', 'agency_admin', 'field_worker'] },
   { href: '/dashboard/organizations', labelKey: 'organizations', icon: Building2, roles: ['super_admin', 'agency_admin', 'field_worker'] },
+  { href: '/dashboard/reports', labelKey: 'reports', icon: FileText, roles: ['super_admin', 'agency_admin', 'field_worker'] },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

@@ -9,6 +9,7 @@ import { displacedPersonRouter } from './displaced-person.router.js';
 import { supplyRouter } from './supply.router.js';
 import { taskRouter } from './task.router.js';
 import { notificationRouter } from './notification.router.js';
+import { reportRouter } from './report.router.js';
 
 export const appRouter = router({
   auth: authRouter,
@@ -21,8 +22,9 @@ export const appRouter = router({
   supply: supplyRouter,
   task: taskRouter,
   notification: notificationRouter,
+  report: reportRouter,
   // Remaining routers added in later milestones:
-  // infrastructure, weather, uavSurvey, citizenReport, report, upload
+  // infrastructure, weather, uavSurvey, upload
 });
 
 export type AppRouter = typeof appRouter;

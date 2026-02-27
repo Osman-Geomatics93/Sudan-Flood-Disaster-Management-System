@@ -9,3 +9,4 @@ export * from './displaced-person.schema.js';
 export * from './supply.schema.js';
 export * from './task.schema.js';
 export * from './notification.schema.js';
+export * from './report.schema.js';

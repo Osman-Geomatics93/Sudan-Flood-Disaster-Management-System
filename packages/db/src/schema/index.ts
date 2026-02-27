@@ -13,3 +13,4 @@ export * from './audit-logs.js';
 export * from './notifications.js';
 export * from './relief-supplies.js';
 export * from './comments.js';
+export * from './reports.js';
