@@ -166,35 +166,28 @@ export async function createFloodZone(db: Database, input: CreateFloodZoneInput)
   const seq = (countResult[0]?.count ?? 0) + 1;
   const zoneCode = generateEntityCode(CODE_PREFIXES.FLOOD_ZONE, seq);
 
-  const [zone] = await db
-    .insert(floodZones)
-    .values({
-      zoneCode,
-      name_en: input.name_en,
-      name_ar: input.name_ar ?? null,
-      severity: input.severity,
-      status: input.status ?? 'monitoring',
-      stateId: input.stateId,
-      localityId: input.localityId ?? null,
-      incidentId: input.incidentId ?? null,
-      waterLevel_m: input.waterLevel?.toString() ?? null,
-      waterLevelTrend: input.waterLevelTrend ?? null,
-      affectedPopulation: input.affectedPopulation ?? 0,
-      monitoredByOrgId: input.monitoredByOrgId ?? null,
-    })
-    .returning();
+  const geojson = JSON.stringify(input.geometry);
+  const name_ar = input.name_ar ?? null;
+  const localityId = input.localityId ?? null;
+  const incidentId = input.incidentId ?? null;
+  const waterLevel_m = input.waterLevel?.toString() ?? null;
+  const waterLevelTrend = input.waterLevelTrend ?? null;
+  const affectedPopulation = input.affectedPopulation ?? 0;
+  const monitoredByOrgId = input.monitoredByOrgId ?? null;
+  const status = input.status ?? 'monitoring';
 
-  if (!zone) {
+  const result = await db.execute(
+    sql`INSERT INTO flood_zones (zone_code, name_en, name_ar, severity, status, state_id, locality_id, incident_id, water_level_m, water_level_trend, affected_population, monitored_by_org_id, geometry)
+        VALUES (${zoneCode}, ${input.name_en}, ${name_ar}, ${input.severity}, ${status}, ${input.stateId}, ${localityId}, ${incidentId}, ${waterLevel_m}, ${waterLevelTrend}, ${affectedPopulation}, ${monitoredByOrgId}, ST_GeomFromGeoJSON(${geojson}))
+        RETURNING id`,
+  );
+
+  const zoneId = (result as unknown as Array<{ id: string }>)[0]?.id;
+  if (!zoneId) {
     throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create flood zone' });
   }
 
-  // Set geometry via raw SQL (DB trigger auto-calculates centroid + area_km2)
-  const geojson = JSON.stringify(input.geometry);
-  await db.execute(
-    sql`UPDATE flood_zones SET geometry = ST_GeomFromGeoJSON(${geojson}) WHERE id = ${zone.id}`,
-  );
-
-  return getFloodZoneById(db, zone.id);
+  return getFloodZoneById(db, zoneId);
 }
 
 export async function updateFloodZone(db: Database, input: UpdateFloodZoneInput) {
