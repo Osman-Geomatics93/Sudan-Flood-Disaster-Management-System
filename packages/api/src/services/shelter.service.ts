@@ -173,42 +173,42 @@ export async function createShelter(db: Database, input: CreateShelterInput) {
   return withCodeRetry(
     async (shelterCode) => {
       const [lng, lat] = input.location;
+      const name_ar = input.name_ar ?? null;
+      const address_en = input.address_en ?? null;
+      const address_ar = input.address_ar ?? null;
+      const localityId = input.localityId ?? null;
+      const managerUserId = input.managerUserId ?? null;
+      const facilityNotes = input.facilityNotes ?? null;
+      const hasWater = input.hasWater ?? false;
+      const hasElectricity = input.hasElectricity ?? false;
+      const hasMedical = input.hasMedical ?? false;
+      const hasSanitation = input.hasSanitation ?? false;
+      const hasKitchen = input.hasKitchen ?? false;
+      const hasSecurity = input.hasSecurity ?? false;
 
-      const [shelter] = await db
-        .insert(shelters)
-        .values({
-          shelterCode,
-          name_en: input.name_en,
-          name_ar: input.name_ar ?? null,
-          status: 'preparing',
-          address_en: input.address_en ?? null,
-          address_ar: input.address_ar ?? null,
-          stateId: input.stateId,
-          localityId: input.localityId ?? null,
-          managingOrgId: input.managingOrgId,
-          managerUserId: input.managerUserId ?? null,
-          capacity: input.capacity,
-          currentOccupancy: 0,
-          hasWater: input.hasWater ?? false,
-          hasElectricity: input.hasElectricity ?? false,
-          hasMedical: input.hasMedical ?? false,
-          hasSanitation: input.hasSanitation ?? false,
-          hasKitchen: input.hasKitchen ?? false,
-          hasSecurity: input.hasSecurity ?? false,
-          facilityNotes: input.facilityNotes ?? null,
-        })
-        .returning();
+      const result = await db.execute(
+        sql`INSERT INTO shelters (
+          shelter_code, name_en, name_ar, status,
+          address_en, address_ar, state_id, locality_id,
+          managing_org_id, manager_user_id, capacity, current_occupancy,
+          has_water, has_electricity, has_medical, has_sanitation,
+          has_kitchen, has_security, facility_notes, location
+        ) VALUES (
+          ${shelterCode}, ${input.name_en}, ${name_ar}, 'preparing',
+          ${address_en}, ${address_ar}, ${input.stateId}, ${localityId},
+          ${input.managingOrgId}, ${managerUserId}, ${input.capacity}, 0,
+          ${hasWater}, ${hasElectricity}, ${hasMedical}, ${hasSanitation},
+          ${hasKitchen}, ${hasSecurity}, ${facilityNotes},
+          ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)
+        ) RETURNING id`,
+      );
 
-      if (!shelter) {
+      const newId = (result as unknown as { id: string }[])[0]?.id;
+      if (!newId) {
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create shelter' });
       }
 
-      // Set location via raw SQL
-      await db.execute(
-        sql`UPDATE shelters SET location = ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326) WHERE id = ${shelter.id}`,
-      );
-
-      return getShelterById(db, shelter.id);
+      return getShelterById(db, newId);
     },
     db,
     shelters,
