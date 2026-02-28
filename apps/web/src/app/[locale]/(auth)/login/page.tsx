@@ -44,24 +44,23 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen">
       {/* Left panel — branding */}
-      <div className="bg-primary relative hidden items-end p-12 lg:flex lg:w-[45%]">
-        <div className="relative z-10">
-          <div className="mb-8 flex items-center gap-3">
+      <div className="bg-primary relative hidden flex-col items-center justify-center p-12 lg:flex lg:w-[45%]">
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <div className="mb-6 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm">
             <Image
               src="/logo.png"
-              alt="HRC Sudan"
-              width={44}
-              height={44}
-              className="rounded-md bg-white/90 p-1 backdrop-blur-sm"
+              alt="HRC Sudan - Hydraulics Research Center"
+              width={120}
+              height={120}
+              className="h-auto w-[120px]"
+              priority
             />
-            <span className="font-heading text-primary-foreground text-lg font-semibold tracking-tight">
-              SudanFlood
-            </span>
           </div>
-          <h2 className="font-heading text-primary-foreground mb-3 text-3xl font-bold leading-tight">
-            {t('loginSubtitle')}
+          <h2 className="font-heading text-primary-foreground mb-2 text-2xl font-bold tracking-tight">
+            SudanFlood
           </h2>
-          <p className="text-primary-foreground/70 max-w-md text-sm leading-relaxed">
+          <p className="text-primary-foreground/80 mb-6 text-sm">{t('loginSubtitle')}</p>
+          <p className="text-primary-foreground/60 max-w-sm text-sm leading-relaxed">
             Inter-agency emergency coordination platform for flood disaster management across Sudan.
           </p>
         </div>
