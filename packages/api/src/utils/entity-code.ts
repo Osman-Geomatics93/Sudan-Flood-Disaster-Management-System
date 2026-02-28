@@ -40,8 +40,7 @@ export async function withCodeRetry<T>(
     } catch (error) {
       if (
         error instanceof Error &&
-        (error.message.includes('duplicate key') ||
-          error.message.includes('unique constraint')) &&
+        (error.message.includes('duplicate key') || error.message.includes('unique constraint')) &&
         error.message.includes('_code_') &&
         attempt < MAX_RETRIES
       ) {

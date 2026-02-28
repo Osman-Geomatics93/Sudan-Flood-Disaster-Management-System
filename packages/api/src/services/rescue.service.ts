@@ -189,8 +189,10 @@ export async function updateRescueOperation(db: Database, input: UpdateRescueOpe
   if (fields.floodZoneId !== undefined) updates.floodZoneId = fields.floodZoneId;
   if (fields.assignedOrgId !== undefined) updates.assignedOrgId = fields.assignedOrgId;
   if (fields.operationType !== undefined)
-    updates.operationType = fields.operationType as (typeof rescueOperations.operationType.enumValues)[number];
-  if (fields.estimatedPersonsAtRisk !== undefined) updates.estimatedPersonsAtRisk = fields.estimatedPersonsAtRisk;
+    updates.operationType =
+      fields.operationType as (typeof rescueOperations.operationType.enumValues)[number];
+  if (fields.estimatedPersonsAtRisk !== undefined)
+    updates.estimatedPersonsAtRisk = fields.estimatedPersonsAtRisk;
   if (fields.notes !== undefined) updates.notes = fields.notes;
 
   await db.update(rescueOperations).set(updates).where(eq(rescueOperations.id, id));

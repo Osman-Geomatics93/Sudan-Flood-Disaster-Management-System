@@ -1,4 +1,10 @@
-import { router, protectedProcedure, adminProcedure, superAdminProcedure, requirePermission } from '../trpc.js';
+import {
+  router,
+  protectedProcedure,
+  adminProcedure,
+  superAdminProcedure,
+  requirePermission,
+} from '../trpc.js';
 import {
   createRescueOperationSchema,
   updateRescueOperationSchema,
@@ -47,11 +53,9 @@ export const rescueRouter = router({
       return updateRescueOperation(ctx.db, input);
     }),
 
-  delete: superAdminProcedure
-    .input(idParamSchema)
-    .mutation(async ({ input, ctx }) => {
-      return deleteRescueOperation(ctx.db, input.id);
-    }),
+  delete: superAdminProcedure.input(idParamSchema).mutation(async ({ input, ctx }) => {
+    return deleteRescueOperation(ctx.db, input.id);
+  }),
 
   dispatch: adminProcedure
     .use(requirePermission('rescue:dispatch'))

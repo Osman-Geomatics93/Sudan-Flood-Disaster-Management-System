@@ -36,10 +36,7 @@ async function migrate() {
     }
 
     // Run drizzle-generated migration for new tables (weather_alerts, file_attachments, etc.)
-    const drizzleMigrationPath = resolve(
-      __dirname,
-      '../migrations/0000_funny_wasp.sql',
-    );
+    const drizzleMigrationPath = resolve(__dirname, '../migrations/0000_funny_wasp.sql');
     try {
       const drizzleMigrationSql = readFileSync(drizzleMigrationPath, 'utf-8');
       // Split on statement breakpoints and run each statement individually
@@ -56,8 +53,7 @@ async function migrate() {
         } catch (e) {
           if (
             e instanceof Error &&
-            (e.message.includes('already exists') ||
-              e.message.includes('duplicate key'))
+            (e.message.includes('already exists') || e.message.includes('duplicate key'))
           ) {
             // Skip — table/type/constraint already exists
           } else {

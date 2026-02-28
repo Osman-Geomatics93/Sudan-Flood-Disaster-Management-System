@@ -65,12 +65,7 @@ export async function getDownloadUrl(db: Database, id: string) {
   return { url, fileName: attachment.fileName, mimeType: attachment.mimeType };
 }
 
-export async function deleteAttachment(
-  db: Database,
-  id: string,
-  userId: string,
-  userRole: string,
-) {
+export async function deleteAttachment(db: Database, id: string, userId: string, userRole: string) {
   const [attachment] = await db
     .select()
     .from(fileAttachments)

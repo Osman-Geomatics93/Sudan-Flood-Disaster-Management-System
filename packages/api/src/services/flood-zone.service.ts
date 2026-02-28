@@ -178,7 +178,10 @@ export async function createFloodZone(db: Database, input: CreateFloodZoneInput)
 
       const zoneId = (result as unknown as { id: string }[])[0]?.id;
       if (!zoneId) {
-        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create flood zone' });
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create flood zone',
+        });
       }
 
       return getFloodZoneById(db, zoneId);

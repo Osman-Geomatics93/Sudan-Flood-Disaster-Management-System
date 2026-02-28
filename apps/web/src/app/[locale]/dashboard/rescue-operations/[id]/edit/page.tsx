@@ -133,9 +133,7 @@ export default function EditRescueOperationPage() {
         <button onClick={() => router.back()} className="hover:bg-accent rounded-md p-2">
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          {t('editOperation')}
-        </h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('editOperation')}</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -283,9 +281,7 @@ export default function EditRescueOperationPage() {
         </div>
 
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
-            {t('notes')}
-          </h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('notes')}</h2>
           <textarea
             rows={3}
             value={form.notes}
