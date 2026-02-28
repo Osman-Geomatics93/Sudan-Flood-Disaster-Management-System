@@ -50,7 +50,6 @@ function BoundsTracker({
       east: bounds.getEast(),
       west: bounds.getWest(),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;

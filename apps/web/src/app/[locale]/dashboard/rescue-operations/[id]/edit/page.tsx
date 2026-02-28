@@ -86,7 +86,10 @@ export default function EditRescueOperationPage() {
     const lng = form.longitude ? parseFloat(form.longitude) : undefined;
     const lat = form.latitude ? parseFloat(form.latitude) : undefined;
 
-    if ((lng !== undefined || lat !== undefined) && (isNaN(lng!) || isNaN(lat!))) {
+    if (
+      (lng !== undefined || lat !== undefined) &&
+      (lng === undefined || lat === undefined || isNaN(lng) || isNaN(lat))
+    ) {
       setError('Invalid coordinates');
       return;
     }
