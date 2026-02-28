@@ -245,9 +245,7 @@ export default function EditEmergencyCallPage() {
         </div>
 
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
-            {t('notes')}
-          </h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('notes')}</h2>
           <textarea
             rows={3}
             value={form.notes}

@@ -69,7 +69,13 @@ export default function EditSupplyPage() {
     e.preventDefault();
     setError('');
 
-    if (!form.supplyType || !form.itemName_en || !form.quantity || !form.unit || !form.sourceOrgId) {
+    if (
+      !form.supplyType ||
+      !form.itemName_en ||
+      !form.quantity ||
+      !form.unit ||
+      !form.sourceOrgId
+    ) {
       setError('Please fill in all required fields');
       return;
     }

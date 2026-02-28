@@ -318,10 +318,7 @@ export async function updateSupply(db: Database, input: UpdateSupplyInput) {
 
 export async function deleteSupply(db: Database, id: string) {
   await getSupplyById(db, id);
-  await db
-    .update(reliefSupplies)
-    .set({ deletedAt: new Date() })
-    .where(eq(reliefSupplies.id, id));
+  await db.update(reliefSupplies).set({ deletedAt: new Date() }).where(eq(reliefSupplies.id, id));
   return { success: true };
 }
 
