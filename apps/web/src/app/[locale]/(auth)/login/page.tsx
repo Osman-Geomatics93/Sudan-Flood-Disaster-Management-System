@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
@@ -46,9 +47,13 @@ export default function LoginPage() {
       <div className="bg-primary relative hidden items-end p-12 lg:flex lg:w-[45%]">
         <div className="relative z-10">
           <div className="mb-8 flex items-center gap-3">
-            <div className="bg-primary-foreground/20 text-primary-foreground flex h-10 w-10 items-center justify-center rounded-md text-sm font-bold backdrop-blur-sm">
-              SF
-            </div>
+            <Image
+              src="/logo.png"
+              alt="HRC Sudan"
+              width={44}
+              height={44}
+              className="rounded-md bg-white/90 p-1 backdrop-blur-sm"
+            />
             <span className="font-heading text-primary-foreground text-lg font-semibold tracking-tight">
               SudanFlood
             </span>
@@ -74,9 +79,13 @@ export default function LoginPage() {
         <div className="w-full max-w-sm">
           {/* Mobile logo */}
           <div className="mb-10 flex items-center gap-2.5 lg:hidden">
-            <div className="bg-primary text-primary-foreground flex h-9 w-9 items-center justify-center rounded-md text-sm font-bold">
-              SF
-            </div>
+            <Image
+              src="/logo.png"
+              alt="HRC Sudan"
+              width={40}
+              height={40}
+              className="drop-shadow-sm"
+            />
             <span className="font-heading text-base font-semibold tracking-tight">SudanFlood</span>
           </div>
 

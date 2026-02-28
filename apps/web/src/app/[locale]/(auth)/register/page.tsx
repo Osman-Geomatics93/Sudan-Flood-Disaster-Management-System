@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
@@ -82,9 +83,13 @@ export default function RegisterPage() {
     <div className="bg-muted/40 flex min-h-screen items-center justify-center px-4 py-8">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-          <div className="bg-primary text-primary-foreground mx-auto flex h-14 w-14 items-center justify-center rounded-xl text-xl font-bold">
-            SF
-          </div>
+          <Image
+            src="/logo.png"
+            alt="HRC Sudan"
+            width={56}
+            height={56}
+            className="mx-auto drop-shadow-md"
+          />
           <h1 className="mt-4 text-2xl font-bold tracking-tight">{t('registerTitle')}</h1>
           <p className="text-muted-foreground mt-2 text-sm">{t('registerSubtitle')}</p>
         </div>
