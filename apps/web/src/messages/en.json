@@ -299,7 +299,12 @@
     "creating": "Recording...",
     "timeline": "Timeline",
     "linkedRescue": "Linked Rescue Operation",
-    "viewRescueOp": "View Rescue Operation"
+    "viewRescueOp": "View Rescue Operation",
+    "editTitle": "Edit Emergency Call",
+    "editCall": "Edit Call",
+    "deleteConfirm": "Are you sure you want to delete this emergency call? This action cannot be undone.",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes"
   },
   "rescue": {
     "title": "Rescue Operations",

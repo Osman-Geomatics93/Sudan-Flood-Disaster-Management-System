@@ -2,7 +2,7 @@ import { eq, and, sql, count as drizzleCount, inArray } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { emergencyCalls } from '@sudanflood/db/schema';
-import type { CreateEmergencyCallInput } from '@sudanflood/shared';
+import type { CreateEmergencyCallInput, UpdateEmergencyCallInput } from '@sudanflood/shared';
 import { CODE_PREFIXES } from '@sudanflood/shared';
 import { withCodeRetry } from '../utils/entity-code.js';
 import { createRescueOperation } from './rescue.service.js';
@@ -271,6 +271,38 @@ export async function resolveEmergencyCall(db: Database, input: { id: string; no
     .where(eq(emergencyCalls.id, input.id));
 
   return getEmergencyCallById(db, input.id);
+}
+
+export async function updateEmergencyCall(db: Database, input: UpdateEmergencyCallInput) {
+  const existing = await getEmergencyCallById(db, input.id);
+
+  await db
+    .update(emergencyCalls)
+    .set({
+      ...(input.callerName !== undefined && { callerName: input.callerName }),
+      ...(input.callerPhone !== undefined && { callerPhone: input.callerPhone }),
+      ...(input.callerAddress !== undefined && { callerAddress: input.callerAddress }),
+      ...(input.callNumber !== undefined && { callNumber: input.callNumber }),
+      ...(input.urgency !== undefined && {
+        urgency: input.urgency as (typeof emergencyCalls.urgency.enumValues)[number],
+      }),
+      ...(input.description_en !== undefined && { description_en: input.description_en }),
+      ...(input.description_ar !== undefined && { description_ar: input.description_ar }),
+      ...(input.personsAtRisk !== undefined && { personsAtRisk: input.personsAtRisk }),
+      ...(input.stateId !== undefined && { stateId: input.stateId }),
+      ...(input.floodZoneId !== undefined && { floodZoneId: input.floodZoneId }),
+      ...(input.notes !== undefined && { notes: input.notes }),
+      updatedAt: new Date(),
+    })
+    .where(eq(emergencyCalls.id, existing.id));
+
+  return getEmergencyCallById(db, input.id);
+}
+
+export async function deleteEmergencyCall(db: Database, id: string) {
+  await getEmergencyCallById(db, id);
+  await db.delete(emergencyCalls).where(eq(emergencyCalls.id, id));
+  return { success: true };
 }
 
 export async function getActiveCalls(db: Database) {

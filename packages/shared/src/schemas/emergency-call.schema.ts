@@ -19,6 +19,23 @@ export const createEmergencyCallSchema = z.object({
 
 export type CreateEmergencyCallInput = z.infer<typeof createEmergencyCallSchema>;
 
+export const updateEmergencyCallSchema = z.object({
+  id: uuidSchema,
+  callerName: z.string().max(200).optional(),
+  callerPhone: sudanPhoneSchema.optional(),
+  callerAddress: z.string().optional(),
+  callNumber: z.enum(['999', '112']).optional(),
+  urgency: z.enum(CALL_URGENCIES).optional(),
+  description_en: z.string().optional(),
+  description_ar: z.string().optional(),
+  personsAtRisk: z.number().int().min(0).optional(),
+  stateId: uuidSchema.optional(),
+  floodZoneId: uuidSchema.optional(),
+  notes: z.string().optional(),
+});
+
+export type UpdateEmergencyCallInput = z.infer<typeof updateEmergencyCallSchema>;
+
 export const triageCallSchema = z.object({
   id: uuidSchema,
   urgency: z.enum(CALL_URGENCIES),

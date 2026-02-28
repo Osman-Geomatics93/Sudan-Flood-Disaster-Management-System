@@ -1,6 +1,7 @@
 import { router, protectedProcedure, adminProcedure, requirePermission } from '../trpc.js';
 import {
   createEmergencyCallSchema,
+  updateEmergencyCallSchema,
   triageCallSchema,
   dispatchCallSchema,
   resolveCallSchema,
@@ -11,6 +12,8 @@ import {
   listEmergencyCalls,
   getEmergencyCallById,
   createEmergencyCall,
+  updateEmergencyCall,
+  deleteEmergencyCall,
   triageEmergencyCall,
   dispatchEmergencyCall,
   resolveEmergencyCall,
@@ -32,6 +35,20 @@ export const emergencyCallRouter = router({
     .input(createEmergencyCallSchema)
     .mutation(async ({ input, ctx }) => {
       return createEmergencyCall(ctx.db, input, ctx.user.id);
+    }),
+
+  update: protectedProcedure
+    .use(requirePermission('emergency_call:create'))
+    .input(updateEmergencyCallSchema)
+    .mutation(async ({ input, ctx }) => {
+      return updateEmergencyCall(ctx.db, input);
+    }),
+
+  delete: protectedProcedure
+    .use(requirePermission('emergency_call:triage'))
+    .input(idParamSchema)
+    .mutation(async ({ input, ctx }) => {
+      return deleteEmergencyCall(ctx.db, input.id);
     }),
 
   triage: adminProcedure

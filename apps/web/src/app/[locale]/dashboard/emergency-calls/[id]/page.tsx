@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, Phone, Clock, AlertTriangle, Users } from 'lucide-react';
+import { ArrowLeft, Phone, Clock, AlertTriangle, Users, Pencil, Trash2 } from 'lucide-react';
 import { CALL_URGENCIES } from '@sudanflood/shared';
 
 const URGENCY_STYLES: Record<string, string> = {
@@ -55,6 +55,19 @@ export default function EmergencyCallDetailPage() {
       utils.emergencyCall.getById.invalidate({ id });
     },
   });
+
+  const deleteMutation = trpc.emergencyCall.delete.useMutation({
+    onSuccess: () => {
+      utils.emergencyCall.list.invalidate();
+      router.push('/dashboard/emergency-calls');
+    },
+  });
+
+  const handleDelete = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      deleteMutation.mutate({ id });
+    }
+  };
 
   if (callQuery.isLoading) {
     return (
@@ -107,6 +120,23 @@ export default function EmergencyCallDetailPage() {
             </h1>
             <p className="text-muted-foreground font-mono text-sm">{call.callCode}</p>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/dashboard/emergency-calls/${id}/edit`}
+            className="btn-secondary inline-flex items-center gap-2 text-sm"
+          >
+            <Pencil className="h-4 w-4" />
+            {t('editCall')}
+          </Link>
+          <button
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="inline-flex items-center gap-2 rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" />
+            {tCommon('delete')}
+          </button>
         </div>
       </div>
 
