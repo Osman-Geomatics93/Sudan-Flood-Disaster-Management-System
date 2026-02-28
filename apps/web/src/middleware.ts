@@ -5,5 +5,5 @@ export default createMiddleware(routing);
 
 export const config = {
   // Match all pathnames except for API routes, static files, etc.
-  matcher: ['/', '/(ar|en)/:path*'],
+  matcher: ['/', '/(ar|en)/:path*', '/login', '/register', '/dashboard/:path*'],
 };
