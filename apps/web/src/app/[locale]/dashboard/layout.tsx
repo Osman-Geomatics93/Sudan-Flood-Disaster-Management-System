@@ -29,6 +29,7 @@ import {
   Calculator,
   Shield,
 } from 'lucide-react';
+import Image from 'next/image';
 import { useState, type ComponentType } from 'react';
 import { trpc } from '@/lib/trpc-client';
 import type { UserRole } from '@sudanflood/shared';
@@ -201,9 +202,13 @@ function SidebarContent({
     <>
       <div className="border-b px-5 py-5">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-md text-xs font-bold tracking-tight">
-            SF
-          </div>
+          <Image
+            src="/logo.png"
+            alt="SudanFlood"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-md"
+          />
           <span className="font-heading text-base font-semibold tracking-tight">SudanFlood</span>
         </Link>
         {session?.user && (
