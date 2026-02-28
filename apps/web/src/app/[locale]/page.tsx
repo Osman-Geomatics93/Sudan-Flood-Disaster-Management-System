@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
@@ -7,10 +8,15 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
       <div className="animate-slide-up mx-auto max-w-xl text-center">
-        <div className="mb-8">
-          <div className="bg-primary text-primary-foreground inline-flex h-14 w-14 items-center justify-center rounded-lg text-xl font-bold">
-            SF
-          </div>
+        <div className="mb-8 flex justify-center">
+          <Image
+            src="/logo.png"
+            alt="HRC Sudan - Hydraulics Research Center"
+            width={96}
+            height={96}
+            className="drop-shadow-md dark:brightness-110 dark:contrast-105"
+            priority
+          />
         </div>
         <h1 className="font-heading mb-3 text-4xl font-bold tracking-tight">
           {t('common.appName')}
