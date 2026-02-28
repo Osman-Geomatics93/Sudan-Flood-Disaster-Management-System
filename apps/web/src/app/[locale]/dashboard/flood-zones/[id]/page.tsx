@@ -2,12 +2,12 @@
 
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/navigation';
+import { useRouter, Link } from '@/i18n/navigation';
 import dynamic from 'next/dynamic';
 import { trpc } from '@/lib/trpc-client';
 import { SeverityBadge } from '@/components/flood-zones/SeverityBadge';
 import { StatusBadge } from '@/components/flood-zones/StatusBadge';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), { ssr: false });
 const FloodZoneLayer = dynamic(() => import('@/components/map/FloodZoneLayer'), { ssr: false });
@@ -18,7 +18,23 @@ export default function FloodZoneDetailPage() {
   const t = useTranslations('floodZone');
   const router = useRouter();
 
+  const tCommon = useTranslations('common');
   const zoneQuery = trpc.floodZone.getById.useQuery({ id });
+
+  const archiveMutation = trpc.floodZone.archive.useMutation({
+    onSuccess: () => {
+      router.push('/dashboard/flood-zones');
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
+  const handleDelete = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      archiveMutation.mutate({ id });
+    }
+  };
 
   if (zoneQuery.isLoading) {
     return (
@@ -74,6 +90,23 @@ export default function FloodZoneDetailPage() {
             <h1 className="font-heading text-2xl font-semibold tracking-tight">{zone.name_en}</h1>
             <p className="text-sm text-muted-foreground font-mono">{zone.zoneCode}</p>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/dashboard/flood-zones/${id}/edit`}
+            className="btn-secondary inline-flex items-center gap-2"
+          >
+            <Pencil className="h-4 w-4" />
+            {tCommon('edit')}
+          </Link>
+          <button
+            onClick={handleDelete}
+            disabled={archiveMutation.isPending}
+            className="inline-flex items-center gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/20 disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" />
+            {archiveMutation.isPending ? tCommon('loading') : tCommon('delete')}
+          </button>
         </div>
       </div>
 

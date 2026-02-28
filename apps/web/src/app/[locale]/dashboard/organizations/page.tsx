@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react';
 import { ORG_TYPES } from '@sudanflood/shared';
 import type { OrgType } from '@sudanflood/shared';
 
@@ -36,8 +37,15 @@ export default function OrganizationsPage() {
 
   return (
     <div className="animate-in">
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
+        <Link
+          href="/dashboard/organizations/create"
+          className="btn-primary flex items-center gap-1.5 text-sm"
+        >
+          <Plus className="h-4 w-4" />
+          {t('createOrg')}
+        </Link>
       </div>
 
       <div className="mb-4 flex flex-wrap gap-3">
@@ -91,7 +99,7 @@ export default function OrganizationsPage() {
                 {listQuery.data.items.map((org) => (
                   <tr key={org.id} className="border-b last:border-0 hover:bg-accent/50">
                     <td className="px-4 py-3.5">
-                      <div className="font-medium text-sm">{org.name_en}</div>
+                      <Link href={`/dashboard/organizations/${org.id}`} className="font-medium text-sm text-primary hover:underline">{org.name_en}</Link>
                       {org.name_ar && <div className="text-xs text-muted-foreground mt-0.5" dir="rtl">{org.name_ar}</div>}
                     </td>
                     <td className="px-4 py-3.5 font-mono text-sm">{org.acronym ?? '—'}</td>

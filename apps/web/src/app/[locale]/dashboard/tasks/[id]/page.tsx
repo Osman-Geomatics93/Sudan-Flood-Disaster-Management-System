@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Pencil, Send } from 'lucide-react';
 import { TASK_STATUSES } from '@sudanflood/shared';
 
 const STATUS_STYLES: Record<string, string> = {
@@ -83,14 +83,23 @@ export default function TaskDetailPage() {
 
   return (
     <div className="animate-in mx-auto max-w-3xl">
-      <div className="mb-6 flex items-center gap-3">
-        <Link href="/dashboard/tasks" className="btn-secondary rounded-md p-1">
-          <ArrowLeft className="h-5 w-5" />
-        </Link>
-        <div>
-          <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
-          <p className="text-sm text-muted-foreground font-mono">{task.taskCode}</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Link href="/dashboard/tasks" className="btn-secondary rounded-md p-1">
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <div>
+            <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
+            <p className="text-sm text-muted-foreground font-mono">{task.taskCode}</p>
+          </div>
         </div>
+        <Link
+          href={`/dashboard/tasks/${id}/edit`}
+          className="btn-secondary flex items-center gap-1.5"
+        >
+          <Pencil className="h-4 w-4" />
+          {tCommon('edit')}
+        </Link>
       </div>
 
       {/* Status & Priority */}

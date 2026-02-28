@@ -6,7 +6,7 @@ import { useRouter } from '@/i18n/navigation';
 import { Link } from '@/i18n/navigation';
 import dynamic from 'next/dynamic';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, Droplets, Zap, Stethoscope, ShowerHead, CookingPot, Shield, Users } from 'lucide-react';
+import { ArrowLeft, Droplets, Zap, Stethoscope, ShowerHead, CookingPot, Shield, Users, Pencil } from 'lucide-react';
 import { Marker, Popup } from 'react-leaflet';
 
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), { ssr: false });
@@ -35,6 +35,7 @@ export default function ShelterDetailPage() {
   const t = useTranslations('shelter');
   const router = useRouter();
 
+  const tCommon = useTranslations('common');
   const shelterQuery = trpc.shelter.getById.useQuery({ id });
 
   if (shelterQuery.isLoading) {
@@ -80,9 +81,18 @@ export default function ShelterDetailPage() {
             <p className="font-mono text-sm text-muted-foreground">{shelter.shelterCode}</p>
           </div>
         </div>
-        <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${STATUS_STYLES[shelter.status] ?? ''}`}>
-          {t(`status_${shelter.status}`)}
-        </span>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/dashboard/shelters/${id}/edit`}
+            className="btn-secondary inline-flex items-center gap-2"
+          >
+            <Pencil className="h-4 w-4" />
+            {tCommon('edit')}
+          </Link>
+          <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${STATUS_STYLES[shelter.status] ?? ''}`}>
+            {t(`status_${shelter.status}`)}
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

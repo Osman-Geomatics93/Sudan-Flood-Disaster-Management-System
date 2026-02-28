@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, Link } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, Heart, Home, Users } from 'lucide-react';
+import { ArrowLeft, Heart, Home, Pencil, Users } from 'lucide-react';
 import { HEALTH_STATUSES } from '@sudanflood/shared';
 import type { HealthStatus } from '@sudanflood/shared';
 
@@ -125,6 +125,13 @@ export default function DisplacedPersonDetailPage() {
             <p className="font-mono text-sm text-muted-foreground">{person.registrationCode}</p>
           </div>
         </div>
+        <Link
+          href={`/dashboard/displaced-persons/${id}/edit`}
+          className="btn-secondary flex items-center gap-1.5"
+        >
+          <Pencil className="h-4 w-4" />
+          {tCommon('edit')}
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { trpc } from '@/lib/trpc-client';
-import { CloudLightning, AlertTriangle, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { CloudLightning, AlertTriangle, ShieldAlert, ShieldCheck, Plus } from 'lucide-react';
 
 const SEVERITY_COLORS: Record<string, string> = {
   advisory: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
@@ -44,6 +45,13 @@ export default function WeatherAlertsPage() {
     <div className="animate-in">
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
+        <Link
+          href="/dashboard/weather-alerts/create"
+          className="btn-primary flex items-center gap-1.5"
+        >
+          <Plus className="h-4 w-4" />
+          {t('createAlert')}
+        </Link>
       </div>
 
       {/* Tab Toggle */}

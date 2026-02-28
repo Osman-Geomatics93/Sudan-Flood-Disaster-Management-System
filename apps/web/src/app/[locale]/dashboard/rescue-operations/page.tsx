@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { OPERATION_STATUSES, TASK_PRIORITIES } from '@sudanflood/shared';
 import type { OperationStatus, TaskPriority } from '@sudanflood/shared';
 
@@ -45,6 +45,13 @@ export default function RescueOperationsPage() {
     <div className="animate-in">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
+        <Link
+          href="/dashboard/rescue-operations/create"
+          className="btn-primary flex items-center gap-1.5"
+        >
+          <Plus className="h-4 w-4" />
+          {t('createOperation')}
+        </Link>
       </div>
 
       <div className="mb-4 flex flex-wrap gap-3">
