@@ -3,10 +3,10 @@
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/navigation';
+import { useRouter, Link } from '@/i18n/navigation';
 import dynamic from 'next/dynamic';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, Clock, Users, AlertTriangle, MapPin } from 'lucide-react';
+import { ArrowLeft, Clock, Users, AlertTriangle, MapPin, Pencil, Trash2 } from 'lucide-react';
 import { OPERATION_STATUSES } from '@sudanflood/shared';
 import type { OperationStatus } from '@sudanflood/shared';
 
@@ -76,6 +76,15 @@ export default function RescueOperationDetailPage() {
     },
   });
 
+  const deleteMutation = trpc.rescue.delete.useMutation({
+    onSuccess: () => {
+      router.push('/dashboard/rescue-operations');
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
   if (opQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -98,6 +107,14 @@ export default function RescueOperationDetailPage() {
   const targetCoords = op.targetLocation
     ? (op.targetLocation as { coordinates: [number, number] }).coordinates
     : null;
+
+  const isDeletable = ['pending', 'aborted', 'failed'].includes(op.status);
+
+  const handleDelete = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      deleteMutation.mutate({ id: op.id });
+    }
+  };
 
   const handleDispatch = () => {
     dispatchMutation.mutate({ id: op.id });
@@ -150,6 +167,25 @@ export default function RescueOperationDetailPage() {
             <h1 className="font-heading text-2xl font-semibold tracking-tight">{op.title_en}</h1>
             <p className="text-muted-foreground font-mono text-sm">{op.operationCode}</p>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/dashboard/rescue-operations/${id}/edit`}
+            className="btn-secondary inline-flex items-center gap-2"
+          >
+            <Pencil className="h-4 w-4" />
+            {tCommon('edit')}
+          </Link>
+          {isDeletable && (
+            <button
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+              className="border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium disabled:opacity-50"
+            >
+              <Trash2 className="h-4 w-4" />
+              {deleteMutation.isPending ? tCommon('loading') : tCommon('delete')}
+            </button>
+          )}
         </div>
       </div>
 

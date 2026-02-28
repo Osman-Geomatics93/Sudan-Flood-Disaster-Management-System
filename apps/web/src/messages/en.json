@@ -354,7 +354,13 @@
     "floodZone": "Flood Zone",
     "selectFloodZone": "Select Flood Zone",
     "assignedOrg": "Assigned Organization",
-    "selectOrg": "Select Organization"
+    "selectOrg": "Select Organization",
+    "editOperation": "Edit Operation",
+    "deleteOperation": "Delete Operation",
+    "deleteConfirm": "Are you sure you want to delete this rescue operation? This action cannot be undone.",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "cannotDeleteActive": "Only pending, aborted, or failed operations can be deleted."
   },
   "supply": {
     "title": "Relief Supplies",

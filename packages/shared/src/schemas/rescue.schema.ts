@@ -42,6 +42,22 @@ export const completeRescueSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const updateRescueOperationSchema = z.object({
+  id: uuidSchema,
+  title_en: z.string().min(1).max(300).optional(),
+  title_ar: z.string().max(600).optional(),
+  description: z.string().optional(),
+  priority: z.enum(TASK_PRIORITIES).optional(),
+  floodZoneId: uuidSchema.optional(),
+  assignedOrgId: uuidSchema.optional(),
+  operationType: z.enum(RESCUE_OPERATION_TYPES).optional(),
+  estimatedPersonsAtRisk: z.number().int().min(0).optional(),
+  targetLocation: coordinateSchema.optional(),
+  notes: z.string().optional(),
+});
+
+export type UpdateRescueOperationInput = z.infer<typeof updateRescueOperationSchema>;
+
 export const listRescueOperationsSchema = paginationSchema.extend({
   status: z.enum(OPERATION_STATUSES).optional(),
   zoneId: uuidSchema.optional(),

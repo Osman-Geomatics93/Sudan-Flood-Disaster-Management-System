@@ -2,7 +2,7 @@ import { eq, and, sql, count as drizzleCount, inArray } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { rescueOperations, rescueTeamMembers } from '@sudanflood/db/schema';
-import type { CreateRescueOperationInput } from '@sudanflood/shared';
+import type { CreateRescueOperationInput, UpdateRescueOperationInput } from '@sudanflood/shared';
 import { CODE_PREFIXES } from '@sudanflood/shared';
 import { withCodeRetry } from '../utils/entity-code.js';
 
@@ -172,6 +172,53 @@ export async function createRescueOperation(
     rescueOperations,
     CODE_PREFIXES.RESCUE_OPERATION,
   );
+}
+
+export async function updateRescueOperation(db: Database, input: UpdateRescueOperationInput) {
+  await getRescueOperationById(db, input.id);
+
+  const { id, targetLocation, ...fields } = input;
+
+  const updates: Record<string, unknown> = { updatedAt: new Date() };
+
+  if (fields.title_en !== undefined) updates.title_en = fields.title_en;
+  if (fields.title_ar !== undefined) updates.title_ar = fields.title_ar;
+  if (fields.description !== undefined) updates.description = fields.description;
+  if (fields.priority !== undefined)
+    updates.priority = fields.priority as (typeof rescueOperations.priority.enumValues)[number];
+  if (fields.floodZoneId !== undefined) updates.floodZoneId = fields.floodZoneId;
+  if (fields.assignedOrgId !== undefined) updates.assignedOrgId = fields.assignedOrgId;
+  if (fields.operationType !== undefined)
+    updates.operationType = fields.operationType as (typeof rescueOperations.operationType.enumValues)[number];
+  if (fields.estimatedPersonsAtRisk !== undefined) updates.estimatedPersonsAtRisk = fields.estimatedPersonsAtRisk;
+  if (fields.notes !== undefined) updates.notes = fields.notes;
+
+  await db.update(rescueOperations).set(updates).where(eq(rescueOperations.id, id));
+
+  if (targetLocation) {
+    const [lng, lat] = targetLocation;
+    await db.execute(
+      sql`UPDATE rescue_operations SET target_location = ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326) WHERE id = ${id}`,
+    );
+  }
+
+  return getRescueOperationById(db, id);
+}
+
+export async function deleteRescueOperation(db: Database, id: string) {
+  const op = await getRescueOperationById(db, id);
+
+  const deletableStatuses = ['pending', 'aborted', 'failed'];
+  if (!deletableStatuses.includes(op.status)) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: `Cannot delete operation in '${op.status}' status. Only pending, aborted, or failed operations can be deleted.`,
+    });
+  }
+
+  await db.delete(rescueOperations).where(eq(rescueOperations.id, id));
+
+  return { id };
 }
 
 export async function dispatchRescueOperation(db: Database, id: string) {
