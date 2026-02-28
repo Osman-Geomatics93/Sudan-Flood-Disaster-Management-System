@@ -59,6 +59,7 @@ export default function EditDisplacedPersonPage() {
   useEffect(() => {
     if (personQuery.data) {
       const person = personQuery.data;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         firstName_ar: person.firstName_ar ?? '',
         lastName_ar: person.lastName_ar ?? '',

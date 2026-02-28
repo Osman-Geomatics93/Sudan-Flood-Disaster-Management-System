@@ -27,7 +27,7 @@ export default function CommandCenterMap() {
   };
 
   const floodZoneQuery = trpc.floodZone.getByBounds.useQuery(
-    { bbox: bbox! },
+    { bbox: bbox ?? [0, 0, 0, 0] },
     { enabled: layers.floodZones && bbox !== null },
   );
 

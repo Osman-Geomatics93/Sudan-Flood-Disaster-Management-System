@@ -50,6 +50,7 @@ function BoundsTracker({
       east: bounds.getEast(),
       west: bounds.getWest(),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;
@@ -84,6 +85,7 @@ export default function LeafletMapComponent({
   // double-invoking effects on a not-yet-attached DOM node.
   useEffect(() => {
     if (containerRef.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setReady(true);
     }
   }, []);

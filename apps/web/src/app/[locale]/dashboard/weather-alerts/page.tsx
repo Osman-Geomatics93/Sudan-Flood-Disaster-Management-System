@@ -109,10 +109,10 @@ export default function WeatherAlertsPage() {
                       <span
                         className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${SEVERITY_COLORS[alert.severity] || ''}`}
                       >
-                        {t(`severity_${alert.severity}` as any)}
+                        {t(`severity_${alert.severity}` as Parameters<typeof t>[0])}
                       </span>
                       <span className="bg-muted inline-flex rounded-full px-2.5 py-0.5 text-xs">
-                        {t(`type_${alert.alertType}` as any)}
+                        {t(`type_${alert.alertType}` as Parameters<typeof t>[0])}
                       </span>
                       {alert.stateName && (
                         <span className="text-muted-foreground text-xs">{alert.stateName}</span>

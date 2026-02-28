@@ -150,7 +150,7 @@ export default function OrganizationDetailPage() {
               </dt>
               <dd className="mt-1">
                 <span className={`badge ${TYPE_STYLES[org.orgType] ?? ''}`}>
-                  {t(`type_${org.orgType}` as any)}
+                  {t(`type_${org.orgType}` as Parameters<typeof t>[0])}
                 </span>
               </dd>
             </div>

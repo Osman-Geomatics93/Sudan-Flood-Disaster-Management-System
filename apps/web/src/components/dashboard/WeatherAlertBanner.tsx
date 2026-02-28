@@ -42,7 +42,7 @@ export default function WeatherAlertBanner() {
           )}
         </div>
         <span className="shrink-0 text-xs font-medium">
-          {t(`severity_${topAlert.severity}` as any)}
+          {t(`severity_${topAlert.severity}` as Parameters<typeof t>[0])}
         </span>
       </div>
     </Link>

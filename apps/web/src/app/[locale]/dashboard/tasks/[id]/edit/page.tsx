@@ -41,6 +41,7 @@ export default function EditTaskPage() {
   useEffect(() => {
     if (taskQuery.data) {
       const task = taskQuery.data;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         title_en: task.title_en ?? '',
         title_ar: task.title_ar ?? '',

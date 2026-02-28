@@ -56,6 +56,7 @@ export default function EditFloodZonePage() {
   useEffect(() => {
     if (zoneQuery.data && !initialized) {
       const zone = zoneQuery.data;
+      /* eslint-disable react-hooks/set-state-in-effect */
       setFormData({
         name_en: zone.name_en ?? '',
         name_ar: zone.name_ar ?? '',
@@ -71,6 +72,7 @@ export default function EditFloodZonePage() {
         setGeometry(zone.geometry as GeoJsonPolygon);
       }
       setInitialized(true);
+      /* eslint-enable react-hooks/set-state-in-effect */
     }
   }, [zoneQuery.data, initialized]);
 

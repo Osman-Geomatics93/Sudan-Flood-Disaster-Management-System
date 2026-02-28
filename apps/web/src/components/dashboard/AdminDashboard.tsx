@@ -23,7 +23,7 @@ export default function AdminDashboard() {
   };
 
   const floodZoneQuery = trpc.floodZone.getByBounds.useQuery(
-    { bbox: bbox! },
+    { bbox: bbox ?? [0, 0, 0, 0] },
     { enabled: bbox !== null },
   );
 

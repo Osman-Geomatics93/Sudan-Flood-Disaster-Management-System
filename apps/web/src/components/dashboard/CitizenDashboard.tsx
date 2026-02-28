@@ -71,8 +71,8 @@ export default function CitizenDashboard() {
               <div>
                 <p className="text-sm font-medium">{shelter.name_en || shelter.name_ar}</p>
                 <p className="text-muted-foreground text-xs capitalize">
-                  {t(`shelter.status_${shelter.status}` as any)} · {shelter.currentOccupancy}/
-                  {shelter.capacity}
+                  {t(`shelter.status_${shelter.status}` as Parameters<typeof t>[0])} ·{' '}
+                  {shelter.currentOccupancy}/{shelter.capacity}
                 </p>
               </div>
               <span className="text-muted-foreground text-xs">{shelter.shelterCode}</span>

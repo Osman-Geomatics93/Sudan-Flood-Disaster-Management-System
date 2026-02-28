@@ -24,7 +24,7 @@ export const exportRouter = router({
         { key: 'status', header: 'Status' },
       ];
 
-      const items = data.items.map((i: any) => ({
+      const items = data.items.map((i) => ({
         trackingCode: i.trackingCode,
         itemName_en: i.itemName_en,
         supplyType: i.supplyType,
@@ -64,7 +64,7 @@ export const exportRouter = router({
         { key: 'phone', header: 'Phone' },
       ];
 
-      const items = data.items.map((i: any) => ({
+      const items = data.items.map((i) => ({
         registrationCode: i.registrationCode,
         firstName_ar: i.firstName_ar,
         lastName_ar: i.lastName_ar,
@@ -102,7 +102,7 @@ export const exportRouter = router({
         { key: 'priority', header: 'Priority' },
       ];
 
-      const items = data.items.map((i: any) => ({
+      const items = data.items.map((i) => ({
         taskCode: i.taskCode,
         title_en: i.title_en || i.title_ar,
         status: i.status,

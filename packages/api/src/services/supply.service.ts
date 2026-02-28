@@ -136,7 +136,7 @@ export async function requestSupply(db: Database, input: RequestSupplyInput, use
           destinationOrgId: input.destinationOrgId ?? null,
           destinationShelterId: input.destinationShelterId ?? null,
           stateId: input.stateId ?? null,
-          expiryDate: input.expiryDate ? input.expiryDate.toISOString().split('T')[0]! : null,
+          expiryDate: input.expiryDate ? input.expiryDate.toISOString().split('T')[0] : null,
           notes: input.notes ?? null,
           requestedByUserId: userId,
         })

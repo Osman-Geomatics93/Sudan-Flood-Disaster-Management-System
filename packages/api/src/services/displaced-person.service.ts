@@ -44,16 +44,17 @@ export async function listDisplacedPersons(
   }
   if (input.search) {
     const pattern = `%${input.search}%`;
-    conditions.push(
-      or(
-        sql`${displacedPersons.firstName_ar} ILIKE ${pattern}`,
-        sql`${displacedPersons.lastName_ar} ILIKE ${pattern}`,
-        sql`${displacedPersons.firstName_en} ILIKE ${pattern}`,
-        sql`${displacedPersons.lastName_en} ILIKE ${pattern}`,
-        sql`${displacedPersons.phone} ILIKE ${pattern}`,
-        sql`${displacedPersons.nationalId} ILIKE ${pattern}`,
-      )!,
+    const searchCondition = or(
+      sql`${displacedPersons.firstName_ar} ILIKE ${pattern}`,
+      sql`${displacedPersons.lastName_ar} ILIKE ${pattern}`,
+      sql`${displacedPersons.firstName_en} ILIKE ${pattern}`,
+      sql`${displacedPersons.lastName_en} ILIKE ${pattern}`,
+      sql`${displacedPersons.phone} ILIKE ${pattern}`,
+      sql`${displacedPersons.nationalId} ILIKE ${pattern}`,
     );
+    if (searchCondition) {
+      conditions.push(searchCondition);
+    }
   }
 
   const whereClause = and(...conditions);

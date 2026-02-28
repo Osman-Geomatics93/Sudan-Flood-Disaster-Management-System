@@ -63,7 +63,7 @@ export default function AnalyticsPage() {
                     : 'bg-muted hover:bg-accent'
                 }`}
               >
-                {t(`last${d}Days` as any)}
+                {t(`last${d}Days` as Parameters<typeof t>[0])}
               </button>
             ))}
           </div>

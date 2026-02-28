@@ -53,7 +53,7 @@ export async function loginUser(
 
   const tokens = await generateTokenPair({
     userId: user.id,
-    email: user.email!,
+    email: user.email ?? '',
     role: user.role,
     orgId: user.orgId,
   });
@@ -61,7 +61,7 @@ export async function loginUser(
   return {
     user: {
       id: user.id,
-      email: user.email!,
+      email: user.email ?? '',
       role: user.role,
       orgId: user.orgId,
       firstName_ar: user.firstName_ar,
@@ -111,7 +111,7 @@ export async function registerUser(db: Database, input: RegisterInput): Promise<
 
   const tokens = await generateTokenPair({
     userId: newUser.id,
-    email: newUser.email!,
+    email: newUser.email ?? '',
     role: newUser.role,
     orgId: newUser.orgId,
   });
@@ -119,7 +119,7 @@ export async function registerUser(db: Database, input: RegisterInput): Promise<
   return {
     user: {
       id: newUser.id,
-      email: newUser.email!,
+      email: newUser.email ?? '',
       role: newUser.role,
       orgId: newUser.orgId,
       firstName_ar: newUser.firstName_ar,
@@ -149,7 +149,7 @@ export async function refreshUserTokens(db: Database, refreshToken: string): Pro
 
   return generateTokenPair({
     userId: user.id,
-    email: user.email!,
+    email: user.email ?? '',
     role: user.role,
     orgId: user.orgId,
   });
@@ -162,7 +162,7 @@ export async function getUserById(db: Database, userId: string): Promise<AuthUse
 
   return {
     id: user.id,
-    email: user.email!,
+    email: user.email ?? '',
     role: user.role,
     orgId: user.orgId,
     firstName_ar: user.firstName_ar,

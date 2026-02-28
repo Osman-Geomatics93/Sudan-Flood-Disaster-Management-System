@@ -43,7 +43,7 @@ export default function SheltersPage() {
   });
 
   const boundsQuery = trpc.shelter.getByBounds.useQuery(
-    { bbox: bounds! },
+    { bbox: bounds ?? [0, 0, 0, 0] },
     { enabled: viewMode === 'map' && bounds !== null, refetchInterval: 30_000 },
   );
 

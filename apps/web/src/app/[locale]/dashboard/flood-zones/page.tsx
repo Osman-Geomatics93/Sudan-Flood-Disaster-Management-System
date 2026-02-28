@@ -44,7 +44,7 @@ export default function FloodZonesPage() {
   });
 
   const boundsQuery = trpc.floodZone.getByBounds.useQuery(
-    { bbox: bounds! },
+    { bbox: bounds ?? [0, 0, 0, 0] },
     { enabled: viewMode === 'map' && bounds !== null, refetchInterval: 30_000 },
   );
 

@@ -1,4 +1,5 @@
 import { count as drizzleCount } from 'drizzle-orm';
+import type { PgTable } from 'drizzle-orm/pg-core';
 import type { Database } from '@sudanflood/db';
 import { generateEntityCode } from '@sudanflood/shared';
 
@@ -11,7 +12,7 @@ const MAX_RETRIES = 3;
  */
 export async function generateUniqueCode(
   db: Database,
-  table: any,
+  table: PgTable,
   prefix: string,
   options?: { stateCode?: string },
 ): Promise<string> {
@@ -28,7 +29,7 @@ export async function generateUniqueCode(
 export async function withCodeRetry<T>(
   fn: (code: string) => Promise<T>,
   db: Database,
-  table: any,
+  table: PgTable,
   prefix: string,
   options?: { stateCode?: string },
 ): Promise<T> {

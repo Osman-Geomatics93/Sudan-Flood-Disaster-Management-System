@@ -77,6 +77,7 @@ export default function EditShelterPage() {
   useEffect(() => {
     if (shelterQuery.data && !initialized) {
       const shelter = shelterQuery.data;
+      /* eslint-disable react-hooks/set-state-in-effect */
       setForm({
         name_en: shelter.name_en ?? '',
         name_ar: shelter.name_ar ?? '',
@@ -99,6 +100,7 @@ export default function EditShelterPage() {
         setMarkerPos([location.coordinates[1], location.coordinates[0]]);
       }
       setInitialized(true);
+      /* eslint-enable react-hooks/set-state-in-effect */
     }
   }, [shelterQuery.data, initialized]);
 

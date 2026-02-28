@@ -48,6 +48,7 @@ export default function EditRescueOperationPage() {
   useEffect(() => {
     if (opQuery.data && !initialized) {
       const op = opQuery.data;
+      /* eslint-disable react-hooks/set-state-in-effect */
       const targetCoords = op.targetLocation
         ? (op.targetLocation as { coordinates: [number, number] }).coordinates
         : null;
@@ -67,6 +68,7 @@ export default function EditRescueOperationPage() {
         notes: op.notes ?? '',
       });
       setInitialized(true);
+      /* eslint-enable react-hooks/set-state-in-effect */
     }
   }, [opQuery.data, initialized]);
 

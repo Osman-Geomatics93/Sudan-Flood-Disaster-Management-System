@@ -114,7 +114,7 @@ export default function CreateOrganizationPage() {
                 <option value="">{t('selectType')}</option>
                 {ORG_TYPES.map((type) => (
                   <option key={type} value={type}>
-                    {t(`type_${type}` as any)}
+                    {t(`type_${type}` as Parameters<typeof t>[0])}
                   </option>
                 ))}
               </select>

@@ -38,6 +38,7 @@ export default function EditOrganizationPage() {
   useEffect(() => {
     if (orgQuery.data) {
       const org = orgQuery.data;
+      /* eslint-disable react-hooks/set-state-in-effect */
       setNameEn(org.name_en);
       setNameAr(org.name_ar);
       setAcronym(org.acronym ?? '');
@@ -46,6 +47,7 @@ export default function EditOrganizationPage() {
       setContactPhone(org.contactPhone ?? '');
       setWebsite(org.website ?? '');
       setHeadquartersStateId(org.headquartersStateId ?? '');
+      /* eslint-enable react-hooks/set-state-in-effect */
     }
   }, [orgQuery.data]);
 
@@ -154,7 +156,7 @@ export default function EditOrganizationPage() {
                 <option value="">{t('selectType')}</option>
                 {ORG_TYPES.map((type) => (
                   <option key={type} value={type}>
-                    {t(`type_${type}` as any)}
+                    {t(`type_${type}` as Parameters<typeof t>[0])}
                   </option>
                 ))}
               </select>

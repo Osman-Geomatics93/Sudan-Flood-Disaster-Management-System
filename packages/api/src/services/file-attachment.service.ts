@@ -29,8 +29,12 @@ export async function requestUpload(db: Database, input: RequestUploadInput, use
     })
     .returning();
 
+  if (!attachment) {
+    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create attachment' });
+  }
+
   return {
-    attachmentId: attachment!.id,
+    attachmentId: attachment.id,
     uploadUrl: presigned.url,
     storageKey: presigned.key,
   };
