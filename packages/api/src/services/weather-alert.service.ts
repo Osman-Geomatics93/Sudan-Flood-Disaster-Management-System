@@ -2,7 +2,11 @@ import { eq, and, desc, count as drizzleCount } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { weatherAlerts, states } from '@sudanflood/db/schema';
-import type { CreateWeatherAlertInput, ListWeatherAlertsInput, UpdateWeatherAlertInput } from '@sudanflood/shared';
+import type {
+  CreateWeatherAlertInput,
+  ListWeatherAlertsInput,
+  UpdateWeatherAlertInput,
+} from '@sudanflood/shared';
 import { CODE_PREFIXES } from '@sudanflood/shared';
 import { withCodeRetry } from '../utils/entity-code.js';
 

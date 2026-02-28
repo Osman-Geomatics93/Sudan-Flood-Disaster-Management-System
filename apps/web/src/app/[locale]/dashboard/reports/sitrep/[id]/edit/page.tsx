@@ -50,7 +50,9 @@ export default function EditSituationReportPage() {
         summary_en: r.summary_en ?? '',
         summary_ar: r.summary_ar ?? '',
         content:
-          r.content != null && typeof r.content === 'object' && Object.keys(r.content as Record<string, unknown>).length > 0
+          r.content != null &&
+          typeof r.content === 'object' &&
+          Object.keys(r.content as Record<string, unknown>).length > 0
             ? JSON.stringify(r.content as Record<string, unknown>, null, 2)
             : '',
         stateId: r.stateId ?? '',

@@ -300,10 +300,7 @@ export async function updateShelterStatus(
 
 export async function deleteShelter(db: Database, id: string) {
   await getShelterById(db, id);
-  await db
-    .update(shelters)
-    .set({ deletedAt: new Date() })
-    .where(eq(shelters.id, id));
+  await db.update(shelters).set({ deletedAt: new Date() }).where(eq(shelters.id, id));
   return { success: true };
 }
 
