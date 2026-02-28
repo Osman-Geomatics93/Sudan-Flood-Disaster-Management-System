@@ -49,10 +49,7 @@ export async function listWeatherAlerts(db: Database, input: ListWeatherAlertsIn
       .orderBy(desc(weatherAlerts.createdAt))
       .limit(input.limit)
       .offset(offset),
-    db
-      .select({ count: drizzleCount() })
-      .from(weatherAlerts)
-      .where(whereClause),
+    db.select({ count: drizzleCount() }).from(weatherAlerts).where(whereClause),
   ]);
 
   const total = totalResult[0]?.count ?? 0;

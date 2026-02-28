@@ -76,28 +76,41 @@ export default function DisplacedPersonsPage() {
       <div className="mb-4 flex flex-wrap gap-3">
         <select
           value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setPage(1);
+          }}
           className="input-field"
         >
           <option value="">{t('allStatuses')}</option>
           {DISPLACED_PERSON_STATUSES.map((s) => (
-            <option key={s} value={s}>{t(`status_${s}`)}</option>
+            <option key={s} value={s}>
+              {t(`status_${s}`)}
+            </option>
           ))}
         </select>
         <select
           value={healthFilter}
-          onChange={(e) => { setHealthFilter(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setHealthFilter(e.target.value);
+            setPage(1);
+          }}
           className="input-field"
         >
           <option value="">{t('allHealthStatuses')}</option>
           {HEALTH_STATUSES.map((h) => (
-            <option key={h} value={h}>{t(`health_${h}`)}</option>
+            <option key={h} value={h}>
+              {t(`health_${h}`)}
+            </option>
           ))}
         </select>
         <input
           type="text"
           value={searchInput}
-          onChange={(e) => { setSearchInput(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+            setPage(1);
+          }}
           placeholder={t('searchPlaceholder')}
           className="input-field min-w-[200px]"
         />
@@ -105,12 +118,12 @@ export default function DisplacedPersonsPage() {
 
       {listQuery.isLoading && (
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       )}
 
       {listQuery.data && listQuery.data.items.length === 0 && (
-        <div className="rounded-lg border py-12 text-center text-muted-foreground">
+        <div className="text-muted-foreground rounded-lg border py-12 text-center">
           {tCommon('noData')}
         </div>
       )}
@@ -131,14 +144,20 @@ export default function DisplacedPersonsPage() {
               </thead>
               <tbody className="table-premium tbody">
                 {listQuery.data.items.map((person) => (
-                  <tr key={person.id} className="border-b hover:bg-muted/30">
+                  <tr key={person.id} className="hover:bg-muted/30 border-b">
                     <td className="px-4 py-3 font-mono">
-                      <Link href={`/dashboard/displaced-persons/${person.id}`} className="text-primary dark:text-primary hover:underline">
+                      <Link
+                        href={`/dashboard/displaced-persons/${person.id}`}
+                        className="text-primary dark:text-primary hover:underline"
+                      >
                         {person.registrationCode}
                       </Link>
                     </td>
                     <td className="px-4 py-3" dir="rtl">
-                      <Link href={`/dashboard/displaced-persons/${person.id}`} className="hover:underline">
+                      <Link
+                        href={`/dashboard/displaced-persons/${person.id}`}
+                        className="hover:underline"
+                      >
                         {person.firstName_ar} {person.lastName_ar}
                       </Link>
                     </td>
@@ -166,8 +185,9 @@ export default function DisplacedPersonsPage() {
 
           {listQuery.data.totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
-                {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} ({listQuery.data.total} {t('total')})
+              <span className="text-muted-foreground text-sm">
+                {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} (
+                {listQuery.data.total} {t('total')})
               </span>
               <div className="flex gap-2">
                 <button

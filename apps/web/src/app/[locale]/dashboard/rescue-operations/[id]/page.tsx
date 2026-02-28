@@ -11,7 +11,9 @@ import { OPERATION_STATUSES } from '@sudanflood/shared';
 import type { OperationStatus } from '@sudanflood/shared';
 
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), { ssr: false });
-const ShelterMarkerLayer = dynamic(() => import('@/components/map/ShelterMarkerLayer'), { ssr: false });
+const ShelterMarkerLayer = dynamic(() => import('@/components/map/ShelterMarkerLayer'), {
+  ssr: false,
+});
 
 const PRIORITY_STYLES: Record<string, string> = {
   critical: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
@@ -31,7 +33,14 @@ const STATUS_STYLES: Record<string, string> = {
   failed: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
 };
 
-const STATUS_ORDER: OperationStatus[] = ['pending', 'dispatched', 'en_route', 'on_site', 'in_progress', 'completed'];
+const STATUS_ORDER: OperationStatus[] = [
+  'pending',
+  'dispatched',
+  'en_route',
+  'on_site',
+  'in_progress',
+  'completed',
+];
 
 export default function RescueOperationDetailPage() {
   const params = useParams();
@@ -70,14 +79,14 @@ export default function RescueOperationDetailPage() {
   if (opQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }
 
   if (opQuery.error) {
     return (
-      <div className="rounded-md bg-destructive/10 p-4 text-destructive">
+      <div className="bg-destructive/10 text-destructive rounded-md p-4">
         {opQuery.error.message}
       </div>
     );
@@ -139,7 +148,7 @@ export default function RescueOperationDetailPage() {
           </button>
           <div>
             <h1 className="font-heading text-2xl font-semibold tracking-tight">{op.title_en}</h1>
-            <p className="font-mono text-sm text-muted-foreground">{op.operationCode}</p>
+            <p className="text-muted-foreground font-mono text-sm">{op.operationCode}</p>
           </div>
         </div>
       </div>
@@ -174,7 +183,7 @@ export default function RescueOperationDetailPage() {
             </div>
             <div className="mt-2 flex gap-1">
               {STATUS_ORDER.map((s) => (
-                <div key={s} className="flex-1 text-center text-[10px] text-muted-foreground">
+                <div key={s} className="text-muted-foreground flex-1 text-center text-[10px]">
                   {s.replace('_', ' ')}
                 </div>
               ))}
@@ -184,7 +193,11 @@ export default function RescueOperationDetailPage() {
           {/* Map */}
           {targetCoords && (
             <div className="overflow-hidden rounded-lg border">
-              <LeafletMap className="h-[350px] w-full" center={[targetCoords[1], targetCoords[0]]} zoom={12}>
+              <LeafletMap
+                className="h-[350px] w-full"
+                center={[targetCoords[1], targetCoords[0]]}
+                zoom={12}
+              >
                 <ShelterMarkerLayer shelters={mapMarkers} />
               </LeafletMap>
             </div>
@@ -212,9 +225,12 @@ export default function RescueOperationDetailPage() {
               <h2 className="mb-4 text-lg font-semibold">{t('teamMembers')}</h2>
               <div className="space-y-2">
                 {op.team.map((member) => (
-                  <div key={member.id} className="flex items-center justify-between rounded-md border px-3 py-2">
+                  <div
+                    key={member.id}
+                    className="flex items-center justify-between rounded-md border px-3 py-2"
+                  >
                     <span className="text-sm">{member.userId}</span>
-                    <span className="text-xs text-muted-foreground">{member.roleInTeam}</span>
+                    <span className="text-muted-foreground text-xs">{member.roleInTeam}</span>
                   </div>
                 ))}
               </div>
@@ -235,61 +251,66 @@ export default function RescueOperationDetailPage() {
             </div>
           )}
 
-          {op.status !== 'completed' && op.status !== 'aborted' && op.status !== 'failed' && op.status !== 'pending' && (
-            <div className="card">
-              <h2 className="mb-4 text-lg font-semibold">{t('updateStatus')}</h2>
-              <div className="space-y-3">
-                <div>
-                  <label className="mb-1 block text-sm font-medium">{t('newStatus')}</label>
-                  <select
-                    value={newStatus}
-                    onChange={(e) => setNewStatus(e.target.value)}
-                    className="input-field"
-                  >
-                    <option value="">{t('selectStatus')}</option>
-                    {OPERATION_STATUSES.map((s) => (
-                      <option key={s} value={s}>{t(`status_${s}`)}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium">{t('personsRescued')}</label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={personsRescued}
-                    onChange={(e) => setPersonsRescued(e.target.value)}
-                    className="input-field"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium">{t('notes')}</label>
-                  <textarea
-                    rows={3}
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    className="input-field"
-                  />
-                </div>
-                <div className="flex gap-3">
-                  <button
-                    onClick={handleUpdateStatus}
-                    disabled={updateStatusMutation.isPending || !newStatus}
-                    className="btn-primary"
-                  >
-                    {updateStatusMutation.isPending ? tCommon('loading') : t('updateStatus')}
-                  </button>
-                  <button
-                    onClick={handleComplete}
-                    disabled={completeMutation.isPending}
-                    className="btn-secondary border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-green-950"
-                  >
-                    {completeMutation.isPending ? tCommon('loading') : t('markComplete')}
-                  </button>
+          {op.status !== 'completed' &&
+            op.status !== 'aborted' &&
+            op.status !== 'failed' &&
+            op.status !== 'pending' && (
+              <div className="card">
+                <h2 className="mb-4 text-lg font-semibold">{t('updateStatus')}</h2>
+                <div className="space-y-3">
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">{t('newStatus')}</label>
+                    <select
+                      value={newStatus}
+                      onChange={(e) => setNewStatus(e.target.value)}
+                      className="input-field"
+                    >
+                      <option value="">{t('selectStatus')}</option>
+                      {OPERATION_STATUSES.map((s) => (
+                        <option key={s} value={s}>
+                          {t(`status_${s}`)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">{t('personsRescued')}</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={personsRescued}
+                      onChange={(e) => setPersonsRescued(e.target.value)}
+                      className="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-sm font-medium">{t('notes')}</label>
+                    <textarea
+                      rows={3}
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      className="input-field"
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handleUpdateStatus}
+                      disabled={updateStatusMutation.isPending || !newStatus}
+                      className="btn-primary"
+                    >
+                      {updateStatusMutation.isPending ? tCommon('loading') : t('updateStatus')}
+                    </button>
+                    <button
+                      onClick={handleComplete}
+                      disabled={completeMutation.isPending}
+                      className="btn-secondary border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-green-950"
+                    >
+                      {completeMutation.isPending ? tCommon('loading') : t('markComplete')}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
 
         {/* Sidebar */}
@@ -298,45 +319,49 @@ export default function RescueOperationDetailPage() {
             <h2 className="mb-4 text-lg font-semibold">{t('operationDetails')}</h2>
             <dl className="space-y-3">
               <div>
-                <dt className="text-sm text-muted-foreground">{t('status')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('status')}</dt>
                 <dd className="mt-1">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[op.status] ?? ''}`}>
+                  <span
+                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLES[op.status] ?? ''}`}
+                  >
                     {op.status.replace('_', ' ')}
                   </span>
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('priority')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('priority')}</dt>
                 <dd className="mt-1">
-                  <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${PRIORITY_STYLES[op.priority] ?? ''}`}>
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${PRIORITY_STYLES[op.priority] ?? ''}`}
+                  >
                     <AlertTriangle className="h-3 w-3" />
                     {op.priority}
                   </span>
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('type')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('type')}</dt>
                 <dd className="mt-1 text-sm">{op.operationType.replace('_', ' ')}</dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('personsAtRisk')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('personsAtRisk')}</dt>
                 <dd className="mt-1 flex items-center gap-1 text-sm">
                   <Users className="h-3 w-3" /> {op.estimatedPersonsAtRisk ?? 0}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('rescued')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('rescued')}</dt>
                 <dd className="mt-1 text-sm">{op.personsRescued ?? 0}</dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('teamSize')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('teamSize')}</dt>
                 <dd className="mt-1 flex items-center gap-1 text-sm">
                   <Users className="h-3 w-3" /> {op.teamSize ?? 0}
                 </dd>
               </div>
               {targetCoords && (
                 <div>
-                  <dt className="text-sm text-muted-foreground">{t('targetLocation')}</dt>
+                  <dt className="text-muted-foreground text-sm">{t('targetLocation')}</dt>
                   <dd className="mt-1 flex items-center gap-1 text-sm">
                     <MapPin className="h-3 w-3" />
                     {targetCoords[1].toFixed(4)}, {targetCoords[0].toFixed(4)}
@@ -350,14 +375,14 @@ export default function RescueOperationDetailPage() {
             <h2 className="mb-4 text-lg font-semibold">{t('timeline')}</h2>
             <dl className="space-y-3">
               <div>
-                <dt className="flex items-center gap-1 text-sm text-muted-foreground">
+                <dt className="text-muted-foreground flex items-center gap-1 text-sm">
                   <Clock className="h-3 w-3" /> {t('createdAt')}
                 </dt>
                 <dd className="mt-1 text-sm">{new Date(op.createdAt).toLocaleString()}</dd>
               </div>
               {op.dispatchedAt && (
                 <div>
-                  <dt className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <dt className="text-muted-foreground flex items-center gap-1 text-sm">
                     <Clock className="h-3 w-3" /> {t('dispatchedAt')}
                   </dt>
                   <dd className="mt-1 text-sm">{new Date(op.dispatchedAt).toLocaleString()}</dd>
@@ -365,7 +390,7 @@ export default function RescueOperationDetailPage() {
               )}
               {op.arrivedAt && (
                 <div>
-                  <dt className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <dt className="text-muted-foreground flex items-center gap-1 text-sm">
                     <Clock className="h-3 w-3" /> {t('arrivedAt')}
                   </dt>
                   <dd className="mt-1 text-sm">{new Date(op.arrivedAt).toLocaleString()}</dd>
@@ -373,7 +398,7 @@ export default function RescueOperationDetailPage() {
               )}
               {op.completedAt && (
                 <div>
-                  <dt className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <dt className="text-muted-foreground flex items-center gap-1 text-sm">
                     <Clock className="h-3 w-3" /> {t('completedAt')}
                   </dt>
                   <dd className="mt-1 text-sm">{new Date(op.completedAt).toLocaleString()}</dd>

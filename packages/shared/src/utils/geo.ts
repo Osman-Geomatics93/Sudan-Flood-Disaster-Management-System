@@ -54,5 +54,7 @@ export const SUDAN_BBOX: BBox = [21.8, 8.7, 38.6, 23.15];
  */
 export function isWithinSudan(coord: Coordinate): boolean {
   const [lng, lat] = coord;
-  return lng >= SUDAN_BBOX[0] && lng <= SUDAN_BBOX[2] && lat >= SUDAN_BBOX[1] && lat <= SUDAN_BBOX[3];
+  return (
+    lng >= SUDAN_BBOX[0] && lng <= SUDAN_BBOX[2] && lat >= SUDAN_BBOX[1] && lat <= SUDAN_BBOX[3]
+  );
 }

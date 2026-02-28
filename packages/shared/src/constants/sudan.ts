@@ -13,7 +13,14 @@ export const DEFAULT_LOCALE: SupportedLocale = 'ar';
 
 export const SRID = 4326; // WGS84
 
-export const RIVERS = ['Blue Nile', 'White Nile', 'River Nile', 'Atbara', 'Dinder', 'Rahad'] as const;
+export const RIVERS = [
+  'Blue Nile',
+  'White Nile',
+  'River Nile',
+  'Atbara',
+  'Dinder',
+  'Rahad',
+] as const;
 export type River = (typeof RIVERS)[number];
 
 // Sudan's 18 states with ISO 3166-2:SD codes

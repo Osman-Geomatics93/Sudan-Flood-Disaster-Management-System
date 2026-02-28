@@ -1,11 +1,4 @@
-import {
-  pgTable,
-  uuid,
-  varchar,
-  integer,
-  timestamp,
-  index,
-} from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, integer, timestamp, index } from 'drizzle-orm/pg-core';
 import { users } from './users.js';
 
 export const fileAttachments = pgTable(
@@ -19,7 +12,9 @@ export const fileAttachments = pgTable(
     mimeType: varchar('mime_type', { length: 200 }).notNull(),
     storageKey: varchar('storage_key', { length: 1000 }).notNull(),
     bucket: varchar('bucket', { length: 200 }).notNull(),
-    uploadedByUserId: uuid('uploaded_by_user_id').references(() => users.id, { onDelete: 'set null' }),
+    uploadedByUserId: uuid('uploaded_by_user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [

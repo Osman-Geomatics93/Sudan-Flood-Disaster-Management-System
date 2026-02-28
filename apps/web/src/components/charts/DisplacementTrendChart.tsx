@@ -1,6 +1,14 @@
 'use client';
 
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
 interface DisplacementTrendChartProps {
   data: { date: string; count: number }[];
@@ -8,7 +16,7 @@ interface DisplacementTrendChartProps {
 
 export default function DisplacementTrendChart({ data }: DisplacementTrendChartProps) {
   if (!data || data.length === 0) {
-    return <p className="text-sm text-muted-foreground text-center py-8">No data</p>;
+    return <p className="text-muted-foreground py-8 text-center text-sm">No data</p>;
   }
 
   const chartData = data.map((d) => ({

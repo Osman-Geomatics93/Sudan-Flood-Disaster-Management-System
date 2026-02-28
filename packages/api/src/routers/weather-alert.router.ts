@@ -20,17 +20,13 @@ export const weatherAlertRouter = router({
       return listWeatherAlerts(ctx.db, input);
     }),
 
-  active: protectedProcedure
-    .use(requirePermission('weather:read'))
-    .query(async ({ ctx }) => {
-      return getActiveAlerts(ctx.db);
-    }),
+  active: protectedProcedure.use(requirePermission('weather:read')).query(async ({ ctx }) => {
+    return getActiveAlerts(ctx.db);
+  }),
 
-  create: adminProcedure
-    .input(createWeatherAlertSchema)
-    .mutation(async ({ input, ctx }) => {
-      return createWeatherAlert(ctx.db, input);
-    }),
+  create: adminProcedure.input(createWeatherAlertSchema).mutation(async ({ input, ctx }) => {
+    return createWeatherAlert(ctx.db, input);
+  }),
 
   deactivate: adminProcedure
     .input(deactivateWeatherAlertSchema)
@@ -38,9 +34,7 @@ export const weatherAlertRouter = router({
       return deactivateAlert(ctx.db, input.id);
     }),
 
-  stats: protectedProcedure
-    .use(requirePermission('weather:read'))
-    .query(async ({ ctx }) => {
-      return getWeatherAlertStats(ctx.db);
-    }),
+  stats: protectedProcedure.use(requirePermission('weather:read')).query(async ({ ctx }) => {
+    return getWeatherAlertStats(ctx.db);
+  }),
 });

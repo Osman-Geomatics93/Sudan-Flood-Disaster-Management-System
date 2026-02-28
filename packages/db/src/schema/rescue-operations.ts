@@ -10,11 +10,7 @@ import {
   unique,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import {
-  rescueOperationTypeEnum,
-  operationStatusEnum,
-  taskPriorityEnum,
-} from './enums.js';
+import { rescueOperationTypeEnum, operationStatusEnum, taskPriorityEnum } from './enums.js';
 import { floodZones } from './flood-zones.js';
 import { organizations } from './organizations.js';
 import { users } from './users.js';

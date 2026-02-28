@@ -54,15 +54,13 @@ export default function TaskDetailPage() {
   if (taskQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }
 
   if (taskQuery.error || !taskQuery.data) {
-    return (
-      <div className="py-12 text-center text-muted-foreground">{tCommon('error')}</div>
-    );
+    return <div className="text-muted-foreground py-12 text-center">{tCommon('error')}</div>;
   }
 
   const task = taskQuery.data;
@@ -71,7 +69,7 @@ export default function TaskDetailPage() {
     if (!selectedStatus) return;
     updateStatusMutation.mutate({
       id,
-      status: selectedStatus as typeof TASK_STATUSES[number],
+      status: selectedStatus as (typeof TASK_STATUSES)[number],
     });
   };
 
@@ -90,7 +88,7 @@ export default function TaskDetailPage() {
           </Link>
           <div>
             <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
-            <p className="text-sm text-muted-foreground font-mono">{task.taskCode}</p>
+            <p className="text-muted-foreground font-mono text-sm">{task.taskCode}</p>
           </div>
         </div>
         <Link
@@ -115,16 +113,20 @@ export default function TaskDetailPage() {
       {/* Task Info */}
       <div className="card mb-6">
         <h2 className="font-heading text-lg font-semibold tracking-tight">{task.title_en}</h2>
-        {task.title_ar && <p className="text-sm text-muted-foreground" dir="rtl">{task.title_ar}</p>}
+        {task.title_ar && (
+          <p className="text-muted-foreground text-sm" dir="rtl">
+            {task.title_ar}
+          </p>
+        )}
         {task.description && <p className="mt-3 text-sm">{task.description}</p>}
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
-            <p className="text-xs text-muted-foreground">{t('progress')}</p>
+            <p className="text-muted-foreground text-xs">{t('progress')}</p>
             <div className="mt-1 flex items-center gap-2">
-              <div className="h-2 flex-1 rounded-full bg-muted">
+              <div className="bg-muted h-2 flex-1 rounded-full">
                 <div
-                  className="h-2 rounded-full bg-primary"
+                  className="bg-primary h-2 rounded-full"
                   style={{ width: `${task.progressPct ?? 0}%` }}
                 />
               </div>
@@ -133,7 +135,7 @@ export default function TaskDetailPage() {
           </div>
           {task.deadline && (
             <div>
-              <p className="text-xs text-muted-foreground">{t('deadline')}</p>
+              <p className="text-muted-foreground text-xs">{t('deadline')}</p>
               <p className="text-sm">{new Date(task.deadline).toLocaleString()}</p>
             </div>
           )}
@@ -166,7 +168,9 @@ export default function TaskDetailPage() {
       {/* Dependencies */}
       {task.dependencies && task.dependencies.length > 0 && (
         <div className="card mb-6">
-          <h2 className="font-heading mb-3 text-lg font-semibold tracking-tight">{t('dependencies')}</h2>
+          <h2 className="font-heading mb-3 text-lg font-semibold tracking-tight">
+            {t('dependencies')}
+          </h2>
           <ul className="space-y-1">
             {task.dependencies.map((dep) => (
               <li key={dep.id} className="text-sm">
@@ -185,7 +189,9 @@ export default function TaskDetailPage() {
       {/* Status Update */}
       {task.status !== 'completed' && task.status !== 'cancelled' && (
         <div className="card mb-6">
-          <h2 className="font-heading mb-3 text-lg font-semibold tracking-tight">{t('updateStatus')}</h2>
+          <h2 className="font-heading mb-3 text-lg font-semibold tracking-tight">
+            {t('updateStatus')}
+          </h2>
           <div className="flex gap-3">
             <select
               value={selectedStatus}
@@ -194,7 +200,9 @@ export default function TaskDetailPage() {
             >
               <option value="">{t('allStatuses')}</option>
               {TASK_STATUSES.filter((s) => s !== task.status).map((s) => (
-                <option key={s} value={s}>{t(`status_${s}`)}</option>
+                <option key={s} value={s}>
+                  {t(`status_${s}`)}
+                </option>
               ))}
             </select>
             <button
@@ -216,13 +224,13 @@ export default function TaskDetailPage() {
           {commentsQuery.data?.map((comment) => (
             <div key={comment.id} className="rounded-md border p-3">
               <p className="text-sm">{comment.body}</p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-xs">
                 {comment.createdAt ? new Date(comment.createdAt).toLocaleString() : ''}
               </p>
             </div>
           ))}
           {commentsQuery.data?.length === 0 && (
-            <p className="py-2 text-sm text-muted-foreground">{tCommon('noData')}</p>
+            <p className="text-muted-foreground py-2 text-sm">{tCommon('noData')}</p>
           )}
         </div>
 

@@ -5,7 +5,10 @@
 
 export interface SMSProvider {
   sendSMS(to: string, message: string): Promise<{ success: boolean; messageId?: string }>;
-  sendBulkSMS(recipients: string[], message: string): Promise<{ success: boolean; sent: number; failed: number }>;
+  sendBulkSMS(
+    recipients: string[],
+    message: string,
+  ): Promise<{ success: boolean; sent: number; failed: number }>;
 }
 
 class TwilioSMSProvider implements SMSProvider {

@@ -23,6 +23,7 @@ export function getDb() {
       idle_timeout: parseInt(process.env['DB_IDLE_TIMEOUT'] ?? '20', 10),
       connect_timeout: parseInt(process.env['DB_CONNECT_TIMEOUT'] ?? '10', 10),
       ...(isProduction && { ssl: { rejectUnauthorized: false } }),
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       onnotice: () => {},
     });
     _db = drizzle(_sql, { schema });
@@ -65,6 +66,7 @@ export async function closeDb() {
 // Auto-cleanup on process termination
 if (typeof process !== 'undefined') {
   const shutdown = () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     closeDb().catch(() => {});
   };
   process.on('SIGTERM', shutdown);

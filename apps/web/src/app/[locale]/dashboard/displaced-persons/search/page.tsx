@@ -38,7 +38,7 @@ export default function SearchDisplacedPersonsPage() {
   return (
     <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
-        <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+        <button onClick={() => router.back()} className="hover:bg-accent rounded-md p-2">
           <ArrowLeft className="h-5 w-5" />
         </button>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('searchTitle')}</h1>
@@ -47,7 +47,7 @@ export default function SearchDisplacedPersonsPage() {
       <form onSubmit={handleSearch} className="mb-6">
         <div className="flex gap-3">
           <div className="relative flex-1">
-            <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2" />
             <input
               type="text"
               value={query}
@@ -62,10 +62,7 @@ export default function SearchDisplacedPersonsPage() {
               autoFocus
             />
           </div>
-          <button
-            type="submit"
-            className="btn-primary"
-          >
+          <button type="submit" className="btn-primary">
             {tCommon('search')}
           </button>
         </div>
@@ -73,12 +70,12 @@ export default function SearchDisplacedPersonsPage() {
 
       {searchQuery.isLoading && (
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       )}
 
       {searchQuery.data && searchQuery.data.length === 0 && (
-        <div className="rounded-lg border py-12 text-center text-muted-foreground">
+        <div className="text-muted-foreground rounded-lg border py-12 text-center">
           {t('noResults')}
         </div>
       )}
@@ -98,14 +95,20 @@ export default function SearchDisplacedPersonsPage() {
             </thead>
             <tbody className="table-premium tbody">
               {searchQuery.data.map((person) => (
-                <tr key={person.id} className="border-b hover:bg-muted/30 cursor-pointer">
+                <tr key={person.id} className="hover:bg-muted/30 cursor-pointer border-b">
                   <td className="px-4 py-3 font-mono">
-                    <Link href={`/dashboard/displaced-persons/${person.id}`} className="text-primary dark:text-primary hover:underline">
+                    <Link
+                      href={`/dashboard/displaced-persons/${person.id}`}
+                      className="text-primary dark:text-primary hover:underline"
+                    >
                       {person.registrationCode}
                     </Link>
                   </td>
                   <td className="px-4 py-3" dir="rtl">
-                    <Link href={`/dashboard/displaced-persons/${person.id}`} className="hover:underline">
+                    <Link
+                      href={`/dashboard/displaced-persons/${person.id}`}
+                      className="hover:underline"
+                    >
                       {person.firstName_ar} {person.lastName_ar}
                     </Link>
                   </td>

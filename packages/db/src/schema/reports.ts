@@ -88,9 +88,13 @@ export const citizenReports = pgTable(
     // location (geometry) handled via raw SQL — same pattern as rescue service
     // photos TEXT[] handled via metadata or raw SQL
     status: varchar('status', { length: 30 }).notNull().default('submitted'),
-    reviewedByUserId: uuid('reviewed_by_user_id').references(() => users.id, { onDelete: 'set null' }),
+    reviewedByUserId: uuid('reviewed_by_user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
     linkedTaskId: uuid('linked_task_id').references(() => tasks.id, { onDelete: 'set null' }),
-    linkedRescueId: uuid('linked_rescue_id').references(() => rescueOperations.id, { onDelete: 'set null' }),
+    linkedRescueId: uuid('linked_rescue_id').references(() => rescueOperations.id, {
+      onDelete: 'set null',
+    }),
     metadata: jsonb('metadata').default({}),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),

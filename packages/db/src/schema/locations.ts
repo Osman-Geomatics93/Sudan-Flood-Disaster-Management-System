@@ -1,4 +1,13 @@
-import { pgTable, uuid, varchar, integer, numeric, boolean, timestamp, index } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  uuid,
+  varchar,
+  integer,
+  numeric,
+  boolean,
+  timestamp,
+  index,
+} from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 export const states = pgTable(
@@ -15,9 +24,7 @@ export const states = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [
-    index('idx_states_code').on(table.code),
-  ],
+  (table) => [index('idx_states_code').on(table.code)],
 );
 
 export const statesRelations = relations(states, ({ many }) => ({

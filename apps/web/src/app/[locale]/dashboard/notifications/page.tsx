@@ -62,13 +62,19 @@ export default function NotificationsPage() {
         <div className="flex items-center gap-3">
           <div className="flex rounded-md border">
             <button
-              onClick={() => { setUnreadOnly(false); setPage(1); }}
+              onClick={() => {
+                setUnreadOnly(false);
+                setPage(1);
+              }}
               className={`px-3 py-1.5 text-sm ${!unreadOnly ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'}`}
             >
               {t('all')}
             </button>
             <button
-              onClick={() => { setUnreadOnly(true); setPage(1); }}
+              onClick={() => {
+                setUnreadOnly(true);
+                setPage(1);
+              }}
               className={`px-3 py-1.5 text-sm ${unreadOnly ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'}`}
             >
               {t('unread')}
@@ -87,12 +93,12 @@ export default function NotificationsPage() {
 
       {listQuery.isLoading && (
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       )}
 
       {listQuery.data && listQuery.data.items.length === 0 && (
-        <div className="rounded-lg border py-12 text-center text-muted-foreground">
+        <div className="text-muted-foreground rounded-lg border py-12 text-center">
           {t('noNotifications')}
         </div>
       )}
@@ -104,7 +110,7 @@ export default function NotificationsPage() {
               <button
                 key={notification.id}
                 onClick={() => handleNotificationClick(notification)}
-                className={`w-full rounded-lg border p-4 text-start transition-colors hover:bg-accent ${
+                className={`hover:bg-accent w-full rounded-lg border p-4 text-start transition-colors ${
                   notification.isRead ? 'opacity-60' : 'border-primary/30 bg-primary/5'
                 }`}
               >
@@ -114,14 +120,16 @@ export default function NotificationsPage() {
                       {notification.title_en}
                     </p>
                     {notification.body_en && (
-                      <p className="mt-1 text-xs text-muted-foreground">{notification.body_en}</p>
+                      <p className="text-muted-foreground mt-1 text-xs">{notification.body_en}</p>
                     )}
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {notification.createdAt ? new Date(notification.createdAt).toLocaleString() : ''}
+                    <p className="text-muted-foreground mt-1 text-xs">
+                      {notification.createdAt
+                        ? new Date(notification.createdAt).toLocaleString()
+                        : ''}
                     </p>
                   </div>
                   {!notification.isRead && (
-                    <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-primary" />
+                    <div className="bg-primary mt-1 h-2 w-2 shrink-0 rounded-full" />
                   )}
                 </div>
               </button>
@@ -130,8 +138,9 @@ export default function NotificationsPage() {
 
           {listQuery.data.totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
-                {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} ({listQuery.data.total} {t('total')})
+              <span className="text-muted-foreground text-sm">
+                {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} (
+                {listQuery.data.total} {t('total')})
               </span>
               <div className="flex gap-2">
                 <button

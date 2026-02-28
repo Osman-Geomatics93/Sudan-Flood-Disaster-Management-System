@@ -70,7 +70,7 @@ export default function EditOrganizationPage() {
     return (
       <div className="animate-in">
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       </div>
     );
@@ -216,11 +216,7 @@ export default function EditOrganizationPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={updateMutation.isPending}
-            className="btn-primary"
-          >
+          <button type="submit" disabled={updateMutation.isPending} className="btn-primary">
             {updateMutation.isPending ? t('saving') : t('save')}
           </button>
           <Link href={`/dashboard/organizations/${id}`} className="btn-secondary">

@@ -20,21 +20,15 @@ export const uploadRouter = router({
       return requestUpload(ctx.db, input, ctx.user.id);
     }),
 
-  listByEntity: protectedProcedure
-    .input(listAttachmentsSchema)
-    .query(async ({ input, ctx }) => {
-      return listAttachments(ctx.db, input);
-    }),
+  listByEntity: protectedProcedure.input(listAttachmentsSchema).query(async ({ input, ctx }) => {
+    return listAttachments(ctx.db, input);
+  }),
 
-  getDownloadUrl: protectedProcedure
-    .input(getDownloadUrlSchema)
-    .query(async ({ input, ctx }) => {
-      return getDownloadUrl(ctx.db, input.id);
-    }),
+  getDownloadUrl: protectedProcedure.input(getDownloadUrlSchema).query(async ({ input, ctx }) => {
+    return getDownloadUrl(ctx.db, input.id);
+  }),
 
-  delete: protectedProcedure
-    .input(deleteAttachmentSchema)
-    .mutation(async ({ input, ctx }) => {
-      return deleteAttachment(ctx.db, input.id);
-    }),
+  delete: protectedProcedure.input(deleteAttachmentSchema).mutation(async ({ input, ctx }) => {
+    return deleteAttachment(ctx.db, input.id);
+  }),
 });

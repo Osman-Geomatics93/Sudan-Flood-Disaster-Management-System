@@ -5,7 +5,11 @@ export const requestUploadSchema = z.object({
   entityType: z.string().min(1).max(50),
   entityId: uuidSchema,
   fileName: z.string().min(1).max(500),
-  fileSize: z.number().int().positive().max(50 * 1024 * 1024), // 50MB max
+  fileSize: z
+    .number()
+    .int()
+    .positive()
+    .max(50 * 1024 * 1024), // 50MB max
   mimeType: z.string().min(1).max(200),
 });
 

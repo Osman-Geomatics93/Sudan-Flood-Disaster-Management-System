@@ -24,9 +24,9 @@ export default function FamilyGroupCard({ familyCode, headName, members }: Famil
 
   return (
     <div className="card p-4">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Users className="h-4 w-4 text-primary" />
+          <Users className="text-primary h-4 w-4" />
           <span className="text-sm font-medium">{familyCode}</span>
         </div>
         {crossShelter && (
@@ -36,14 +36,16 @@ export default function FamilyGroupCard({ familyCode, headName, members }: Famil
           </div>
         )}
       </div>
-      <p className="text-xs text-muted-foreground mb-2">{t('headOfFamily')}: {headName}</p>
+      <p className="text-muted-foreground mb-2 text-xs">
+        {t('headOfFamily')}: {headName}
+      </p>
       <div className="space-y-1.5">
         {members.map((m) => (
           <div key={m.id} className="flex items-center justify-between text-xs">
-            <span>{m.firstName_ar} {m.lastName_ar}</span>
-            <span className="text-muted-foreground">
-              {m.shelter?.shelterCode || '—'}
+            <span>
+              {m.firstName_ar} {m.lastName_ar}
             </span>
+            <span className="text-muted-foreground">{m.shelter?.shelterCode || '—'}</span>
           </div>
         ))}
       </div>

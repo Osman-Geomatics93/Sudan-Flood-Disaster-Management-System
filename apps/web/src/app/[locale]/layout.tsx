@@ -59,7 +59,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
         <meta name="theme-color" content="#0d9488" />
       </head>
       <body
-        className={`${fontHeading.variable} ${fontBody.variable} ${fontArabic.variable} min-h-screen bg-background font-sans antialiased`}
+        className={`${fontHeading.variable} ${fontBody.variable} ${fontArabic.variable} bg-background min-h-screen font-sans antialiased`}
         suppressHydrationWarning
       >
         <SessionProvider>

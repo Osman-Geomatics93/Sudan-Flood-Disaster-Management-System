@@ -111,7 +111,14 @@ export const INFRASTRUCTURE_TYPES = [
 ] as const;
 export type InfrastructureType = (typeof INFRASTRUCTURE_TYPES)[number];
 
-export const DAMAGE_LEVELS = ['not_assessed', 'none', 'minor', 'moderate', 'major', 'destroyed'] as const;
+export const DAMAGE_LEVELS = [
+  'not_assessed',
+  'none',
+  'minor',
+  'moderate',
+  'major',
+  'destroyed',
+] as const;
 export type DamageLevel = (typeof DAMAGE_LEVELS)[number];
 
 export const REPAIR_PRIORITIES = ['p0_critical', 'p1_high', 'p2_medium', 'p3_low'] as const;
@@ -256,10 +263,5 @@ export const WEATHER_ALERT_TYPES = [
 ] as const;
 export type WeatherAlertType = (typeof WEATHER_ALERT_TYPES)[number];
 
-export const WEATHER_ALERT_SEVERITIES = [
-  'advisory',
-  'watch',
-  'warning',
-  'emergency',
-] as const;
+export const WEATHER_ALERT_SEVERITIES = ['advisory', 'watch', 'warning', 'emergency'] as const;
 export type WeatherAlertSeverity = (typeof WEATHER_ALERT_SEVERITIES)[number];

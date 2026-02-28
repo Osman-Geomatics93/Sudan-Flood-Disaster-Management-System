@@ -78,17 +78,16 @@ export default function CreateFloodZonePage() {
       localityId: formData.localityId || undefined,
       waterLevel: formData.waterLevel ? Number(formData.waterLevel) : undefined,
       waterLevelTrend: (formData.waterLevelTrend as 'rising' | 'stable' | 'falling') || undefined,
-      affectedPopulation: formData.affectedPopulation ? Number(formData.affectedPopulation) : undefined,
+      affectedPopulation: formData.affectedPopulation
+        ? Number(formData.affectedPopulation)
+        : undefined,
     });
   };
 
   return (
     <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
-        <button
-          onClick={() => router.back()}
-          className="rounded-md p-2 hover:bg-accent"
-        >
+        <button onClick={() => router.back()} className="hover:bg-accent rounded-md p-2">
           <ArrowLeft className="h-5 w-5" />
         </button>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('create')}</h1>
@@ -106,9 +105,11 @@ export default function CreateFloodZonePage() {
 
         <div className="card">
           <h2 className="font-heading mb-2 text-lg font-semibold tracking-tight">{t('mapView')}</h2>
-          <p className="mb-4 text-sm text-muted-foreground">{t('drawPolygon')}</p>
+          <p className="text-muted-foreground mb-4 text-sm">{t('drawPolygon')}</p>
           {geometry && (
-            <p className="mb-2 text-sm text-green-600 dark:text-green-400">Polygon drawn ({geometry.coordinates[0]?.length ?? 0} points)</p>
+            <p className="mb-2 text-sm text-green-600 dark:text-green-400">
+              Polygon drawn ({geometry.coordinates[0]?.length ?? 0} points)
+            </p>
           )}
           <LeafletMap className="h-[400px] w-full rounded-md">
             <DrawControl onPolygonCreated={handlePolygonCreated} />
@@ -116,7 +117,7 @@ export default function CreateFloodZonePage() {
         </div>
 
         {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+          <div className="bg-destructive/10 text-destructive rounded-md p-3 text-sm">{error}</div>
         )}
 
         <div className="flex gap-3">
@@ -127,11 +128,7 @@ export default function CreateFloodZonePage() {
           >
             {createMutation.isPending ? t('creating') : t('create')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

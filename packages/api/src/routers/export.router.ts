@@ -35,10 +35,18 @@ export const exportRouter = router({
 
       if (input.format === 'excel') {
         const buf = generateExcelExport(items, columns, 'Supplies');
-        return { fileName: `supplies-${Date.now()}.xlsx`, data: buf.toString('base64'), mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
+        return {
+          fileName: `supplies-${Date.now()}.xlsx`,
+          data: buf.toString('base64'),
+          mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        };
       } else {
         const buf = generatePdfTable(items, columns, 'Relief Supplies Report');
-        return { fileName: `supplies-${Date.now()}.html`, data: buf.toString('base64'), mimeType: 'text/html' };
+        return {
+          fileName: `supplies-${Date.now()}.html`,
+          data: buf.toString('base64'),
+          mimeType: 'text/html',
+        };
       }
     }),
 
@@ -67,10 +75,18 @@ export const exportRouter = router({
 
       if (input.format === 'excel') {
         const buf = generateExcelExport(items, columns, 'Displaced Persons');
-        return { fileName: `displaced-persons-${Date.now()}.xlsx`, data: buf.toString('base64'), mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
+        return {
+          fileName: `displaced-persons-${Date.now()}.xlsx`,
+          data: buf.toString('base64'),
+          mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        };
       } else {
         const buf = generatePdfTable(items, columns, 'Displaced Persons Report');
-        return { fileName: `displaced-persons-${Date.now()}.html`, data: buf.toString('base64'), mimeType: 'text/html' };
+        return {
+          fileName: `displaced-persons-${Date.now()}.html`,
+          data: buf.toString('base64'),
+          mimeType: 'text/html',
+        };
       }
     }),
 
@@ -95,10 +111,18 @@ export const exportRouter = router({
 
       if (input.format === 'excel') {
         const buf = generateExcelExport(items, columns, 'Tasks');
-        return { fileName: `tasks-${Date.now()}.xlsx`, data: buf.toString('base64'), mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
+        return {
+          fileName: `tasks-${Date.now()}.xlsx`,
+          data: buf.toString('base64'),
+          mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        };
       } else {
         const buf = generatePdfTable(items, columns, 'Tasks Report');
-        return { fileName: `tasks-${Date.now()}.html`, data: buf.toString('base64'), mimeType: 'text/html' };
+        return {
+          fileName: `tasks-${Date.now()}.html`,
+          data: buf.toString('base64'),
+          mimeType: 'text/html',
+        };
       }
     }),
 });

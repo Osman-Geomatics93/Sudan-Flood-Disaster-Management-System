@@ -2,7 +2,11 @@ import { eq, and, sql, isNull, count as drizzleCount } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { organizations } from '@sudanflood/db/schema';
-import type { CreateOrganizationInput, UpdateOrganizationInput, ListOrganizationsInput } from '@sudanflood/shared';
+import type {
+  CreateOrganizationInput,
+  UpdateOrganizationInput,
+  ListOrganizationsInput,
+} from '@sudanflood/shared';
 
 export async function listOrganizations(db: Database, input: ListOrganizationsInput) {
   const conditions = [isNull(organizations.deletedAt)];
@@ -32,10 +36,7 @@ export async function listOrganizations(db: Database, input: ListOrganizationsIn
       .limit(input.limit)
       .offset(offset)
       .orderBy(organizations.name_en),
-    db
-      .select({ count: drizzleCount() })
-      .from(organizations)
-      .where(whereClause),
+    db.select({ count: drizzleCount() }).from(organizations).where(whereClause),
   ]);
 
   const total = totalResult[0]?.count ?? 0;
@@ -109,10 +110,7 @@ export async function updateOrganization(db: Database, input: UpdateOrganization
 export async function deleteOrganization(db: Database, id: string) {
   await getOrganizationById(db, id);
 
-  await db
-    .update(organizations)
-    .set({ deletedAt: new Date() })
-    .where(eq(organizations.id, id));
+  await db.update(organizations).set({ deletedAt: new Date() }).where(eq(organizations.id, id));
 
   return { success: true };
 }

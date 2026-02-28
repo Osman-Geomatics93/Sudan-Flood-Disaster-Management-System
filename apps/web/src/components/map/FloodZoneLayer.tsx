@@ -15,7 +15,7 @@ const SEVERITY_COLORS: Record<string, string> = {
 interface FloodZoneLayerProps {
   data: {
     type: 'FeatureCollection';
-    features: Array<{
+    features: {
       type: 'Feature';
       id?: string;
       properties: {
@@ -30,7 +30,7 @@ interface FloodZoneLayerProps {
         waterLevelTrend?: string | null;
       };
       geometry: unknown;
-    }>;
+    }[];
   } | null;
   onZoneClick?: (id: string) => void;
 }

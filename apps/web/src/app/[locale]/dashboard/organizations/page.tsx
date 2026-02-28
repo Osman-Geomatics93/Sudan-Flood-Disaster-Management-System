@@ -50,35 +50,43 @@ export default function OrganizationsPage() {
 
       <div className="mb-4 flex flex-wrap gap-3">
         <div className="relative">
-          <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2" />
           <input
             type="text"
             value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             placeholder={t('searchPlaceholder')}
-            className="input-field ps-9 w-[240px]"
+            className="input-field w-[240px] ps-9"
           />
         </div>
         <select
           value={type}
-          onChange={(e) => { setType(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setType(e.target.value);
+            setPage(1);
+          }}
           className="input-field w-auto"
         >
           <option value="">{t('allTypes')}</option>
           {ORG_TYPES.map((orgType) => (
-            <option key={orgType} value={orgType}>{orgType.replace(/_/g, ' ')}</option>
+            <option key={orgType} value={orgType}>
+              {orgType.replace(/_/g, ' ')}
+            </option>
           ))}
         </select>
       </div>
 
       {listQuery.isLoading && (
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       )}
 
       {listQuery.data && listQuery.data.items.length === 0 && (
-        <div className="rounded-lg border py-12 text-center text-muted-foreground">
+        <div className="text-muted-foreground rounded-lg border py-12 text-center">
           {tCommon('noData')}
         </div>
       )}
@@ -89,18 +97,35 @@ export default function OrganizationsPage() {
             <table className="table-premium w-full">
               <thead>
                 <tr>
-                  <th className="px-4 py-3 text-start text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('name')}</th>
-                  <th className="px-4 py-3 text-start text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('acronym')}</th>
-                  <th className="px-4 py-3 text-start text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('type')}</th>
-                  <th className="px-4 py-3 text-start text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('contact')}</th>
+                  <th className="text-muted-foreground px-4 py-3 text-start text-xs font-medium uppercase tracking-wider">
+                    {t('name')}
+                  </th>
+                  <th className="text-muted-foreground px-4 py-3 text-start text-xs font-medium uppercase tracking-wider">
+                    {t('acronym')}
+                  </th>
+                  <th className="text-muted-foreground px-4 py-3 text-start text-xs font-medium uppercase tracking-wider">
+                    {t('type')}
+                  </th>
+                  <th className="text-muted-foreground px-4 py-3 text-start text-xs font-medium uppercase tracking-wider">
+                    {t('contact')}
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {listQuery.data.items.map((org) => (
-                  <tr key={org.id} className="border-b last:border-0 hover:bg-accent/50">
+                  <tr key={org.id} className="hover:bg-accent/50 border-b last:border-0">
                     <td className="px-4 py-3.5">
-                      <Link href={`/dashboard/organizations/${org.id}`} className="font-medium text-sm text-primary hover:underline">{org.name_en}</Link>
-                      {org.name_ar && <div className="text-xs text-muted-foreground mt-0.5" dir="rtl">{org.name_ar}</div>}
+                      <Link
+                        href={`/dashboard/organizations/${org.id}`}
+                        className="text-primary text-sm font-medium hover:underline"
+                      >
+                        {org.name_en}
+                      </Link>
+                      {org.name_ar && (
+                        <div className="text-muted-foreground mt-0.5 text-xs" dir="rtl">
+                          {org.name_ar}
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-3.5 font-mono text-sm">{org.acronym ?? '—'}</td>
                     <td className="px-4 py-3.5">
@@ -110,8 +135,12 @@ export default function OrganizationsPage() {
                     </td>
                     <td className="px-4 py-3.5 text-sm">
                       {org.contactEmail && <div>{org.contactEmail}</div>}
-                      {org.contactPhone && <div className="text-muted-foreground">{org.contactPhone}</div>}
-                      {!org.contactEmail && !org.contactPhone && <span className="text-muted-foreground">—</span>}
+                      {org.contactPhone && (
+                        <div className="text-muted-foreground">{org.contactPhone}</div>
+                      )}
+                      {!org.contactEmail && !org.contactPhone && (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -121,14 +150,22 @@ export default function OrganizationsPage() {
 
           {listQuery.data.totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
+              <span className="text-muted-foreground text-sm">
                 {t('page')} {listQuery.data.page} / {listQuery.data.totalPages}
               </span>
               <div className="flex gap-2">
-                <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="btn-secondary disabled:opacity-50">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => setPage((p) => p - 1)}
+                  className="btn-secondary disabled:opacity-50"
+                >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
-                <button disabled={page >= (listQuery.data?.totalPages ?? 1)} onClick={() => setPage((p) => p + 1)} className="btn-secondary disabled:opacity-50">
+                <button
+                  disabled={page >= (listQuery.data?.totalPages ?? 1)}
+                  onClick={() => setPage((p) => p + 1)}
+                  className="btn-secondary disabled:opacity-50"
+                >
                   <ChevronRight className="h-4 w-4" />
                 </button>
               </div>

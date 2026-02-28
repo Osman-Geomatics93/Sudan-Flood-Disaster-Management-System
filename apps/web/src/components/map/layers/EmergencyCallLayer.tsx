@@ -32,15 +32,13 @@ export default function EmergencyCallLayer() {
         const [lng, lat] = loc.coordinates;
         const color = URGENCY_COLORS[call.urgency] || '#888';
         return (
-          <Marker
-            key={call.id}
-            position={[lat, lng]}
-            icon={createCallIcon(color)}
-          >
+          <Marker key={call.id} position={[lat, lng]} icon={createCallIcon(color)}>
             <Popup>
-              <div className="text-xs space-y-1">
+              <div className="space-y-1 text-xs">
                 <p className="font-medium">{call.callCode}</p>
-                <p className="capitalize">{call.urgency} · {call.status}</p>
+                <p className="capitalize">
+                  {call.urgency} · {call.status}
+                </p>
                 <p>{call.callerName}</p>
               </div>
             </Popup>

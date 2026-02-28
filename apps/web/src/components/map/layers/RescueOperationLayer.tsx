@@ -34,15 +34,13 @@ export default function RescueOperationLayer() {
         const [lng, lat] = loc.coordinates;
         const color = STATUS_COLORS[op.status] || '#888';
         return (
-          <Marker
-            key={op.id}
-            position={[lat, lng]}
-            icon={createIcon(color)}
-          >
+          <Marker key={op.id} position={[lat, lng]} icon={createIcon(color)}>
             <Popup>
-              <div className="text-xs space-y-1">
+              <div className="space-y-1 text-xs">
                 <p className="font-medium">{op.operationCode}</p>
-                <p className="capitalize">{op.status} · {op.operationType}</p>
+                <p className="capitalize">
+                  {op.status} · {op.operationType}
+                </p>
                 <p>{op.estimatedPersonsAtRisk} at risk</p>
               </div>
             </Popup>

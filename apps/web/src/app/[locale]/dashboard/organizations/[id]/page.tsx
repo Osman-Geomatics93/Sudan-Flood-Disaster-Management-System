@@ -43,7 +43,7 @@ export default function OrganizationDetailPage() {
     return (
       <div className="animate-in">
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       </div>
     );
@@ -106,10 +106,7 @@ export default function OrganizationDetailPage() {
             >
               {deleteMutation.isPending ? tCommon('loading') : tCommon('confirm')}
             </button>
-            <button
-              onClick={() => setShowDeleteConfirm(false)}
-              className="btn-secondary text-sm"
-            >
+            <button onClick={() => setShowDeleteConfirm(false)} className="btn-secondary text-sm">
               {tCommon('cancel')}
             </button>
           </div>
@@ -121,26 +118,36 @@ export default function OrganizationDetailPage() {
         {/* Basic Information */}
         <div className="rounded-lg border p-6">
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
-            <Building2 className="h-5 w-5 text-muted-foreground" />
+            <Building2 className="text-muted-foreground h-5 w-5" />
             {t('name')}
           </h2>
           <dl className="space-y-3">
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('nameEn')}</dt>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('nameEn')}
+              </dt>
               <dd className="mt-0.5 text-sm font-medium">{org.name_en}</dd>
             </div>
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('nameAr')}</dt>
-              <dd className="mt-0.5 text-sm font-medium" dir="rtl">{org.name_ar}</dd>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('nameAr')}
+              </dt>
+              <dd className="mt-0.5 text-sm font-medium" dir="rtl">
+                {org.name_ar}
+              </dd>
             </div>
             {org.acronym && (
               <div>
-                <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('acronym')}</dt>
+                <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                  {t('acronym')}
+                </dt>
                 <dd className="mt-0.5 font-mono text-sm">{org.acronym}</dd>
               </div>
             )}
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('orgType')}</dt>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('orgType')}
+              </dt>
               <dd className="mt-1">
                 <span className={`badge ${TYPE_STYLES[org.orgType] ?? ''}`}>
                   {t(`type_${org.orgType}` as any)}
@@ -148,9 +155,13 @@ export default function OrganizationDetailPage() {
               </dd>
             </div>
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('status')}</dt>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('status')}
+              </dt>
               <dd className="mt-1">
-                <span className={`badge ${org.isActive ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'}`}>
+                <span
+                  className={`badge ${org.isActive ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'}`}
+                >
                   {org.isActive ? t('active') : t('inactive')}
                 </span>
               </dd>
@@ -161,12 +172,14 @@ export default function OrganizationDetailPage() {
         {/* Contact Information */}
         <div className="rounded-lg border p-6">
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
-            <Mail className="h-5 w-5 text-muted-foreground" />
+            <Mail className="text-muted-foreground h-5 w-5" />
             {t('contact')}
           </h2>
           <dl className="space-y-3">
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('contactEmail')}</dt>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('contactEmail')}
+              </dt>
               <dd className="mt-0.5 text-sm">
                 {org.contactEmail ? (
                   <a href={`mailto:${org.contactEmail}`} className="text-primary hover:underline">
@@ -178,7 +191,9 @@ export default function OrganizationDetailPage() {
               </dd>
             </div>
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('contactPhone')}</dt>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('contactPhone')}
+              </dt>
               <dd className="mt-0.5 text-sm">
                 {org.contactPhone ? (
                   <a href={`tel:${org.contactPhone}`} className="text-primary hover:underline">
@@ -190,10 +205,17 @@ export default function OrganizationDetailPage() {
               </dd>
             </div>
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('website')}</dt>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('website')}
+              </dt>
               <dd className="mt-0.5 text-sm">
                 {org.website ? (
-                  <a href={org.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
+                  <a
+                    href={org.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary inline-flex items-center gap-1 hover:underline"
+                  >
                     <Globe className="h-3.5 w-3.5" />
                     {org.website}
                   </a>
@@ -210,11 +232,15 @@ export default function OrganizationDetailPage() {
           <h2 className="mb-4 text-lg font-semibold">{tCommon('actions')}</h2>
           <dl className="grid gap-3 sm:grid-cols-2">
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('createdAt')}</dt>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('createdAt')}
+              </dt>
               <dd className="mt-0.5 text-sm">{new Date(org.createdAt).toLocaleString()}</dd>
             </div>
             <div>
-              <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t('updatedAt')}</dt>
+              <dt className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+                {t('updatedAt')}
+              </dt>
               <dd className="mt-0.5 text-sm">{new Date(org.updatedAt).toLocaleString()}</dd>
             </div>
           </dl>

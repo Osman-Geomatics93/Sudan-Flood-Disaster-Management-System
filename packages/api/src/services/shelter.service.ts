@@ -12,7 +12,9 @@ export async function listShelters(
   const conditions = [isNull(shelters.deletedAt)];
 
   if (input.status) {
-    conditions.push(eq(shelters.status, input.status as typeof shelters.status.enumValues[number]));
+    conditions.push(
+      eq(shelters.status, input.status as (typeof shelters.status.enumValues)[number]),
+    );
   }
   if (input.stateId) {
     conditions.push(eq(shelters.stateId, input.stateId));
@@ -141,10 +143,7 @@ export async function findNearestShelters(
   return results;
 }
 
-export async function getSheltersByBounds(
-  db: Database,
-  bbox: [number, number, number, number],
-) {
+export async function getSheltersByBounds(db: Database, bbox: [number, number, number, number]) {
   const [west, south, east, north] = bbox;
 
   const results = await db
@@ -170,9 +169,7 @@ export async function getSheltersByBounds(
 }
 
 export async function createShelter(db: Database, input: CreateShelterInput) {
-  const countResult = await db
-    .select({ count: drizzleCount() })
-    .from(shelters);
+  const countResult = await db.select({ count: drizzleCount() }).from(shelters);
   const seq = (countResult[0]?.count ?? 0) + 1;
   const shelterCode = generateEntityCode(CODE_PREFIXES.SHELTER, seq);
 
@@ -288,14 +285,11 @@ export async function updateOccupancy(db: Database, id: string, currentOccupancy
 export async function updateShelterStatus(
   db: Database,
   id: string,
-  status: typeof shelters.status.enumValues[number],
+  status: (typeof shelters.status.enumValues)[number],
 ) {
   await getShelterById(db, id);
 
-  await db
-    .update(shelters)
-    .set({ status, updatedAt: new Date() })
-    .where(eq(shelters.id, id));
+  await db.update(shelters).set({ status, updatedAt: new Date() }).where(eq(shelters.id, id));
 
   return getShelterById(db, id);
 }

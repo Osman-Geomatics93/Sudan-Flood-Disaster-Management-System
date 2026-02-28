@@ -84,9 +84,7 @@ export const supplyRouter = router({
       return cancelSupply(ctx.db, input.id);
     }),
 
-  stats: protectedProcedure
-    .use(requirePermission('supply:read'))
-    .query(async ({ ctx }) => {
-      return getSupplyStats(ctx.db);
-    }),
+  stats: protectedProcedure.use(requirePermission('supply:read')).query(async ({ ctx }) => {
+    return getSupplyStats(ctx.db);
+  }),
 });

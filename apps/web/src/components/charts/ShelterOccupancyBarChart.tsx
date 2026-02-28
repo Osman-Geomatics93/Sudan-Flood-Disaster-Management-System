@@ -1,6 +1,15 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 
 interface ShelterData {
   name_en: string | null;
@@ -14,7 +23,7 @@ interface ShelterOccupancyBarChartProps {
 
 export default function ShelterOccupancyBarChart({ data }: ShelterOccupancyBarChartProps) {
   if (!data || data.length === 0) {
-    return <p className="text-sm text-muted-foreground text-center py-8">No data</p>;
+    return <p className="text-muted-foreground py-8 text-center text-sm">No data</p>;
   }
 
   const chartData = data.map((d) => ({

@@ -32,7 +32,15 @@ export default function FloodZonesPage() {
     page,
     limit: 20,
     ...(severity && { severity: severity as 'low' | 'moderate' | 'high' | 'severe' | 'extreme' }),
-    ...(status && { status: status as 'monitoring' | 'warning' | 'active_flood' | 'receding' | 'post_flood' | 'archived' }),
+    ...(status && {
+      status: status as
+        | 'monitoring'
+        | 'warning'
+        | 'active_flood'
+        | 'receding'
+        | 'post_flood'
+        | 'archived',
+    }),
   });
 
   const boundsQuery = trpc.floodZone.getByBounds.useQuery(
@@ -85,8 +93,14 @@ export default function FloodZonesPage() {
         <FloodZoneFilters
           severity={severity}
           status={status}
-          onSeverityChange={(v) => { setSeverity(v); setPage(1); }}
-          onStatusChange={(v) => { setStatus(v); setPage(1); }}
+          onSeverityChange={(v) => {
+            setSeverity(v);
+            setPage(1);
+          }}
+          onStatusChange={(v) => {
+            setStatus(v);
+            setPage(1);
+          }}
         />
       </div>
 
@@ -94,12 +108,12 @@ export default function FloodZonesPage() {
         <div>
           {listQuery.isLoading && (
             <div className="flex items-center justify-center py-12">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
             </div>
           )}
 
           {listQuery.data && listQuery.data.items.length === 0 && (
-            <div className="rounded-lg border py-12 text-center text-muted-foreground">
+            <div className="text-muted-foreground rounded-lg border py-12 text-center">
               {tCommon('noData')}
             </div>
           )}
@@ -115,23 +129,29 @@ export default function FloodZonesPage() {
                       <th className="px-4 py-3 text-start font-medium">{t('severity')}</th>
                       <th className="px-4 py-3 text-start font-medium">{t('status')}</th>
                       <th className="px-4 py-3 text-start font-medium">{t('waterLevel')}</th>
-                      <th className="px-4 py-3 text-start font-medium">{t('affectedPopulation')}</th>
+                      <th className="px-4 py-3 text-start font-medium">
+                        {t('affectedPopulation')}
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="table-premium tbody">
                     {listQuery.data.items.map((zone) => (
-                      <tr key={zone.id} className="border-b hover:bg-muted/30">
+                      <tr key={zone.id} className="hover:bg-muted/30 border-b">
                         <td className="px-4 py-3">
                           <Link
                             href={`/dashboard/flood-zones/${zone.id}`}
-                            className="font-mono text-primary dark:text-primary hover:underline"
+                            className="text-primary dark:text-primary font-mono hover:underline"
                           >
                             {zone.zoneCode}
                           </Link>
                         </td>
                         <td className="px-4 py-3">{zone.name_en}</td>
-                        <td className="px-4 py-3"><SeverityBadge severity={zone.severity} /></td>
-                        <td className="px-4 py-3"><StatusBadge status={zone.status} /></td>
+                        <td className="px-4 py-3">
+                          <SeverityBadge severity={zone.severity} />
+                        </td>
+                        <td className="px-4 py-3">
+                          <StatusBadge status={zone.status} />
+                        </td>
                         <td className="px-4 py-3">
                           {zone.waterLevel_m ? `${zone.waterLevel_m}m` : '-'}
                           {zone.waterLevelTrend && ` (${zone.waterLevelTrend})`}
@@ -147,8 +167,9 @@ export default function FloodZonesPage() {
 
               {listQuery.data.totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} ({listQuery.data.total} {t('total')})
+                  <span className="text-muted-foreground text-sm">
+                    {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} (
+                    {listQuery.data.total} {t('total')})
                   </span>
                   <div className="flex gap-2">
                     <button
@@ -172,7 +193,7 @@ export default function FloodZonesPage() {
           )}
         </div>
       ) : (
-        <div className="relative rounded-lg border overflow-hidden">
+        <div className="relative overflow-hidden rounded-lg border">
           <LeafletMap onBoundsChange={handleBoundsChange} className="h-[600px] w-full">
             <FloodZoneLayer data={boundsQuery.data ?? null} />
           </LeafletMap>

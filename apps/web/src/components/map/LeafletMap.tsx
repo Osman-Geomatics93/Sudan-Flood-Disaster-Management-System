@@ -24,7 +24,11 @@ interface LeafletMapInnerProps {
   mapRef?: React.MutableRefObject<LeafletMap | null>;
 }
 
-function BoundsTracker({ onBoundsChange }: { onBoundsChange: (bounds: BoundsChangeEvent) => void }) {
+function BoundsTracker({
+  onBoundsChange,
+}: {
+  onBoundsChange: (bounds: BoundsChangeEvent) => void;
+}) {
   const map = useMapEvents({
     moveend: () => {
       const bounds = map.getBounds();
@@ -41,7 +45,9 @@ function BoundsTracker({ onBoundsChange }: { onBoundsChange: (bounds: BoundsChan
 
 function MapRefSetter({ mapRef }: { mapRef: React.MutableRefObject<LeafletMap | null> }) {
   const map = useMapEvents({
-    load: () => { /* noop */ },
+    load: () => {
+      /* noop */
+    },
   });
   useEffect(() => {
     mapRef.current = map;

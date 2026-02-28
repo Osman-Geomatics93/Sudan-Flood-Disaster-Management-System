@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { REPORT_TYPES, CITIZEN_REPORT_TYPES, CITIZEN_REPORT_STATUSES, CALL_URGENCIES } from '../constants/enums.js';
+import {
+  REPORT_TYPES,
+  CITIZEN_REPORT_TYPES,
+  CITIZEN_REPORT_STATUSES,
+  CALL_URGENCIES,
+} from '../constants/enums.js';
 import { uuidSchema, paginationSchema } from './common.schema.js';
 import { coordinateSchema } from '../utils/geo.js';
 

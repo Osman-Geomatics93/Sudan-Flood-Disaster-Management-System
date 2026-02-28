@@ -60,10 +60,7 @@ export default function TasksPage() {
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <div className="flex items-center gap-3">
           <ExportButton onExport={(format) => exportMutation.mutateAsync({ format })} />
-          <Link
-            href="/dashboard/tasks/create"
-            className="btn-primary flex items-center gap-1.5"
-          >
+          <Link href="/dashboard/tasks/create" className="btn-primary flex items-center gap-1.5">
             <Plus className="h-4 w-4" />
             {t('createTask')}
           </Link>
@@ -90,22 +87,32 @@ export default function TasksPage() {
         <div className="mb-4 flex gap-3">
           <select
             value={statusFilter}
-            onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(1);
+            }}
             className="input-field"
           >
             <option value="">{t('allStatuses')}</option>
             {TASK_STATUSES.map((s) => (
-              <option key={s} value={s}>{t(`status_${s}`)}</option>
+              <option key={s} value={s}>
+                {t(`status_${s}`)}
+              </option>
             ))}
           </select>
           <select
             value={priorityFilter}
-            onChange={(e) => { setPriorityFilter(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setPriorityFilter(e.target.value);
+              setPage(1);
+            }}
             className="input-field"
           >
             <option value="">{t('allPriorities')}</option>
             {TASK_PRIORITIES.map((p) => (
-              <option key={p} value={p}>{t(`priority_${p}`)}</option>
+              <option key={p} value={p}>
+                {t(`priority_${p}`)}
+              </option>
             ))}
           </select>
         </div>
@@ -113,7 +120,7 @@ export default function TasksPage() {
 
       {listQuery.isLoading && (
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       )}
 
@@ -124,10 +131,10 @@ export default function TasksPage() {
               (col.statuses as readonly string[]).includes(task.status),
             );
             return (
-              <div key={col.key} className="rounded-lg border bg-muted/30 p-3">
+              <div key={col.key} className="bg-muted/30 rounded-lg border p-3">
                 <h2 className="font-heading mb-3 flex items-center justify-between text-sm font-semibold tracking-tight">
                   {t(col.key)}
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-xs">
+                  <span className="bg-muted rounded-full px-2 py-0.5 text-xs">
                     {columnTasks.length}
                   </span>
                 </h2>
@@ -136,9 +143,9 @@ export default function TasksPage() {
                     <Link
                       key={task.id}
                       href={`/dashboard/tasks/${task.id}`}
-                      className="block rounded-md border bg-card p-3 hover:shadow-sm transition-shadow"
+                      className="bg-card block rounded-md border p-3 transition-shadow hover:shadow-sm"
                     >
-                      <p className="text-xs font-mono text-muted-foreground">{task.taskCode}</p>
+                      <p className="text-muted-foreground font-mono text-xs">{task.taskCode}</p>
                       <p className="mt-1 text-sm font-medium">{task.title_en}</p>
                       <div className="mt-2 flex items-center gap-2">
                         <span className={`badge ${PRIORITY_STYLES[task.priority] ?? ''}`}>
@@ -151,7 +158,9 @@ export default function TasksPage() {
                     </Link>
                   ))}
                   {columnTasks.length === 0 && (
-                    <p className="py-4 text-center text-xs text-muted-foreground">{tCommon('noData')}</p>
+                    <p className="text-muted-foreground py-4 text-center text-xs">
+                      {tCommon('noData')}
+                    </p>
                   )}
                 </div>
               </div>
@@ -163,7 +172,7 @@ export default function TasksPage() {
       {viewMode === 'list' && listQuery.data && (
         <>
           {listQuery.data.items.length === 0 && (
-            <div className="rounded-lg border py-12 text-center text-muted-foreground">
+            <div className="text-muted-foreground rounded-lg border py-12 text-center">
               {tCommon('noData')}
             </div>
           )}
@@ -172,7 +181,7 @@ export default function TasksPage() {
             <>
               <div className="overflow-x-auto rounded-lg border">
                 <table className="w-full text-sm">
-                  <thead className="border-b bg-muted/50">
+                  <thead className="bg-muted/50 border-b">
                     <tr>
                       <th className="px-4 py-3 text-start font-medium">{t('taskCode')}</th>
                       <th className="px-4 py-3 text-start font-medium">{t('titleLabel')}</th>
@@ -183,9 +192,12 @@ export default function TasksPage() {
                   </thead>
                   <tbody>
                     {listQuery.data.items.map((task) => (
-                      <tr key={task.id} className="border-b hover:bg-muted/30">
+                      <tr key={task.id} className="hover:bg-muted/30 border-b">
                         <td className="px-4 py-3 font-mono">
-                          <Link href={`/dashboard/tasks/${task.id}`} className="text-primary dark:text-primary hover:underline">
+                          <Link
+                            href={`/dashboard/tasks/${task.id}`}
+                            className="text-primary dark:text-primary hover:underline"
+                          >
                             {task.taskCode}
                           </Link>
                         </td>
@@ -209,8 +221,9 @@ export default function TasksPage() {
 
               {listQuery.data.totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} ({listQuery.data.total} {t('total')})
+                  <span className="text-muted-foreground text-sm">
+                    {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} (
+                    {listQuery.data.total} {t('total')})
                   </span>
                   <div className="flex gap-2">
                     <button

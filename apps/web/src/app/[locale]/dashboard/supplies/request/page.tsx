@@ -40,13 +40,19 @@ export default function RequestSupplyPage() {
     e.preventDefault();
     setError('');
 
-    if (!form.supplyType || !form.itemName_en || !form.quantity || !form.unit || !form.sourceOrgId) {
+    if (
+      !form.supplyType ||
+      !form.itemName_en ||
+      !form.quantity ||
+      !form.unit ||
+      !form.sourceOrgId
+    ) {
       setError('Please fill in all required fields');
       return;
     }
 
     requestMutation.mutate({
-      supplyType: form.supplyType as typeof SUPPLY_TYPES[number],
+      supplyType: form.supplyType as (typeof SUPPLY_TYPES)[number],
       itemName_en: form.itemName_en,
       itemName_ar: form.itemName_ar || undefined,
       quantity: Number(form.quantity),
@@ -60,7 +66,9 @@ export default function RequestSupplyPage() {
 
   return (
     <div className="animate-in mx-auto max-w-2xl">
-      <h1 className="font-heading mb-6 text-2xl font-semibold tracking-tight">{t('requestSupply')}</h1>
+      <h1 className="font-heading mb-6 text-2xl font-semibold tracking-tight">
+        {t('requestSupply')}
+      </h1>
 
       {error && (
         <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
@@ -80,7 +88,9 @@ export default function RequestSupplyPage() {
             >
               <option value="">{t('selectType')}</option>
               {SUPPLY_TYPES.map((type) => (
-                <option key={type} value={type}>{t(`type_${type}`)}</option>
+                <option key={type} value={type}>
+                  {t(`type_${type}`)}
+                </option>
               ))}
             </select>
           </div>
@@ -144,7 +154,9 @@ export default function RequestSupplyPage() {
             >
               <option value="">{t('selectOrg')}</option>
               {orgsQuery.data?.items.map((org) => (
-                <option key={org.id} value={org.id}>{org.name_en}</option>
+                <option key={org.id} value={org.id}>
+                  {org.name_en}
+                </option>
               ))}
             </select>
           </div>
@@ -158,7 +170,9 @@ export default function RequestSupplyPage() {
             >
               <option value="">{t('selectShelter')}</option>
               {sheltersQuery.data?.items.map((shelter) => (
-                <option key={shelter.id} value={shelter.id}>{shelter.name_en}</option>
+                <option key={shelter.id} value={shelter.id}>
+                  {shelter.name_en}
+                </option>
               ))}
             </select>
           </div>
@@ -192,11 +206,7 @@ export default function RequestSupplyPage() {
           >
             {requestMutation.isPending ? t('requesting') : t('requestSupply')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

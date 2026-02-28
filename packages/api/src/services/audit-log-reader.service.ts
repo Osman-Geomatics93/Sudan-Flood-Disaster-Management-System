@@ -48,10 +48,7 @@ export async function listAuditLogs(db: Database, input: ListAuditLogsInput) {
       .orderBy(desc(auditLogs.createdAt))
       .limit(input.limit)
       .offset(offset),
-    db
-      .select({ count: drizzleCount() })
-      .from(auditLogs)
-      .where(whereClause),
+    db.select({ count: drizzleCount() }).from(auditLogs).where(whereClause),
   ]);
 
   const total = totalResult[0]?.count ?? 0;

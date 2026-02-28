@@ -24,7 +24,9 @@ export async function getSupplyStatsByType(db: Database) {
     .select({
       type: reliefSupplies.supplyType,
       count: drizzleCount(),
-      totalQuantity: sql<number>`COALESCE(SUM(${reliefSupplies.quantity}), 0)::int`.as('totalQuantity'),
+      totalQuantity: sql<number>`COALESCE(SUM(${reliefSupplies.quantity}), 0)::int`.as(
+        'totalQuantity',
+      ),
     })
     .from(reliefSupplies)
     .groupBy(reliefSupplies.supplyType)

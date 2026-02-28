@@ -1,6 +1,17 @@
 import { router, publicProcedure, protectedProcedure } from '../trpc.js';
-import { loginSchema, registerSchema, changePasswordSchema, refreshTokenSchema } from '@sudanflood/shared';
-import { loginUser, registerUser, refreshUserTokens, getUserById, changeUserPassword } from '../services/auth.service.js';
+import {
+  loginSchema,
+  registerSchema,
+  changePasswordSchema,
+  refreshTokenSchema,
+} from '@sudanflood/shared';
+import {
+  loginUser,
+  registerUser,
+  refreshUserTokens,
+  getUserById,
+  changeUserPassword,
+} from '../services/auth.service.js';
 import { logAuthEvent } from '../services/audit.service.js';
 
 export const authRouter = router({

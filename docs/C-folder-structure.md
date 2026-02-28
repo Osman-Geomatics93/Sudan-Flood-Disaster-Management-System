@@ -285,12 +285,12 @@ sudanflood/
 
 ## Key File Purposes
 
-| File | Purpose |
-|------|---------|
-| `turbo.json` | Defines build/lint/test pipelines with caching; `build` depends on `^build`; `lint` and `type-check` run in parallel |
-| `pnpm-workspace.yaml` | Declares `apps/*` and `packages/*` as workspace packages |
-| `tsconfig.base.json` | Shared strict TS config: `strict: true`, `noUncheckedIndexedAccess: true`, `exactOptionalPropertyTypes: true` |
-| `.env.example` | All env vars with placeholder values: `DATABASE_URL`, `REDIS_URL`, `MINIO_*`, `NEXTAUTH_SECRET`, `NEXT_PUBLIC_SOCKET_URL` |
-| `docker/postgres/init.sql` | Runs on first container start: creates DB, enables PostGIS + uuid-ossp extensions |
-| `scripts/setup.sh` | Runs: `pnpm install` → `docker compose up -d` → wait for healthy → `pnpm db:migrate` → `pnpm db:seed` |
-| `packages/shared/src/constants/roles.ts` | Permissions matrix mapping each role to allowed actions per module |
+| File                                     | Purpose                                                                                                                   |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `turbo.json`                             | Defines build/lint/test pipelines with caching; `build` depends on `^build`; `lint` and `type-check` run in parallel      |
+| `pnpm-workspace.yaml`                    | Declares `apps/*` and `packages/*` as workspace packages                                                                  |
+| `tsconfig.base.json`                     | Shared strict TS config: `strict: true`, `noUncheckedIndexedAccess: true`, `exactOptionalPropertyTypes: true`             |
+| `.env.example`                           | All env vars with placeholder values: `DATABASE_URL`, `REDIS_URL`, `MINIO_*`, `NEXTAUTH_SECRET`, `NEXT_PUBLIC_SOCKET_URL` |
+| `docker/postgres/init.sql`               | Runs on first container start: creates DB, enables PostGIS + uuid-ossp extensions                                         |
+| `scripts/setup.sh`                       | Runs: `pnpm install` → `docker compose up -d` → wait for healthy → `pnpm db:migrate` → `pnpm db:seed`                     |
+| `packages/shared/src/constants/roles.ts` | Permissions matrix mapping each role to allowed actions per module                                                        |

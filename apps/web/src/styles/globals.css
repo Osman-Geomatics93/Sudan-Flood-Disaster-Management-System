@@ -11,26 +11,26 @@
 @layer base {
   :root {
     /* --- Color Palette: Warm neutrals + Teal accent --- */
-    --background: 40 20% 98.5%;        /* #faf9f7 — warm off-white */
-    --foreground: 220 14% 10%;          /* #171a1f — near-black, not pure */
-    --card: 0 0% 100%;                  /* #ffffff */
+    --background: 40 20% 98.5%; /* #faf9f7 — warm off-white */
+    --foreground: 220 14% 10%; /* #171a1f — near-black, not pure */
+    --card: 0 0% 100%; /* #ffffff */
     --card-foreground: 220 14% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 14% 10%;
-    --primary: 172 50% 36%;             /* Teal — intentional, not default blue */
+    --primary: 172 50% 36%; /* Teal — intentional, not default blue */
     --primary-foreground: 0 0% 100%;
-    --secondary: 40 15% 94%;            /* Warm light gray */
+    --secondary: 40 15% 94%; /* Warm light gray */
     --secondary-foreground: 220 14% 20%;
-    --muted: 40 12% 95%;               /* Subtle warm muted */
-    --muted-foreground: 220 8% 46%;    /* Readable gray, not tiny/light */
+    --muted: 40 12% 95%; /* Subtle warm muted */
+    --muted-foreground: 220 8% 46%; /* Readable gray, not tiny/light */
     --accent: 40 15% 93%;
     --accent-foreground: 220 14% 10%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 10% 90%;             /* Soft border, warm undertone */
+    --border: 220 10% 90%; /* Soft border, warm undertone */
     --input: 220 10% 90%;
     --ring: 172 50% 36%;
-    --radius: 0.375rem;                /* 6px — modern, not overly rounded */
+    --radius: 0.375rem; /* 6px — modern, not overly rounded */
 
     /* --- Spacing scale (8px base) --- */
     --space-1: 0.25rem;
@@ -58,15 +58,15 @@
   }
 
   .dark {
-    --background: 228 12% 7%;          /* #111318 — rich dark, not pure black */
-    --foreground: 220 10% 90%;         /* Slightly muted white */
-    --card: 228 10% 10%;               /* Elevated surface */
+    --background: 228 12% 7%; /* #111318 — rich dark, not pure black */
+    --foreground: 220 10% 90%; /* Slightly muted white */
+    --card: 228 10% 10%; /* Elevated surface */
     --card-foreground: 220 10% 90%;
     --popover: 228 10% 10%;
     --popover-foreground: 220 10% 90%;
-    --primary: 172 45% 48%;            /* Slightly desaturated teal for dark */
+    --primary: 172 45% 48%; /* Slightly desaturated teal for dark */
     --primary-foreground: 228 12% 7%;
-    --secondary: 228 10% 14%;          /* Elevated surface */
+    --secondary: 228 10% 14%; /* Elevated surface */
     --secondary-foreground: 220 10% 85%;
     --muted: 228 10% 14%;
     --muted-foreground: 220 8% 55%;
@@ -74,7 +74,7 @@
     --accent-foreground: 220 10% 90%;
     --destructive: 0 62% 45%;
     --destructive-foreground: 220 10% 90%;
-    --border: 228 10% 16%;            /* Subtle borders via lighter surface */
+    --border: 228 10% 16%; /* Subtle borders via lighter surface */
     --input: 228 10% 16%;
     --ring: 172 45% 48%;
 
@@ -103,18 +103,33 @@
   }
 
   /* Typography scale — confident, clear hierarchy */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading), var(--font-arabic), sans-serif;
     letter-spacing: -0.02em;
     line-height: 1.2;
   }
 
-  h1 { font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 700; }
-  h2 { font-size: clamp(1.375rem, 2.5vw, 1.75rem); font-weight: 600; }
-  h3 { font-size: clamp(1.125rem, 2vw, 1.375rem); font-weight: 600; }
+  h1 {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 700;
+  }
+  h2 {
+    font-size: clamp(1.375rem, 2.5vw, 1.75rem);
+    font-weight: 600;
+  }
+  h3 {
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    font-weight: 600;
+  }
 
   /* Max line length for readability */
-  p, li {
+  p,
+  li {
     max-width: 65ch;
   }
 
@@ -126,16 +141,16 @@
 }
 
 /* Arabic font support — RTL */
-[dir="rtl"] {
+[dir='rtl'] {
   font-family: var(--font-arabic), var(--font-body), sans-serif;
 }
 
-[dir="rtl"] h1,
-[dir="rtl"] h2,
-[dir="rtl"] h3,
-[dir="rtl"] h4,
-[dir="rtl"] h5,
-[dir="rtl"] h6 {
+[dir='rtl'] h1,
+[dir='rtl'] h2,
+[dir='rtl'] h3,
+[dir='rtl'] h4,
+[dir='rtl'] h5,
+[dir='rtl'] h6 {
   font-family: var(--font-arabic), var(--font-heading), sans-serif;
   letter-spacing: 0;
 }
@@ -147,22 +162,18 @@
 @layer components {
   /* Inputs — consistent, premium feel */
   .input-field {
-    @apply flex h-11 w-full rounded-md border border-input bg-background
-           px-3.5 py-2.5 text-sm transition-colors
-           placeholder:text-muted-foreground/60
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:border-primary;
-    transition: border-color var(--duration-fast) var(--ease-smooth),
-                box-shadow var(--duration-fast) var(--ease-smooth);
+    @apply border-input bg-background placeholder:text-muted-foreground/60 focus-visible:ring-ring/30 focus-visible:border-primary flex h-11 w-full rounded-md border px-3.5 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2;
+    transition:
+      border-color var(--duration-fast) var(--ease-smooth),
+      box-shadow var(--duration-fast) var(--ease-smooth);
   }
 
   /* Buttons — generous padding, intentional hover states */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2
-           h-11 px-6 rounded-md
-           bg-primary text-primary-foreground text-sm font-medium
-           disabled:pointer-events-none disabled:opacity-50;
-    transition: background-color var(--duration-fast) var(--ease-smooth),
-                transform var(--duration-fast) var(--ease-snappy);
+    @apply bg-primary text-primary-foreground inline-flex h-11 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium disabled:pointer-events-none disabled:opacity-50;
+    transition:
+      background-color var(--duration-fast) var(--ease-smooth),
+      transform var(--duration-fast) var(--ease-snappy);
   }
   .btn-primary:hover:not(:disabled) {
     background-color: hsl(172 50% 30%);
@@ -172,22 +183,17 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2
-           h-11 px-6 rounded-md border
-           bg-transparent text-foreground text-sm font-medium
-           disabled:pointer-events-none disabled:opacity-50;
-    transition: background-color var(--duration-fast) var(--ease-smooth),
-                border-color var(--duration-fast) var(--ease-smooth);
+    @apply text-foreground inline-flex h-11 items-center justify-center gap-2 rounded-md border bg-transparent px-6 text-sm font-medium disabled:pointer-events-none disabled:opacity-50;
+    transition:
+      background-color var(--duration-fast) var(--ease-smooth),
+      border-color var(--duration-fast) var(--ease-smooth);
   }
   .btn-secondary:hover:not(:disabled) {
     @apply bg-accent;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2
-           h-9 px-3 rounded-md
-           bg-transparent text-foreground text-sm
-           disabled:pointer-events-none disabled:opacity-50;
+    @apply text-foreground inline-flex h-9 items-center justify-center gap-2 rounded-md bg-transparent px-3 text-sm disabled:pointer-events-none disabled:opacity-50;
     transition: background-color var(--duration-fast) var(--ease-smooth);
   }
   .btn-ghost:hover:not(:disabled) {
@@ -196,7 +202,7 @@
 
   /* Cards — subtle, premium */
   .card {
-    @apply rounded-lg border bg-card p-6;
+    @apply bg-card rounded-lg border p-6;
     box-shadow: var(--shadow-xs);
   }
   .card:hover {
@@ -217,7 +223,7 @@
     @apply border-b;
   }
   .table-premium thead th {
-    @apply px-4 py-3.5 text-start text-xs font-medium uppercase tracking-wider text-muted-foreground;
+    @apply text-muted-foreground px-4 py-3.5 text-start text-xs font-medium uppercase tracking-wider;
   }
   .table-premium tbody tr {
     @apply border-b last:border-0;
@@ -250,25 +256,49 @@
   }
 
   /* Stagger delays */
-  .delay-1 { animation-delay: 80ms; }
-  .delay-2 { animation-delay: 160ms; }
-  .delay-3 { animation-delay: 240ms; }
-  .delay-4 { animation-delay: 320ms; }
+  .delay-1 {
+    animation-delay: 80ms;
+  }
+  .delay-2 {
+    animation-delay: 160ms;
+  }
+  .delay-3 {
+    animation-delay: 240ms;
+  }
+  .delay-4 {
+    animation-delay: 320ms;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Custom scrollbar — minimal */
@@ -294,7 +324,9 @@
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

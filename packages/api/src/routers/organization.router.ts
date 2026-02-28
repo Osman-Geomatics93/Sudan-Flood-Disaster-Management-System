@@ -40,13 +40,11 @@ export const organizationRouter = router({
     return ctx.db.select().from(states).orderBy(states.name_en);
   }),
 
-  listLocalities: protectedProcedure
-    .input(idParamSchema)
-    .query(async ({ input, ctx }) => {
-      return ctx.db
-        .select()
-        .from(localities)
-        .where(eq(localities.stateId, input.id))
-        .orderBy(localities.name_en);
-    }),
+  listLocalities: protectedProcedure.input(idParamSchema).query(async ({ input, ctx }) => {
+    return ctx.db
+      .select()
+      .from(localities)
+      .where(eq(localities.stateId, input.id))
+      .orderBy(localities.name_en);
+  }),
 });

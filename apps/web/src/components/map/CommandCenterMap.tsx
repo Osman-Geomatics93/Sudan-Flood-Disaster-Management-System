@@ -36,7 +36,7 @@ export default function CommandCenterMap() {
     { enabled: layers.shelters },
   );
 
-  const shelterData = (shelterQuery.data?.items ?? []) as Array<{
+  const shelterData = (shelterQuery.data?.items ?? []) as {
     id: string;
     shelterCode: string;
     name_en: string;
@@ -45,7 +45,7 @@ export default function CommandCenterMap() {
     capacity: number;
     currentOccupancy: number;
     location: { type: 'Point'; coordinates: [number, number] } | null;
-  }>;
+  }[];
 
   const layerConfig = [
     { id: 'floodZones', label: 'Flood Zones', checked: layers.floodZones },

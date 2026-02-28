@@ -118,18 +118,21 @@ Premium design is about **restraint and confidence**. It's knowing what to leave
 ## 6. COMPONENTS & UI ELEMENTS
 
 ### Buttons
+
 - **Primary buttons**: solid fill, generous padding (12px 28px minimum), subtle hover state (darken, slight lift, or background slide)
 - **Secondary buttons**: outlined or ghost style, clearly secondary in visual weight
 - Border radius: pick ONE value and stick with it site-wide (0px for sharp/editorial, 6-8px for modern, 999px for pill). Do NOT mix.
 - Never make buttons too small — minimum 44px touch target height
 
 ### Cards
+
 - Avoid heavy `box-shadow` — use subtle shadows or borders
 - If using shadows, use **layered shadows** for depth: `box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06)`
 - Give cards generous internal padding (24px–32px)
 - Don't put a border, shadow, AND background color — pick one or two
 
 ### Images
+
 - Always use `object-fit: cover` for contained images
 - Use `aspect-ratio` for consistent image proportions
 - Add subtle `border-radius` to images if the design language supports it
@@ -137,6 +140,7 @@ Premium design is about **restraint and confidence**. It's knowing what to leave
 - Optimize images — use WebP/AVIF, lazy load below the fold
 
 ### Icons
+
 - Use ONE icon set consistently (Lucide, Phosphor, or Heroicons are solid choices)
 - Icons should be **subtle and supportive**, not the focal point
 - Match icon stroke weight to your typography weight
@@ -258,4 +262,4 @@ Study these sites for inspiration on what premium web design actually feels like
 
 ---
 
-*These rules exist to produce work that looks human-crafted, intentional, and exceptional. Follow them strictly.*
+_These rules exist to produce work that looks human-crafted, intentional, and exceptional. Follow them strictly._

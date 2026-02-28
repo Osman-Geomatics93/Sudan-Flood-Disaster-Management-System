@@ -16,7 +16,7 @@ const SEVERITY_COLORS: Record<string, string> = {
 
 export default function SeverityPieChart({ data }: SeverityPieChartProps) {
   if (!data || data.length === 0) {
-    return <p className="text-sm text-muted-foreground text-center py-8">No data</p>;
+    return <p className="text-muted-foreground py-8 text-center text-sm">No data</p>;
   }
 
   const chartData = data.map((d) => ({

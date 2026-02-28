@@ -3,9 +3,7 @@ import typography from '@tailwindcss/typography';
 
 const config: Config = {
   darkMode: 'class',
-  content: [
-    './src/**/*.{ts,tsx}',
-  ],
+  content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -68,9 +66,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    typography,
-  ],
+  plugins: [typography],
 };
 
 export default config;

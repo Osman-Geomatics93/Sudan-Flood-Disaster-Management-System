@@ -20,10 +20,12 @@ export async function listTasks(
   const conditions: ReturnType<typeof eq>[] = [];
 
   if (input.status) {
-    conditions.push(eq(tasks.status, input.status as typeof tasks.status.enumValues[number]));
+    conditions.push(eq(tasks.status, input.status as (typeof tasks.status.enumValues)[number]));
   }
   if (input.priority) {
-    conditions.push(eq(tasks.priority, input.priority as typeof tasks.priority.enumValues[number]));
+    conditions.push(
+      eq(tasks.priority, input.priority as (typeof tasks.priority.enumValues)[number]),
+    );
   }
   if (input.assignedToOrgId) {
     conditions.push(eq(tasks.assignedToOrgId, input.assignedToOrgId));
@@ -164,7 +166,7 @@ export async function updateTask(
     title_en?: string;
     title_ar?: string;
     description?: string;
-    priority?: typeof tasks.priority.enumValues[number];
+    priority?: (typeof tasks.priority.enumValues)[number];
     assignedToOrgId?: string;
     assignedToUserId?: string;
     incidentId?: string;
@@ -195,7 +197,12 @@ export async function updateTask(
 
 export async function updateTaskStatus(
   db: Database,
-  input: { id: string; status: typeof tasks.status.enumValues[number]; progressPct?: number; notes?: string },
+  input: {
+    id: string;
+    status: (typeof tasks.status.enumValues)[number];
+    progressPct?: number;
+    notes?: string;
+  },
 ) {
   await getTaskById(db, input.id);
 
@@ -264,18 +271,10 @@ export async function removeDependency(db: Database, taskId: string, dependsOnTa
   return getTaskById(db, taskId);
 }
 
-export async function addComment(
-  db: Database,
-  taskId: string,
-  userId: string,
-  body: string,
-) {
+export async function addComment(db: Database, taskId: string, userId: string, body: string) {
   await getTaskById(db, taskId);
 
-  const [comment] = await db
-    .insert(comments)
-    .values({ taskId, userId, body })
-    .returning();
+  const [comment] = await db.insert(comments).values({ taskId, userId, body }).returning();
 
   if (!comment) {
     throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to add comment' });

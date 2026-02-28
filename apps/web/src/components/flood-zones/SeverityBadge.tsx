@@ -11,7 +11,9 @@ const SEVERITY_STYLES: Record<string, string> = {
 export function SeverityBadge({ severity }: { severity: string }) {
   const style = SEVERITY_STYLES[severity] ?? SEVERITY_STYLES.moderate;
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${style}`}>
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${style}`}
+    >
       {severity}
     </span>
   );

@@ -12,6 +12,7 @@
 ## Milestone 0: Project Bootstrap (Week 1)
 
 ### Tasks
+
 1. Initialize monorepo with Turborepo + pnpm
 2. Configure TypeScript strict mode (`tsconfig.base.json`)
 3. Set up ESLint (typescript-eslint strict) + Prettier
@@ -24,6 +25,7 @@
 10. Configure CI pipeline (GitHub Actions: lint + type-check + test)
 
 ### Definition of Done
+
 - [ ] `pnpm install` succeeds with zero warnings
 - [ ] `docker compose up` starts all 4 services with health checks passing
 - [ ] `pnpm db:migrate` applies schema to PostGIS database
@@ -32,6 +34,7 @@
 - [ ] CI pipeline runs green on push to `develop`
 
 ### Seed Data Plan
+
 ```
 States (18): Khartoum, River Nile, White Nile, Blue Nile, Kassala,
   Gedaref, North Kordofan, South Kordofan, West Kordofan, North Darfur,
@@ -66,6 +69,7 @@ Demo Users (8):
 ## Milestone 1: Auth + Core Foundation (Weeks 2-3)
 
 ### Tasks
+
 1. Implement `packages/shared` — Zod schemas, constants, phone validation, role permissions
 2. Set up tRPC server with context, middleware pipeline
 3. Implement NextAuth v5 with credentials provider
@@ -82,6 +86,7 @@ Demo Users (8):
 14. Configure Tailwind with shadcn/ui components
 
 ### Definition of Done
+
 - [ ] Users can register, login, logout
 - [ ] JWT access + refresh token flow works
 - [ ] RBAC blocks unauthorized API calls (tested per role)
@@ -96,6 +101,7 @@ Demo Users (8):
 ## Milestone 2: Flood Zones + Map (Weeks 4-5)
 
 ### Tasks
+
 1. Implement flood zone tRPC router (CRUD + spatial queries)
 2. Implement flood incident router
 3. Set up Leaflet map container component
@@ -109,6 +115,7 @@ Demo Users (8):
 11. Implement GeoJSON import/export for zones
 
 ### Definition of Done
+
 - [ ] Can create flood zone by drawing polygon on map
 - [ ] Zones display on map color-coded by severity
 - [ ] Zone list filters by severity, status, state
@@ -122,6 +129,7 @@ Demo Users (8):
 ## Milestone 3: Rescue + Emergency Calls (Weeks 6-7)
 
 ### Tasks
+
 1. Implement rescue operation tRPC router
 2. Implement emergency call tRPC router
 3. Build rescue dispatch interface (form + map)
@@ -135,6 +143,7 @@ Demo Users (8):
 11. Build active operations dashboard
 
 ### Definition of Done
+
 - [ ] Can receive emergency call + auto-suggest nearest zone
 - [ ] Can triage call and set urgency
 - [ ] Can dispatch call → creates rescue operation
@@ -149,6 +158,7 @@ Demo Users (8):
 ## Milestone 4: Shelters + Displaced Persons (Weeks 8-9)
 
 ### Tasks
+
 1. Implement shelter tRPC router
 2. Implement displaced person + family group routers
 3. Build shelter management interface
@@ -162,6 +172,7 @@ Demo Users (8):
 11. Implement DP stats: by status, health, unaccompanied minors
 
 ### Definition of Done
+
 - [ ] Can create shelter with location + facilities
 - [ ] Shelter map shows capacity (green/yellow/red)
 - [ ] Can register displaced person + assign to shelter
@@ -177,6 +188,7 @@ Demo Users (8):
 ## Milestone 5: Supplies + Tasks + Notifications (Weeks 10-11)
 
 ### Tasks
+
 1. Implement supply tRPC router with full lifecycle
 2. Implement task tRPC router with dependencies
 3. Implement notification service + Socket.io push
@@ -190,6 +202,7 @@ Demo Users (8):
 11. Connect critical events to notification creation
 
 ### Definition of Done
+
 - [ ] Full supply lifecycle: request → approve → ship → deliver → distribute
 - [ ] Supply locations visible on map during transit
 - [ ] Inventory view shows stock by type per org/shelter
@@ -205,29 +218,34 @@ Demo Users (8):
 ## Milestone 6: P2 Modules (Weeks 12-14)
 
 ### Tasks — Infrastructure
+
 1. Implement infrastructure router
 2. Build damage assessment form with photo upload
 3. Build repair tracking workflow
 4. Infrastructure map layer
 
 ### Tasks — Weather
+
 5. Set up BullMQ weather data fetcher (cron job)
 6. Implement weather router (read-only)
 7. Build river level charts (Blue Nile, White Nile, River Nile)
 8. Build rainfall dashboard widget
 
 ### Tasks — UAV Surveys
+
 9. Implement UAV survey router
 10. Build survey planning interface
 11. Build imagery gallery with zone linkage
 
 ### Tasks — Reports
+
 12. Implement situation report CRUD
 13. Build CSV export via BullMQ
 14. Build PDF generation placeholder
 15. Build main dashboard with KPIs
 
 ### Definition of Done
+
 - [ ] Infrastructure: assess damage → plan repair → track progress
 - [ ] Weather: river levels display with historical chart
 - [ ] UAV: plan survey, upload imagery, link to zone
@@ -241,6 +259,7 @@ Demo Users (8):
 ## Milestone 7: PWA + Polish (Weeks 15-16)
 
 ### Tasks
+
 1. Set up service worker with cache strategies
 2. Implement offline detection + sync queue
 3. Build "Add to Home Screen" prompt
@@ -255,6 +274,7 @@ Demo Users (8):
 12. Documentation: API reference, deployment guide, user manual outline
 
 ### Definition of Done
+
 - [ ] PWA installable on Android Chrome
 - [ ] App loads on simulated 2G connection in < 5 seconds
 - [ ] Citizen can submit report offline; syncs when online
@@ -269,22 +289,26 @@ Demo Users (8):
 ## Testing Strategy
 
 ### Unit Tests (Vitest)
+
 - **Scope**: Individual functions, services, utilities, Zod schemas
 - **Coverage target**: 80% on `packages/shared`, `packages/api/src/services`
 - **Run**: `pnpm test` (all packages), `pnpm test --filter=api` (specific)
 
 ### Integration Tests (Vitest + testcontainers)
+
 - **Scope**: tRPC procedures with real PostgreSQL + Redis (via Docker)
 - **Coverage target**: Every router procedure has at least 1 happy-path + 1 auth-failure test
 - **Setup**: `testcontainers` spins up PostGIS container per test suite
 
 ### E2E Tests (Playwright)
+
 - **Scope**: Critical user flows end-to-end in browser
 - **Coverage target**: 15-20 flows covering P0 + P1 features
 - **Flows**: Login → create zone → dispatch rescue → register DP → assign shelter
 - **Run**: Against Docker Compose stack
 
 ### Manual Testing
+
 - **Device testing**: Android phones (low-end: Samsung A03, mid: A54)
 - **Network testing**: Chrome DevTools throttling (2G, 3G, offline)
 - **RTL testing**: Full Arabic locale navigation

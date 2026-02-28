@@ -7,15 +7,15 @@ interface LayerToggleProps {
 
 export default function LayerToggle({ layers, onChange }: LayerToggleProps) {
   return (
-    <div className="absolute top-3 end-3 z-[1000] bg-card/95 backdrop-blur-sm rounded-lg border shadow-md p-3 space-y-2">
-      <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Layers</h4>
+    <div className="bg-card/95 absolute end-3 top-3 z-[1000] space-y-2 rounded-lg border p-3 shadow-md backdrop-blur-sm">
+      <h4 className="text-muted-foreground text-xs font-medium uppercase tracking-wider">Layers</h4>
       {layers.map((layer) => (
-        <label key={layer.id} className="flex items-center gap-2 cursor-pointer text-sm">
+        <label key={layer.id} className="flex cursor-pointer items-center gap-2 text-sm">
           <input
             type="checkbox"
             checked={layer.checked}
             onChange={(e) => onChange(layer.id, e.target.checked)}
-            className="rounded border-muted-foreground/30"
+            className="border-muted-foreground/30 rounded"
           />
           <span>{layer.label}</span>
         </label>

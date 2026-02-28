@@ -104,12 +104,8 @@
           "name": "localities_state_id_states_id_fk",
           "tableFrom": "localities",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
@@ -119,9 +115,7 @@
         "localities_code_unique": {
           "name": "localities_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
+          "columns": ["code"]
         }
       },
       "policies": {},
@@ -214,9 +208,7 @@
         "states_code_unique": {
           "name": "states_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
+          "columns": ["code"]
         }
       },
       "policies": {},
@@ -382,12 +374,8 @@
           "name": "organizations_parent_org_id_organizations_id_fk",
           "tableFrom": "organizations",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "parent_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -395,12 +383,8 @@
           "name": "organizations_headquarters_state_id_states_id_fk",
           "tableFrom": "organizations",
           "tableTo": "states",
-          "columnsFrom": [
-            "headquarters_state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["headquarters_state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -518,12 +502,8 @@
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -533,9 +513,7 @@
         "sessions_session_token_unique": {
           "name": "sessions_session_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "session_token"
-          ]
+          "columns": ["session_token"]
         }
       },
       "policies": {},
@@ -757,12 +735,8 @@
           "name": "users_org_id_organizations_id_fk",
           "tableFrom": "users",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -770,12 +744,8 @@
           "name": "users_assigned_state_id_states_id_fk",
           "tableFrom": "users",
           "tableTo": "states",
-          "columnsFrom": [
-            "assigned_state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -783,12 +753,8 @@
           "name": "users_assigned_locality_id_localities_id_fk",
           "tableFrom": "users",
           "tableTo": "localities",
-          "columnsFrom": [
-            "assigned_locality_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_locality_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -798,9 +764,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -1003,12 +967,8 @@
           "name": "flood_incidents_state_id_states_id_fk",
           "tableFrom": "flood_incidents",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1016,12 +976,8 @@
           "name": "flood_incidents_locality_id_localities_id_fk",
           "tableFrom": "flood_incidents",
           "tableTo": "localities",
-          "columnsFrom": [
-            "locality_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["locality_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1029,12 +985,8 @@
           "name": "flood_incidents_declared_by_user_id_users_id_fk",
           "tableFrom": "flood_incidents",
           "tableTo": "users",
-          "columnsFrom": [
-            "declared_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["declared_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1042,12 +994,8 @@
           "name": "flood_incidents_lead_org_id_organizations_id_fk",
           "tableFrom": "flood_incidents",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "lead_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["lead_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1057,9 +1005,7 @@
         "flood_incidents_incident_code_unique": {
           "name": "flood_incidents_incident_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "incident_code"
-          ]
+          "columns": ["incident_code"]
         }
       },
       "policies": {},
@@ -1272,12 +1218,8 @@
           "name": "flood_zones_incident_id_flood_incidents_id_fk",
           "tableFrom": "flood_zones",
           "tableTo": "flood_incidents",
-          "columnsFrom": [
-            "incident_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["incident_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1285,12 +1227,8 @@
           "name": "flood_zones_state_id_states_id_fk",
           "tableFrom": "flood_zones",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1298,12 +1236,8 @@
           "name": "flood_zones_locality_id_localities_id_fk",
           "tableFrom": "flood_zones",
           "tableTo": "localities",
-          "columnsFrom": [
-            "locality_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["locality_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1311,12 +1245,8 @@
           "name": "flood_zones_monitored_by_org_id_organizations_id_fk",
           "tableFrom": "flood_zones",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "monitored_by_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["monitored_by_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1324,12 +1254,8 @@
           "name": "flood_zones_last_assessed_by_users_id_fk",
           "tableFrom": "flood_zones",
           "tableTo": "users",
-          "columnsFrom": [
-            "last_assessed_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["last_assessed_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1339,9 +1265,7 @@
         "flood_zones_zone_code_unique": {
           "name": "flood_zones_zone_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "zone_code"
-          ]
+          "columns": ["zone_code"]
         }
       },
       "policies": {},
@@ -1578,12 +1502,8 @@
           "name": "rescue_operations_flood_zone_id_flood_zones_id_fk",
           "tableFrom": "rescue_operations",
           "tableTo": "flood_zones",
-          "columnsFrom": [
-            "flood_zone_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["flood_zone_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         },
@@ -1591,12 +1511,8 @@
           "name": "rescue_operations_assigned_org_id_organizations_id_fk",
           "tableFrom": "rescue_operations",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "assigned_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1604,12 +1520,8 @@
           "name": "rescue_operations_team_leader_id_users_id_fk",
           "tableFrom": "rescue_operations",
           "tableTo": "users",
-          "columnsFrom": [
-            "team_leader_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["team_leader_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1619,9 +1531,7 @@
         "rescue_operations_operation_code_unique": {
           "name": "rescue_operations_operation_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "operation_code"
-          ]
+          "columns": ["operation_code"]
         }
       },
       "policies": {},
@@ -1703,12 +1613,8 @@
           "name": "rescue_team_members_rescue_operation_id_rescue_operations_id_fk",
           "tableFrom": "rescue_team_members",
           "tableTo": "rescue_operations",
-          "columnsFrom": [
-            "rescue_operation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rescue_operation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1716,12 +1622,8 @@
           "name": "rescue_team_members_user_id_users_id_fk",
           "tableFrom": "rescue_team_members",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1731,10 +1633,7 @@
         "uq_rescue_team_member": {
           "name": "uq_rescue_team_member",
           "nullsNotDistinct": false,
-          "columns": [
-            "rescue_operation_id",
-            "user_id"
-          ]
+          "columns": ["rescue_operation_id", "user_id"]
         }
       },
       "policies": {},
@@ -1967,12 +1866,8 @@
           "name": "shelters_state_id_states_id_fk",
           "tableFrom": "shelters",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1980,12 +1875,8 @@
           "name": "shelters_locality_id_localities_id_fk",
           "tableFrom": "shelters",
           "tableTo": "localities",
-          "columnsFrom": [
-            "locality_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["locality_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1993,12 +1884,8 @@
           "name": "shelters_managing_org_id_organizations_id_fk",
           "tableFrom": "shelters",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "managing_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["managing_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2006,12 +1893,8 @@
           "name": "shelters_manager_user_id_users_id_fk",
           "tableFrom": "shelters",
           "tableTo": "users",
-          "columnsFrom": [
-            "manager_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["manager_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2021,9 +1904,7 @@
         "shelters_shelter_code_unique": {
           "name": "shelters_shelter_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "shelter_code"
-          ]
+          "columns": ["shelter_code"]
         }
       },
       "policies": {},
@@ -2311,12 +2192,8 @@
           "name": "displaced_persons_family_group_id_family_groups_id_fk",
           "tableFrom": "displaced_persons",
           "tableTo": "family_groups",
-          "columnsFrom": [
-            "family_group_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["family_group_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2324,12 +2201,8 @@
           "name": "displaced_persons_current_shelter_id_shelters_id_fk",
           "tableFrom": "displaced_persons",
           "tableTo": "shelters",
-          "columnsFrom": [
-            "current_shelter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["current_shelter_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2337,12 +2210,8 @@
           "name": "displaced_persons_origin_state_id_states_id_fk",
           "tableFrom": "displaced_persons",
           "tableTo": "states",
-          "columnsFrom": [
-            "origin_state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["origin_state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2350,12 +2219,8 @@
           "name": "displaced_persons_origin_locality_id_localities_id_fk",
           "tableFrom": "displaced_persons",
           "tableTo": "localities",
-          "columnsFrom": [
-            "origin_locality_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["origin_locality_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2363,12 +2228,8 @@
           "name": "displaced_persons_registered_by_user_id_users_id_fk",
           "tableFrom": "displaced_persons",
           "tableTo": "users",
-          "columnsFrom": [
-            "registered_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["registered_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2378,9 +2239,7 @@
         "displaced_persons_registration_code_unique": {
           "name": "displaced_persons_registration_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "registration_code"
-          ]
+          "columns": ["registration_code"]
         }
       },
       "policies": {},
@@ -2493,12 +2352,8 @@
           "name": "family_groups_origin_state_id_states_id_fk",
           "tableFrom": "family_groups",
           "tableTo": "states",
-          "columnsFrom": [
-            "origin_state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["origin_state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2506,12 +2361,8 @@
           "name": "family_groups_origin_locality_id_localities_id_fk",
           "tableFrom": "family_groups",
           "tableTo": "localities",
-          "columnsFrom": [
-            "origin_locality_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["origin_locality_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2521,9 +2372,7 @@
         "family_groups_family_code_unique": {
           "name": "family_groups_family_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "family_code"
-          ]
+          "columns": ["family_code"]
         }
       },
       "policies": {},
@@ -2598,12 +2447,8 @@
           "name": "task_dependencies_task_id_tasks_id_fk",
           "tableFrom": "task_dependencies",
           "tableTo": "tasks",
-          "columnsFrom": [
-            "task_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["task_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2611,12 +2456,8 @@
           "name": "task_dependencies_depends_on_task_id_tasks_id_fk",
           "tableFrom": "task_dependencies",
           "tableTo": "tasks",
-          "columnsFrom": [
-            "depends_on_task_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["depends_on_task_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2626,10 +2467,7 @@
         "uq_task_dependency": {
           "name": "uq_task_dependency",
           "nullsNotDistinct": false,
-          "columns": [
-            "task_id",
-            "depends_on_task_id"
-          ]
+          "columns": ["task_id", "depends_on_task_id"]
         }
       },
       "policies": {},
@@ -2879,12 +2717,8 @@
           "name": "tasks_incident_id_flood_incidents_id_fk",
           "tableFrom": "tasks",
           "tableTo": "flood_incidents",
-          "columnsFrom": [
-            "incident_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["incident_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2892,12 +2726,8 @@
           "name": "tasks_flood_zone_id_flood_zones_id_fk",
           "tableFrom": "tasks",
           "tableTo": "flood_zones",
-          "columnsFrom": [
-            "flood_zone_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["flood_zone_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2905,12 +2735,8 @@
           "name": "tasks_assigned_to_org_id_organizations_id_fk",
           "tableFrom": "tasks",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "assigned_to_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_to_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2918,12 +2744,8 @@
           "name": "tasks_assigned_to_user_id_users_id_fk",
           "tableFrom": "tasks",
           "tableTo": "users",
-          "columnsFrom": [
-            "assigned_to_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_to_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2931,12 +2753,8 @@
           "name": "tasks_created_by_org_id_organizations_id_fk",
           "tableFrom": "tasks",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "created_by_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -2944,12 +2762,8 @@
           "name": "tasks_created_by_user_id_users_id_fk",
           "tableFrom": "tasks",
           "tableTo": "users",
-          "columnsFrom": [
-            "created_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -2959,9 +2773,7 @@
         "tasks_task_code_unique": {
           "name": "tasks_task_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "task_code"
-          ]
+          "columns": ["task_code"]
         }
       },
       "policies": {},
@@ -3226,12 +3038,8 @@
           "name": "emergency_calls_flood_zone_id_flood_zones_id_fk",
           "tableFrom": "emergency_calls",
           "tableTo": "flood_zones",
-          "columnsFrom": [
-            "flood_zone_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["flood_zone_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -3239,12 +3047,8 @@
           "name": "emergency_calls_state_id_states_id_fk",
           "tableFrom": "emergency_calls",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -3252,12 +3056,8 @@
           "name": "emergency_calls_locality_id_localities_id_fk",
           "tableFrom": "emergency_calls",
           "tableTo": "localities",
-          "columnsFrom": [
-            "locality_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["locality_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -3265,12 +3065,8 @@
           "name": "emergency_calls_received_by_user_id_users_id_fk",
           "tableFrom": "emergency_calls",
           "tableTo": "users",
-          "columnsFrom": [
-            "received_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["received_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -3278,12 +3074,8 @@
           "name": "emergency_calls_dispatched_to_org_id_organizations_id_fk",
           "tableFrom": "emergency_calls",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "dispatched_to_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["dispatched_to_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -3291,12 +3083,8 @@
           "name": "emergency_calls_rescue_operation_id_rescue_operations_id_fk",
           "tableFrom": "emergency_calls",
           "tableTo": "rescue_operations",
-          "columnsFrom": [
-            "rescue_operation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rescue_operation_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -3306,16 +3094,12 @@
         "emergency_calls_call_code_unique": {
           "name": "emergency_calls_call_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "call_code"
-          ]
+          "columns": ["call_code"]
         },
         "emergency_calls_rescue_operation_id_unique": {
           "name": "emergency_calls_rescue_operation_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "rescue_operation_id"
-          ]
+          "columns": ["rescue_operation_id"]
         }
       },
       "policies": {},
@@ -3497,12 +3281,8 @@
           "name": "audit_logs_user_id_users_id_fk",
           "tableFrom": "audit_logs",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -3510,12 +3290,8 @@
           "name": "audit_logs_org_id_organizations_id_fk",
           "tableFrom": "audit_logs",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -3703,12 +3479,8 @@
           "name": "notifications_user_id_users_id_fk",
           "tableFrom": "notifications",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3957,12 +3729,8 @@
           "name": "relief_supplies_source_org_id_organizations_id_fk",
           "tableFrom": "relief_supplies",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "source_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["source_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -3970,12 +3738,8 @@
           "name": "relief_supplies_destination_org_id_organizations_id_fk",
           "tableFrom": "relief_supplies",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "destination_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["destination_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -3983,12 +3747,8 @@
           "name": "relief_supplies_destination_shelter_id_shelters_id_fk",
           "tableFrom": "relief_supplies",
           "tableTo": "shelters",
-          "columnsFrom": [
-            "destination_shelter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["destination_shelter_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -3996,12 +3756,8 @@
           "name": "relief_supplies_state_id_states_id_fk",
           "tableFrom": "relief_supplies",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -4009,12 +3765,8 @@
           "name": "relief_supplies_requested_by_user_id_users_id_fk",
           "tableFrom": "relief_supplies",
           "tableTo": "users",
-          "columnsFrom": [
-            "requested_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["requested_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -4022,12 +3774,8 @@
           "name": "relief_supplies_approved_by_user_id_users_id_fk",
           "tableFrom": "relief_supplies",
           "tableTo": "users",
-          "columnsFrom": [
-            "approved_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["approved_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -4037,9 +3785,7 @@
         "relief_supplies_tracking_code_unique": {
           "name": "relief_supplies_tracking_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "tracking_code"
-          ]
+          "columns": ["tracking_code"]
         }
       },
       "policies": {},
@@ -4211,12 +3957,8 @@
           "name": "comments_user_id_users_id_fk",
           "tableFrom": "comments",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -4224,12 +3966,8 @@
           "name": "comments_task_id_tasks_id_fk",
           "tableFrom": "comments",
           "tableTo": "tasks",
-          "columnsFrom": [
-            "task_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["task_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -4237,12 +3975,8 @@
           "name": "comments_rescue_operation_id_rescue_operations_id_fk",
           "tableFrom": "comments",
           "tableTo": "rescue_operations",
-          "columnsFrom": [
-            "rescue_operation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rescue_operation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -4250,12 +3984,8 @@
           "name": "comments_flood_zone_id_flood_zones_id_fk",
           "tableFrom": "comments",
           "tableTo": "flood_zones",
-          "columnsFrom": [
-            "flood_zone_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["flood_zone_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -4263,12 +3993,8 @@
           "name": "comments_incident_id_flood_incidents_id_fk",
           "tableFrom": "comments",
           "tableTo": "flood_incidents",
-          "columnsFrom": [
-            "incident_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["incident_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -4276,12 +4002,8 @@
           "name": "comments_parent_comment_id_comments_id_fk",
           "tableFrom": "comments",
           "tableTo": "comments",
-          "columnsFrom": [
-            "parent_comment_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_comment_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -4494,12 +4216,8 @@
           "name": "citizen_reports_reporter_user_id_users_id_fk",
           "tableFrom": "citizen_reports",
           "tableTo": "users",
-          "columnsFrom": [
-            "reporter_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reporter_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4507,12 +4225,8 @@
           "name": "citizen_reports_state_id_states_id_fk",
           "tableFrom": "citizen_reports",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4520,12 +4234,8 @@
           "name": "citizen_reports_locality_id_localities_id_fk",
           "tableFrom": "citizen_reports",
           "tableTo": "localities",
-          "columnsFrom": [
-            "locality_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["locality_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4533,12 +4243,8 @@
           "name": "citizen_reports_reviewed_by_user_id_users_id_fk",
           "tableFrom": "citizen_reports",
           "tableTo": "users",
-          "columnsFrom": [
-            "reviewed_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reviewed_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4546,12 +4252,8 @@
           "name": "citizen_reports_linked_task_id_tasks_id_fk",
           "tableFrom": "citizen_reports",
           "tableTo": "tasks",
-          "columnsFrom": [
-            "linked_task_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["linked_task_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4559,12 +4261,8 @@
           "name": "citizen_reports_linked_rescue_id_rescue_operations_id_fk",
           "tableFrom": "citizen_reports",
           "tableTo": "rescue_operations",
-          "columnsFrom": [
-            "linked_rescue_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["linked_rescue_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -4574,9 +4272,7 @@
         "citizen_reports_report_code_unique": {
           "name": "citizen_reports_report_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "report_code"
-          ]
+          "columns": ["report_code"]
         }
       },
       "policies": {},
@@ -4786,12 +4482,8 @@
           "name": "situation_reports_incident_id_flood_incidents_id_fk",
           "tableFrom": "situation_reports",
           "tableTo": "flood_incidents",
-          "columnsFrom": [
-            "incident_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["incident_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4799,12 +4491,8 @@
           "name": "situation_reports_state_id_states_id_fk",
           "tableFrom": "situation_reports",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -4812,12 +4500,8 @@
           "name": "situation_reports_created_by_user_id_users_id_fk",
           "tableFrom": "situation_reports",
           "tableTo": "users",
-          "columnsFrom": [
-            "created_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -4825,12 +4509,8 @@
           "name": "situation_reports_created_by_org_id_organizations_id_fk",
           "tableFrom": "situation_reports",
           "tableTo": "organizations",
-          "columnsFrom": [
-            "created_by_org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by_org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -4840,9 +4520,7 @@
         "situation_reports_report_code_unique": {
           "name": "situation_reports_report_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "report_code"
-          ]
+          "columns": ["report_code"]
         }
       },
       "policies": {},
@@ -4959,12 +4637,8 @@
           "name": "file_attachments_uploaded_by_user_id_users_id_fk",
           "tableFrom": "file_attachments",
           "tableTo": "users",
-          "columnsFrom": [
-            "uploaded_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["uploaded_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -5157,12 +4831,8 @@
           "name": "weather_alerts_state_id_states_id_fk",
           "tableFrom": "weather_alerts",
           "tableTo": "states",
-          "columnsFrom": [
-            "state_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["state_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -5172,9 +4842,7 @@
         "weather_alerts_alert_code_unique": {
           "name": "weather_alerts_alert_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "alert_code"
-          ]
+          "columns": ["alert_code"]
         }
       },
       "policies": {},
@@ -5200,70 +4868,32 @@
     "public.call_status": {
       "name": "call_status",
       "schema": "public",
-      "values": [
-        "received",
-        "triaged",
-        "dispatched",
-        "resolved",
-        "duplicate",
-        "false_alarm"
-      ]
+      "values": ["received", "triaged", "dispatched", "resolved", "duplicate", "false_alarm"]
     },
     "public.call_urgency": {
       "name": "call_urgency",
       "schema": "public",
-      "values": [
-        "low",
-        "medium",
-        "high",
-        "life_threatening"
-      ]
+      "values": ["low", "medium", "high", "life_threatening"]
     },
     "public.damage_level": {
       "name": "damage_level",
       "schema": "public",
-      "values": [
-        "none",
-        "minor",
-        "moderate",
-        "major",
-        "destroyed"
-      ]
+      "values": ["none", "minor", "moderate", "major", "destroyed"]
     },
     "public.displaced_person_status": {
       "name": "displaced_person_status",
       "schema": "public",
-      "values": [
-        "registered",
-        "sheltered",
-        "relocated",
-        "returned_home",
-        "missing",
-        "deceased"
-      ]
+      "values": ["registered", "sheltered", "relocated", "returned_home", "missing", "deceased"]
     },
     "public.flood_severity": {
       "name": "flood_severity",
       "schema": "public",
-      "values": [
-        "low",
-        "moderate",
-        "high",
-        "severe",
-        "extreme"
-      ]
+      "values": ["low", "moderate", "high", "severe", "extreme"]
     },
     "public.flood_zone_status": {
       "name": "flood_zone_status",
       "schema": "public",
-      "values": [
-        "monitoring",
-        "warning",
-        "active_flood",
-        "receding",
-        "post_flood",
-        "archived"
-      ]
+      "values": ["monitoring", "warning", "active_flood", "receding", "post_flood", "archived"]
     },
     "public.health_status": {
       "name": "health_status",
@@ -5280,14 +4910,7 @@
     "public.incident_status": {
       "name": "incident_status",
       "schema": "public",
-      "values": [
-        "reported",
-        "confirmed",
-        "active",
-        "contained",
-        "resolved",
-        "archived"
-      ]
+      "values": ["reported", "confirmed", "active", "contained", "resolved", "archived"]
     },
     "public.incident_type": {
       "name": "incident_type",
@@ -5352,12 +4975,7 @@
     "public.repair_priority": {
       "name": "repair_priority",
       "schema": "public",
-      "values": [
-        "p0_critical",
-        "p1_high",
-        "p2_medium",
-        "p3_low"
-      ]
+      "values": ["p0_critical", "p1_high", "p2_medium", "p3_low"]
     },
     "public.repair_status": {
       "name": "repair_status",
@@ -5386,25 +5004,12 @@
     "public.rescue_operation_type": {
       "name": "rescue_operation_type",
       "schema": "public",
-      "values": [
-        "boat",
-        "helicopter",
-        "ground_vehicle",
-        "foot_patrol",
-        "mixed"
-      ]
+      "values": ["boat", "helicopter", "ground_vehicle", "foot_patrol", "mixed"]
     },
     "public.shelter_status": {
       "name": "shelter_status",
       "schema": "public",
-      "values": [
-        "preparing",
-        "open",
-        "at_capacity",
-        "overcrowded",
-        "closing",
-        "closed"
-      ]
+      "values": ["preparing", "open", "at_capacity", "overcrowded", "closing", "closed"]
     },
     "public.supply_status": {
       "name": "supply_status",
@@ -5452,12 +5057,7 @@
     "public.task_priority": {
       "name": "task_priority",
       "schema": "public",
-      "values": [
-        "critical",
-        "high",
-        "medium",
-        "low"
-      ]
+      "values": ["critical", "high", "medium", "low"]
     },
     "public.task_status": {
       "name": "task_status",
@@ -5475,22 +5075,12 @@
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": [
-        "super_admin",
-        "agency_admin",
-        "field_worker",
-        "citizen"
-      ]
+      "values": ["super_admin", "agency_admin", "field_worker", "citizen"]
     },
     "public.weather_alert_severity": {
       "name": "weather_alert_severity",
       "schema": "public",
-      "values": [
-        "advisory",
-        "watch",
-        "warning",
-        "emergency"
-      ]
+      "values": ["advisory", "watch", "warning", "emergency"]
     },
     "public.weather_alert_type": {
       "name": "weather_alert_type",

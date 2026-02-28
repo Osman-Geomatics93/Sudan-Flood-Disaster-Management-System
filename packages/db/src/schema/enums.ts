@@ -162,12 +162,7 @@ export const taskStatusEnum = pgEnum('task_status', [
   'cancelled',
 ]);
 
-export const taskPriorityEnum = pgEnum('task_priority', [
-  'critical',
-  'high',
-  'medium',
-  'low',
-]);
+export const taskPriorityEnum = pgEnum('task_priority', ['critical', 'high', 'medium', 'low']);
 
 export const surveyStatusEnum = pgEnum('survey_status', [
   'planned',

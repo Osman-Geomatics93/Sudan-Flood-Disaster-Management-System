@@ -13,33 +13,36 @@ export function useSSE() {
   const utils = trpc.useUtils();
   const eventSourceRef = useRef<EventSource | null>(null);
 
-  const handleEvent = useCallback((event: SSEEvent) => {
-    // Invalidate relevant caches based on event type
-    switch (event.type) {
-      case 'emergency_call.created':
-        utils.emergencyCall.list.invalidate();
-        utils.emergencyCall.stats.invalidate();
-        break;
-      case 'rescue.status_changed':
-        utils.rescue.list.invalidate();
-        utils.rescue.stats.invalidate();
-        break;
-      case 'shelter.capacity_changed':
-        utils.shelter.list.invalidate();
-        utils.shelter.stats.invalidate();
-        break;
-      case 'weather_alert.created':
-        utils.weatherAlert.list.invalidate();
-        utils.weatherAlert.active.invalidate();
-        utils.weatherAlert.stats.invalidate();
-        break;
-      case 'notification.created':
-        utils.notification.unreadCount.invalidate();
-        break;
-      default:
-        break;
-    }
-  }, [utils]);
+  const handleEvent = useCallback(
+    (event: SSEEvent) => {
+      // Invalidate relevant caches based on event type
+      switch (event.type) {
+        case 'emergency_call.created':
+          utils.emergencyCall.list.invalidate();
+          utils.emergencyCall.stats.invalidate();
+          break;
+        case 'rescue.status_changed':
+          utils.rescue.list.invalidate();
+          utils.rescue.stats.invalidate();
+          break;
+        case 'shelter.capacity_changed':
+          utils.shelter.list.invalidate();
+          utils.shelter.stats.invalidate();
+          break;
+        case 'weather_alert.created':
+          utils.weatherAlert.list.invalidate();
+          utils.weatherAlert.active.invalidate();
+          utils.weatherAlert.stats.invalidate();
+          break;
+        case 'notification.created':
+          utils.notification.unreadCount.invalidate();
+          break;
+        default:
+          break;
+      }
+    },
+    [utils],
+  );
 
   useEffect(() => {
     let es: EventSource | null = null;

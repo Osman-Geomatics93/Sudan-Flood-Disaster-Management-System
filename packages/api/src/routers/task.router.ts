@@ -99,9 +99,7 @@ export const taskRouter = router({
       return getTaskComments(ctx.db, input.id);
     }),
 
-  stats: protectedProcedure
-    .use(requirePermission('task:read'))
-    .query(async ({ ctx }) => {
-      return getTaskStats(ctx.db);
-    }),
+  stats: protectedProcedure.use(requirePermission('task:read')).query(async ({ ctx }) => {
+    return getTaskStats(ctx.db);
+  }),
 });

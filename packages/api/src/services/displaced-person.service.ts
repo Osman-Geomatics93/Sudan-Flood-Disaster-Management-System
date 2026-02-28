@@ -21,7 +21,10 @@ export async function listDisplacedPersons(
 
   if (input.status) {
     conditions.push(
-      eq(displacedPersons.status, input.status as typeof displacedPersons.status.enumValues[number]),
+      eq(
+        displacedPersons.status,
+        input.status as (typeof displacedPersons.status.enumValues)[number],
+      ),
     );
   }
   if (input.shelterId) {
@@ -31,7 +34,7 @@ export async function listDisplacedPersons(
     conditions.push(
       eq(
         displacedPersons.healthStatus,
-        input.healthStatus as typeof displacedPersons.healthStatus.enumValues[number],
+        input.healthStatus as (typeof displacedPersons.healthStatus.enumValues)[number],
       ),
     );
   }
@@ -235,10 +238,11 @@ export async function updateDisplacedPerson(
       ...(input.nationalId !== undefined && { nationalId: input.nationalId }),
       ...(input.phone !== undefined && { phone: input.phone }),
       ...(input.status !== undefined && {
-        status: input.status as typeof displacedPersons.status.enumValues[number],
+        status: input.status as (typeof displacedPersons.status.enumValues)[number],
       }),
       ...(input.healthStatus !== undefined && {
-        healthStatus: input.healthStatus as typeof displacedPersons.healthStatus.enumValues[number],
+        healthStatus:
+          input.healthStatus as (typeof displacedPersons.healthStatus.enumValues)[number],
       }),
       ...(input.healthNotes !== undefined && { healthNotes: input.healthNotes }),
       ...(input.hasDisability !== undefined && { hasDisability: input.hasDisability }),
@@ -258,10 +262,7 @@ export async function updateDisplacedPerson(
   return getDisplacedPersonById(db, input.id);
 }
 
-export async function assignShelter(
-  db: Database,
-  input: { personId: string; shelterId: string },
-) {
+export async function assignShelter(db: Database, input: { personId: string; shelterId: string }) {
   const person = await getDisplacedPersonById(db, input.personId);
 
   // Verify target shelter exists
@@ -317,7 +318,7 @@ export async function updateHealth(
   await db
     .update(displacedPersons)
     .set({
-      healthStatus: input.healthStatus as typeof displacedPersons.healthStatus.enumValues[number],
+      healthStatus: input.healthStatus as (typeof displacedPersons.healthStatus.enumValues)[number],
       ...(input.healthNotes !== undefined && { healthNotes: input.healthNotes }),
       updatedAt: new Date(),
     })
@@ -480,11 +481,7 @@ export async function addFamilyMember(
 }
 
 export async function getFamilyGroupById(db: Database, id: string) {
-  const [group] = await db
-    .select()
-    .from(familyGroups)
-    .where(eq(familyGroups.id, id))
-    .limit(1);
+  const [group] = await db.select().from(familyGroups).where(eq(familyGroups.id, id)).limit(1);
 
   if (!group) {
     throw new TRPCError({ code: 'NOT_FOUND', message: 'Family group not found' });
@@ -502,9 +499,7 @@ export async function getFamilyGroupById(db: Database, id: string) {
       healthStatus: displacedPersons.healthStatus,
     })
     .from(displacedPersons)
-    .where(
-      and(eq(displacedPersons.familyGroupId, id), isNull(displacedPersons.deletedAt)),
-    );
+    .where(and(eq(displacedPersons.familyGroupId, id), isNull(displacedPersons.deletedAt)));
 
   return { ...group, members };
 }

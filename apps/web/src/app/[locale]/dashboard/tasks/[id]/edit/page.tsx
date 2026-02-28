@@ -48,9 +48,7 @@ export default function EditTaskPage() {
         priority: task.priority ?? 'medium',
         assignedToOrgId: task.assignedToOrgId ?? '',
         floodZoneId: task.floodZoneId ?? '',
-        deadline: task.deadline
-          ? new Date(task.deadline).toISOString().slice(0, 16)
-          : '',
+        deadline: task.deadline ? new Date(task.deadline).toISOString().slice(0, 16) : '',
       });
     }
   }, [taskQuery.data]);
@@ -69,7 +67,7 @@ export default function EditTaskPage() {
       title_en: form.title_en,
       title_ar: form.title_ar || undefined,
       description: form.description || undefined,
-      priority: form.priority as typeof TASK_PRIORITIES[number],
+      priority: form.priority as (typeof TASK_PRIORITIES)[number],
       assignedToOrgId: form.assignedToOrgId,
       floodZoneId: form.floodZoneId || undefined,
       deadline: form.deadline ? new Date(form.deadline) : undefined,
@@ -79,15 +77,13 @@ export default function EditTaskPage() {
   if (taskQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }
 
   if (taskQuery.error || !taskQuery.data) {
-    return (
-      <div className="py-12 text-center text-muted-foreground">{tCommon('error')}</div>
-    );
+    return <div className="text-muted-foreground py-12 text-center">{tCommon('error')}</div>;
   }
 
   return (
@@ -144,7 +140,9 @@ export default function EditTaskPage() {
                 className="input-field w-full"
               >
                 {TASK_PRIORITIES.map((p) => (
-                  <option key={p} value={p}>{t(`priority_${p}`)}</option>
+                  <option key={p} value={p}>
+                    {t(`priority_${p}`)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -169,7 +167,9 @@ export default function EditTaskPage() {
             >
               <option value="">{t('selectOrg')}</option>
               {orgsQuery.data?.items.map((org) => (
-                <option key={org.id} value={org.id}>{org.name_en}</option>
+                <option key={org.id} value={org.id}>
+                  {org.name_en}
+                </option>
               ))}
             </select>
           </div>
@@ -183,7 +183,9 @@ export default function EditTaskPage() {
             >
               <option value="">{t('selectFloodZone')}</option>
               {zonesQuery.data?.items.map((zone) => (
-                <option key={zone.id} value={zone.id}>{zone.name_en}</option>
+                <option key={zone.id} value={zone.id}>
+                  {zone.name_en}
+                </option>
               ))}
             </select>
           </div>
@@ -197,11 +199,7 @@ export default function EditTaskPage() {
           >
             {updateMutation.isPending ? tCommon('saving') : tCommon('save')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

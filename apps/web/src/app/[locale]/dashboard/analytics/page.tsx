@@ -6,11 +6,22 @@ import dynamic from 'next/dynamic';
 import { trpc } from '@/lib/trpc-client';
 import ChartCard from '@/components/charts/ChartCard';
 
-const SeverityPieChart = dynamic(() => import('@/components/charts/SeverityPieChart'), { ssr: false });
-const ShelterOccupancyBarChart = dynamic(() => import('@/components/charts/ShelterOccupancyBarChart'), { ssr: false });
-const SupplyByTypeChart = dynamic(() => import('@/components/charts/SupplyByTypeChart'), { ssr: false });
-const DisplacementTrendChart = dynamic(() => import('@/components/charts/DisplacementTrendChart'), { ssr: false });
-const EmergencyCallsChart = dynamic(() => import('@/components/charts/EmergencyCallsChart'), { ssr: false });
+const SeverityPieChart = dynamic(() => import('@/components/charts/SeverityPieChart'), {
+  ssr: false,
+});
+const ShelterOccupancyBarChart = dynamic(
+  () => import('@/components/charts/ShelterOccupancyBarChart'),
+  { ssr: false },
+);
+const SupplyByTypeChart = dynamic(() => import('@/components/charts/SupplyByTypeChart'), {
+  ssr: false,
+});
+const DisplacementTrendChart = dynamic(() => import('@/components/charts/DisplacementTrendChart'), {
+  ssr: false,
+});
+const EmergencyCallsChart = dynamic(() => import('@/components/charts/EmergencyCallsChart'), {
+  ssr: false,
+});
 
 export default function AnalyticsPage() {
   const t = useTranslations('analytics');
@@ -25,29 +36,31 @@ export default function AnalyticsPage() {
 
   return (
     <div className="animate-in">
-      <h1 className="font-heading text-2xl font-semibold tracking-tight mb-6">{t('title')}</h1>
+      <h1 className="font-heading mb-6 text-2xl font-semibold tracking-tight">{t('title')}</h1>
 
       {/* Response Time stat card */}
       {responseQuery.data && (
-        <div className="card p-5 mb-6">
-          <div className="text-3xl font-semibold tracking-tight text-primary">
+        <div className="card mb-6 p-5">
+          <div className="text-primary text-3xl font-semibold tracking-tight">
             {Number(responseQuery.data.avgResponseMinutes).toFixed(1)} min
           </div>
-          <div className="mt-1.5 text-sm text-muted-foreground">{t('avgResponseMinutes')}</div>
+          <div className="text-muted-foreground mt-1.5 text-sm">{t('avgResponseMinutes')}</div>
         </div>
       )}
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Displacement Trend */}
         <ChartCard title={t('displacementTrend')} loading={displacementQuery.isLoading}>
-          <div className="flex gap-2 mb-3">
+          <div className="mb-3 flex gap-2">
             {[7, 30, 90].map((d) => (
               <button
                 key={d}
                 onClick={() => setTrendDays(d)}
-                className={`px-3 py-1 text-xs rounded-md transition-colors ${
-                  trendDays === d ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-accent'
+                className={`rounded-md px-3 py-1 text-xs transition-colors ${
+                  trendDays === d
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted hover:bg-accent'
                 }`}
               >
                 {t(`last${d}Days` as any)}
@@ -59,7 +72,9 @@ export default function AnalyticsPage() {
 
         {/* Severity Distribution */}
         <ChartCard title={t('severityDistribution')} loading={severityQuery.isLoading}>
-          {severityQuery.data?.bySeverity && <SeverityPieChart data={severityQuery.data.bySeverity} />}
+          {severityQuery.data?.bySeverity && (
+            <SeverityPieChart data={severityQuery.data.bySeverity} />
+          )}
         </ChartCard>
 
         {/* Shelter Occupancy */}

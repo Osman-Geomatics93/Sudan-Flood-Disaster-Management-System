@@ -20,7 +20,9 @@ function getSecret(): Uint8Array {
   return new TextEncoder().encode(secret);
 }
 
-export async function signAccessToken(payload: Pick<TokenPayload, 'userId' | 'email' | 'role' | 'orgId'>): Promise<string> {
+export async function signAccessToken(
+  payload: Pick<TokenPayload, 'userId' | 'email' | 'role' | 'orgId'>,
+): Promise<string> {
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -30,9 +32,7 @@ export async function signAccessToken(payload: Pick<TokenPayload, 'userId' | 'em
     .sign(getSecret());
 }
 
-export async function signRefreshToken(
-  payload: Pick<TokenPayload, 'userId'>,
-): Promise<string> {
+export async function signRefreshToken(payload: Pick<TokenPayload, 'userId'>): Promise<string> {
   return new SignJWT({ userId: payload.userId })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -50,9 +50,7 @@ export async function verifyAccessToken(token: string): Promise<TokenPayload> {
   return payload as TokenPayload;
 }
 
-export async function verifyRefreshToken(
-  token: string,
-): Promise<Pick<TokenPayload, 'userId'>> {
+export async function verifyRefreshToken(token: string): Promise<Pick<TokenPayload, 'userId'>> {
   const { payload } = await jwtVerify(token, getSecret(), {
     issuer: 'sudanflood',
     audience: 'sudanflood-refresh',

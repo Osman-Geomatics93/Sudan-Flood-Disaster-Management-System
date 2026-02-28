@@ -1,9 +1,5 @@
 import { router, protectedProcedure, requirePermission } from '../trpc.js';
-import {
-  listNotificationsSchema,
-  markReadSchema,
-  markAllReadSchema,
-} from '@sudanflood/shared';
+import { listNotificationsSchema, markReadSchema, markAllReadSchema } from '@sudanflood/shared';
 import {
   listNotifications,
   getUnreadCount,

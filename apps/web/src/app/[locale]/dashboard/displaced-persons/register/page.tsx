@@ -89,7 +89,7 @@ export default function RegisterDisplacedPersonPage() {
   return (
     <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
-        <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+        <button onClick={() => router.back()} className="hover:bg-accent rounded-md p-2">
           <ArrowLeft className="h-5 w-5" />
         </button>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('registerTitle')}</h1>
@@ -98,7 +98,9 @@ export default function RegisterDisplacedPersonPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Arabic Name */}
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('personalInfo')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('personalInfo')}
+          </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('firstName_ar')} *</label>
@@ -158,7 +160,9 @@ export default function RegisterDisplacedPersonPage() {
               >
                 <option value="">{t('selectGender')}</option>
                 {GENDERS.map((g) => (
-                  <option key={g} value={g}>{t(`gender_${g}`)}</option>
+                  <option key={g} value={g}>
+                    {t(`gender_${g}`)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -186,7 +190,9 @@ export default function RegisterDisplacedPersonPage() {
 
         {/* Health */}
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('healthInfo')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('healthInfo')}
+          </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('healthStatus')}</label>
@@ -196,7 +202,9 @@ export default function RegisterDisplacedPersonPage() {
                 className="input-field w-full"
               >
                 {HEALTH_STATUSES.map((h) => (
-                  <option key={h} value={h}>{t(`health_${h}`)}</option>
+                  <option key={h} value={h}>
+                    {t(`health_${h}`)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -234,7 +242,9 @@ export default function RegisterDisplacedPersonPage() {
 
         {/* Shelter Assignment */}
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('shelterAssignment')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('shelterAssignment')}
+          </h2>
           <div>
             <label className="mb-1 block text-sm font-medium">{t('assignToShelter')}</label>
             <select
@@ -254,7 +264,9 @@ export default function RegisterDisplacedPersonPage() {
 
         {/* Origin */}
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('originInfo')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('originInfo')}
+          </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('originState')}</label>
@@ -265,7 +277,9 @@ export default function RegisterDisplacedPersonPage() {
               >
                 <option value="">{t('selectState')}</option>
                 {(statesQuery.data ?? []).map((s) => (
-                  <option key={s.id} value={s.id}>{s.name_en}</option>
+                  <option key={s.id} value={s.id}>
+                    {s.name_en}
+                  </option>
                 ))}
               </select>
             </div>
@@ -279,7 +293,9 @@ export default function RegisterDisplacedPersonPage() {
               >
                 <option value="">{t('selectLocality')}</option>
                 {(localitiesQuery.data ?? []).map((l) => (
-                  <option key={l.id} value={l.id}>{l.name_en}</option>
+                  <option key={l.id} value={l.id}>
+                    {l.name_en}
+                  </option>
                 ))}
               </select>
             </div>
@@ -296,7 +312,7 @@ export default function RegisterDisplacedPersonPage() {
         </div>
 
         {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+          <div className="bg-destructive/10 text-destructive rounded-md p-3 text-sm">{error}</div>
         )}
 
         <div className="flex gap-3">
@@ -307,11 +323,7 @@ export default function RegisterDisplacedPersonPage() {
           >
             {registerMutation.isPending ? t('registering') : t('register')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

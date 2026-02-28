@@ -20,12 +20,15 @@ export async function listSupplies(
 
   if (input.type) {
     conditions.push(
-      eq(reliefSupplies.supplyType, input.type as typeof reliefSupplies.supplyType.enumValues[number]),
+      eq(
+        reliefSupplies.supplyType,
+        input.type as (typeof reliefSupplies.supplyType.enumValues)[number],
+      ),
     );
   }
   if (input.status) {
     conditions.push(
-      eq(reliefSupplies.status, input.status as typeof reliefSupplies.status.enumValues[number]),
+      eq(reliefSupplies.status, input.status as (typeof reliefSupplies.status.enumValues)[number]),
     );
   }
   if (input.sourceOrgId) {
@@ -115,14 +118,8 @@ export async function getSupplyById(db: Database, id: string) {
   return supply;
 }
 
-export async function requestSupply(
-  db: Database,
-  input: RequestSupplyInput,
-  userId: string,
-) {
-  const countResult = await db
-    .select({ count: drizzleCount() })
-    .from(reliefSupplies);
+export async function requestSupply(db: Database, input: RequestSupplyInput, userId: string) {
+  const countResult = await db.select({ count: drizzleCount() }).from(reliefSupplies);
   const seq = (countResult[0]?.count ?? 0) + 1;
   const trackingCode = generateEntityCode(CODE_PREFIXES.RELIEF_SUPPLY, seq);
 
@@ -147,7 +144,10 @@ export async function requestSupply(
     .returning();
 
   if (!supply) {
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create supply request' });
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Failed to create supply request',
+    });
   }
 
   return getSupplyById(db, supply.id);
@@ -162,11 +162,13 @@ export async function approveSupply(
   const supply = await getSupplyById(db, id);
 
   if (supply.status !== 'requested') {
-    throw new TRPCError({ code: 'BAD_REQUEST', message: 'Supply can only be approved from requested status' });
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Supply can only be approved from requested status',
+    });
   }
 
-  const totalCost =
-    unitCostSdg != null ? String(unitCostSdg * Number(supply.quantity)) : null;
+  const totalCost = unitCostSdg != null ? String(unitCostSdg * Number(supply.quantity)) : null;
 
   await db
     .update(reliefSupplies)
@@ -187,7 +189,10 @@ export async function rejectSupply(db: Database, id: string) {
   const supply = await getSupplyById(db, id);
 
   if (supply.status !== 'requested') {
-    throw new TRPCError({ code: 'BAD_REQUEST', message: 'Supply can only be rejected from requested status' });
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Supply can only be rejected from requested status',
+    });
   }
 
   await db
@@ -203,7 +208,10 @@ export async function shipSupply(db: Database, id: string, originLocation?: [num
   const supply = await getSupplyById(db, id);
 
   if (supply.status !== 'approved') {
-    throw new TRPCError({ code: 'BAD_REQUEST', message: 'Supply can only be shipped from approved status' });
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Supply can only be shipped from approved status',
+    });
   }
 
   await db
@@ -226,7 +234,10 @@ export async function markDelivered(db: Database, id: string) {
   const supply = await getSupplyById(db, id);
 
   if (supply.status !== 'in_transit') {
-    throw new TRPCError({ code: 'BAD_REQUEST', message: 'Supply can only be delivered from in_transit status' });
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Supply can only be delivered from in_transit status',
+    });
   }
 
   await db
@@ -257,7 +268,10 @@ export async function cancelSupply(db: Database, id: string) {
   const supply = await getSupplyById(db, id);
 
   if (supply.status === 'delivered' || supply.status === 'distributed') {
-    throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cannot cancel a delivered or distributed supply' });
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Cannot cancel a delivered or distributed supply',
+    });
   }
 
   await db

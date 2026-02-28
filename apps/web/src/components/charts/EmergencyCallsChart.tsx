@@ -1,6 +1,15 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from 'recharts';
 
 interface EmergencyCallsChartProps {
   data: { urgency: string; count: number }[];
@@ -15,7 +24,7 @@ const URGENCY_COLORS: Record<string, string> = {
 
 export default function EmergencyCallsChart({ data }: EmergencyCallsChartProps) {
   if (!data || data.length === 0) {
-    return <p className="text-sm text-muted-foreground text-center py-8">No data</p>;
+    return <p className="text-muted-foreground py-8 text-center text-sm">No data</p>;
   }
 
   const chartData = data.map((d) => ({

@@ -139,14 +139,14 @@ export default function EditShelterPage() {
   if (shelterQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }
 
   if (shelterQuery.error) {
     return (
-      <div className="rounded-md bg-destructive/10 p-4 text-destructive">
+      <div className="bg-destructive/10 text-destructive rounded-md p-4">
         {shelterQuery.error.message}
       </div>
     );
@@ -214,7 +214,9 @@ export default function EditShelterPage() {
               >
                 <option value="">{t('selectState')}</option>
                 {(statesQuery.data ?? []).map((s) => (
-                  <option key={s.id} value={s.id}>{s.name_en}</option>
+                  <option key={s.id} value={s.id}>
+                    {s.name_en}
+                  </option>
                 ))}
               </select>
             </div>
@@ -228,7 +230,9 @@ export default function EditShelterPage() {
               >
                 <option value="">{t('selectLocality')}</option>
                 {(localitiesQuery.data ?? []).map((l) => (
-                  <option key={l.id} value={l.id}>{l.name_en}</option>
+                  <option key={l.id} value={l.id}>
+                    {l.name_en}
+                  </option>
                 ))}
               </select>
             </div>
@@ -242,7 +246,9 @@ export default function EditShelterPage() {
               >
                 <option value="">{t('selectOrg')}</option>
                 {(orgsQuery.data?.items ?? []).map((o) => (
-                  <option key={o.id} value={o.id}>{o.name_en}</option>
+                  <option key={o.id} value={o.id}>
+                    {o.name_en}
+                  </option>
                 ))}
               </select>
             </div>
@@ -263,19 +269,26 @@ export default function EditShelterPage() {
         <div className="card">
           <h2 className="mb-4 text-lg font-semibold">{t('facilities')}</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {(['hasWater', 'hasElectricity', 'hasMedical', 'hasSanitation', 'hasKitchen', 'hasSecurity'] as const).map(
-              (key) => (
-                <label key={key} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={form[key]}
-                    onChange={(e) => handleChange(key, e.target.checked)}
-                    className="rounded"
-                  />
-                  {t(key)}
-                </label>
-              ),
-            )}
+            {(
+              [
+                'hasWater',
+                'hasElectricity',
+                'hasMedical',
+                'hasSanitation',
+                'hasKitchen',
+                'hasSecurity',
+              ] as const
+            ).map((key) => (
+              <label key={key} className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={form[key]}
+                  onChange={(e) => handleChange(key, e.target.checked)}
+                  className="rounded"
+                />
+                {t(key)}
+              </label>
+            ))}
           </div>
           <div className="mt-4">
             <label className="mb-1 block text-sm font-medium">{t('facilityNotes')}</label>
@@ -290,7 +303,7 @@ export default function EditShelterPage() {
 
         <div className="card">
           <h2 className="mb-2 text-lg font-semibold">{t('location')}</h2>
-          <p className="mb-4 text-sm text-muted-foreground">{t('clickMapLocation')}</p>
+          <p className="text-muted-foreground mb-4 text-sm">{t('clickMapLocation')}</p>
           {markerPos && (
             <p className="mb-2 text-sm text-green-600">
               {t('locationSet')}: {markerPos[0].toFixed(4)}, {markerPos[1].toFixed(4)}
@@ -306,22 +319,14 @@ export default function EditShelterPage() {
         </div>
 
         {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+          <div className="bg-destructive/10 text-destructive rounded-md p-3 text-sm">{error}</div>
         )}
 
         <div className="flex gap-3">
-          <button
-            type="submit"
-            disabled={updateMutation.isPending}
-            className="btn-primary"
-          >
+          <button type="submit" disabled={updateMutation.isPending} className="btn-primary">
             {updateMutation.isPending ? t('saving') : t('saveChanges')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

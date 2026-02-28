@@ -10,7 +10,9 @@ import type { ShelterStatus } from '@sudanflood/shared';
 import { SHELTER_STATUSES } from '@sudanflood/shared';
 
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), { ssr: false });
-const ShelterMarkerLayer = dynamic(() => import('@/components/map/ShelterMarkerLayer'), { ssr: false });
+const ShelterMarkerLayer = dynamic(() => import('@/components/map/ShelterMarkerLayer'), {
+  ssr: false,
+});
 
 type ViewMode = 'list' | 'map';
 
@@ -60,10 +62,7 @@ export default function SheltersPage() {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <div className="flex items-center gap-3">
-          <Link
-            href="/dashboard/shelters/create"
-            className="btn-primary flex items-center gap-1.5"
-          >
+          <Link href="/dashboard/shelters/create" className="btn-primary flex items-center gap-1.5">
             <Plus className="h-4 w-4" />
             {t('createShelter')}
           </Link>
@@ -89,12 +88,17 @@ export default function SheltersPage() {
       <div className="mb-4">
         <select
           value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setPage(1);
+          }}
           className="input-field"
         >
           <option value="">{t('allStatuses')}</option>
           {SHELTER_STATUSES.map((s) => (
-            <option key={s} value={s}>{t(`status_${s}`)}</option>
+            <option key={s} value={s}>
+              {t(`status_${s}`)}
+            </option>
           ))}
         </select>
       </div>
@@ -103,12 +107,12 @@ export default function SheltersPage() {
         <div>
           {listQuery.isLoading && (
             <div className="flex items-center justify-center py-12">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
             </div>
           )}
 
           {listQuery.data && listQuery.data.items.length === 0 && (
-            <div className="rounded-lg border py-12 text-center text-muted-foreground">
+            <div className="text-muted-foreground rounded-lg border py-12 text-center">
               {tCommon('noData')}
             </div>
           )}
@@ -128,14 +132,20 @@ export default function SheltersPage() {
                   </thead>
                   <tbody className="table-premium tbody">
                     {listQuery.data.items.map((shelter) => (
-                      <tr key={shelter.id} className="border-b hover:bg-muted/30">
+                      <tr key={shelter.id} className="hover:bg-muted/30 border-b">
                         <td className="px-4 py-3 font-mono">
-                          <Link href={`/dashboard/shelters/${shelter.id}`} className="text-primary dark:text-primary hover:underline">
+                          <Link
+                            href={`/dashboard/shelters/${shelter.id}`}
+                            className="text-primary dark:text-primary hover:underline"
+                          >
                             {shelter.shelterCode}
                           </Link>
                         </td>
                         <td className="px-4 py-3">
-                          <Link href={`/dashboard/shelters/${shelter.id}`} className="hover:underline">
+                          <Link
+                            href={`/dashboard/shelters/${shelter.id}`}
+                            className="hover:underline"
+                          >
                             {shelter.name_en}
                           </Link>
                         </td>
@@ -156,8 +166,9 @@ export default function SheltersPage() {
 
               {listQuery.data.totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} ({listQuery.data.total} {t('total')})
+                  <span className="text-muted-foreground text-sm">
+                    {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} (
+                    {listQuery.data.total} {t('total')})
                   </span>
                   <div className="flex gap-2">
                     <button
@@ -181,19 +192,21 @@ export default function SheltersPage() {
           )}
         </div>
       ) : (
-        <div className="rounded-lg border overflow-hidden">
+        <div className="overflow-hidden rounded-lg border">
           <LeafletMap onBoundsChange={handleBoundsChange} className="h-[600px] w-full">
             <ShelterMarkerLayer
-              shelters={(boundsQuery.data ?? []) as Array<{
-                id: string;
-                shelterCode: string;
-                name_en: string;
-                name_ar?: string | null;
-                status: string;
-                capacity: number;
-                currentOccupancy: number;
-                location: { type: 'Point'; coordinates: [number, number] } | null;
-              }>}
+              shelters={
+                (boundsQuery.data ?? []) as {
+                  id: string;
+                  shelterCode: string;
+                  name_en: string;
+                  name_ar?: string | null;
+                  status: string;
+                  capacity: number;
+                  currentOccupancy: number;
+                  location: { type: 'Point'; coordinates: [number, number] } | null;
+                }[]
+              }
             />
           </LeafletMap>
         </div>

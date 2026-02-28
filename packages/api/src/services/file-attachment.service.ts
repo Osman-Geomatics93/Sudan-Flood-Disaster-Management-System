@@ -10,11 +10,7 @@ import {
 } from './storage.service.js';
 import { randomUUID } from 'crypto';
 
-export async function requestUpload(
-  db: Database,
-  input: RequestUploadInput,
-  userId: string,
-) {
+export async function requestUpload(db: Database, input: RequestUploadInput, userId: string) {
   const storageKey = `${input.entityType}/${input.entityId}/${randomUUID()}-${input.fileName}`;
 
   const presigned = await generatePresignedUploadUrl(storageKey, input.mimeType);

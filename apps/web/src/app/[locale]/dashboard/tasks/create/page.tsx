@@ -47,7 +47,7 @@ export default function CreateTaskPage() {
       title_en: form.title_en,
       title_ar: form.title_ar || undefined,
       description: form.description || undefined,
-      priority: form.priority as typeof TASK_PRIORITIES[number],
+      priority: form.priority as (typeof TASK_PRIORITIES)[number],
       assignedToOrgId: form.assignedToOrgId,
       floodZoneId: form.floodZoneId || undefined,
       deadline: form.deadline ? new Date(form.deadline) : undefined,
@@ -108,7 +108,9 @@ export default function CreateTaskPage() {
                 className="input-field w-full"
               >
                 {TASK_PRIORITIES.map((p) => (
-                  <option key={p} value={p}>{t(`priority_${p}`)}</option>
+                  <option key={p} value={p}>
+                    {t(`priority_${p}`)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -133,7 +135,9 @@ export default function CreateTaskPage() {
             >
               <option value="">{t('selectOrg')}</option>
               {orgsQuery.data?.items.map((org) => (
-                <option key={org.id} value={org.id}>{org.name_en}</option>
+                <option key={org.id} value={org.id}>
+                  {org.name_en}
+                </option>
               ))}
             </select>
           </div>
@@ -147,7 +151,9 @@ export default function CreateTaskPage() {
             >
               <option value="">{t('selectFloodZone')}</option>
               {zonesQuery.data?.items.map((zone) => (
-                <option key={zone.id} value={zone.id}>{zone.name_en}</option>
+                <option key={zone.id} value={zone.id}>
+                  {zone.name_en}
+                </option>
               ))}
             </select>
           </div>
@@ -161,11 +167,7 @@ export default function CreateTaskPage() {
           >
             {createMutation.isPending ? t('creating') : t('createTask')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

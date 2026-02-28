@@ -29,11 +29,7 @@ export async function loginUser(
   email: string,
   password: string,
 ): Promise<LoginResult> {
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .limit(1);
+  const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1);
 
   if (!user) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid email or password' });
@@ -53,10 +49,7 @@ export async function loginUser(
   }
 
   // Update last login
-  await db
-    .update(users)
-    .set({ lastLoginAt: new Date() })
-    .where(eq(users.id, user.id));
+  await db.update(users).set({ lastLoginAt: new Date() }).where(eq(users.id, user.id));
 
   const tokens = await generateTokenPair({
     userId: user.id,
@@ -82,10 +75,7 @@ export async function loginUser(
   };
 }
 
-export async function registerUser(
-  db: Database,
-  input: RegisterInput,
-): Promise<LoginResult> {
+export async function registerUser(db: Database, input: RegisterInput): Promise<LoginResult> {
   // Check if email already exists
   const [existing] = await db
     .select({ id: users.id })
@@ -143,10 +133,7 @@ export async function registerUser(
   };
 }
 
-export async function refreshUserTokens(
-  db: Database,
-  refreshToken: string,
-): Promise<TokenPair> {
+export async function refreshUserTokens(db: Database, refreshToken: string): Promise<TokenPair> {
   let decoded: { userId: string };
   try {
     decoded = await verifyRefreshToken(refreshToken);
@@ -154,11 +141,7 @@ export async function refreshUserTokens(
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid refresh token' });
   }
 
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, decoded.userId))
-    .limit(1);
+  const [user] = await db.select().from(users).where(eq(users.id, decoded.userId)).limit(1);
 
   if (!user || !user.isActive || user.deletedAt) {
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User not found or inactive' });
@@ -173,11 +156,7 @@ export async function refreshUserTokens(
 }
 
 export async function getUserById(db: Database, userId: string): Promise<AuthUser | null> {
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, userId))
-    .limit(1);
+  const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
 
   if (!user || !user.isActive || user.deletedAt) return null;
 
@@ -217,8 +196,5 @@ export async function changeUserPassword(
   }
 
   const newHash = await hashPassword(newPassword);
-  await db
-    .update(users)
-    .set({ passwordHash: newHash })
-    .where(eq(users.id, userId));
+  await db.update(users).set({ passwordHash: newHash }).where(eq(users.id, userId));
 }

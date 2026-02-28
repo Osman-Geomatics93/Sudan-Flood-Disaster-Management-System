@@ -6,7 +6,17 @@ import { useRouter } from '@/i18n/navigation';
 import { Link } from '@/i18n/navigation';
 import dynamic from 'next/dynamic';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, Droplets, Zap, Stethoscope, ShowerHead, CookingPot, Shield, Users, Pencil } from 'lucide-react';
+import {
+  ArrowLeft,
+  Droplets,
+  Zap,
+  Stethoscope,
+  ShowerHead,
+  CookingPot,
+  Shield,
+  Users,
+  Pencil,
+} from 'lucide-react';
 import { Marker, Popup } from 'react-leaflet';
 
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), { ssr: false });
@@ -41,14 +51,14 @@ export default function ShelterDetailPage() {
   if (shelterQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }
 
   if (shelterQuery.error) {
     return (
-      <div className="rounded-md bg-destructive/10 p-4 text-destructive">
+      <div className="bg-destructive/10 text-destructive rounded-md p-4">
         {shelterQuery.error.message}
       </div>
     );
@@ -57,14 +67,11 @@ export default function ShelterDetailPage() {
   const shelter = shelterQuery.data;
   if (!shelter) return null;
 
-  const occupancyPct = shelter.capacity > 0
-    ? Math.round((shelter.currentOccupancy / shelter.capacity) * 100)
-    : 0;
+  const occupancyPct =
+    shelter.capacity > 0 ? Math.round((shelter.currentOccupancy / shelter.capacity) * 100) : 0;
 
   const occupancyColor =
-    occupancyPct >= 100 ? 'bg-red-500' :
-    occupancyPct >= 80 ? 'bg-yellow-500' :
-    'bg-green-500';
+    occupancyPct >= 100 ? 'bg-red-500' : occupancyPct >= 80 ? 'bg-yellow-500' : 'bg-green-500';
 
   const location = shelter.location as { type: string; coordinates: [number, number] } | null;
 
@@ -76,9 +83,15 @@ export default function ShelterDetailPage() {
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="font-heading text-2xl font-semibold tracking-tight">{shelter.name_en}</h1>
-            {shelter.name_ar && <p className="text-sm text-muted-foreground" dir="rtl">{shelter.name_ar}</p>}
-            <p className="font-mono text-sm text-muted-foreground">{shelter.shelterCode}</p>
+            <h1 className="font-heading text-2xl font-semibold tracking-tight">
+              {shelter.name_en}
+            </h1>
+            {shelter.name_ar && (
+              <p className="text-muted-foreground text-sm" dir="rtl">
+                {shelter.name_ar}
+              </p>
+            )}
+            <p className="text-muted-foreground font-mono text-sm">{shelter.shelterCode}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -89,7 +102,9 @@ export default function ShelterDetailPage() {
             <Pencil className="h-4 w-4" />
             {tCommon('edit')}
           </Link>
-          <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${STATUS_STYLES[shelter.status] ?? ''}`}>
+          <span
+            className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${STATUS_STYLES[shelter.status] ?? ''}`}
+          >
             {t(`status_${shelter.status}`)}
           </span>
         </div>
@@ -100,11 +115,13 @@ export default function ShelterDetailPage() {
           {/* Occupancy bar */}
           <div className="card">
             <h2 className="mb-4 text-lg font-semibold">{t('occupancy')}</h2>
-            <div className="flex items-center justify-between text-sm mb-2">
-              <span>{shelter.currentOccupancy} / {shelter.capacity}</span>
+            <div className="mb-2 flex items-center justify-between text-sm">
+              <span>
+                {shelter.currentOccupancy} / {shelter.capacity}
+              </span>
               <span>{occupancyPct}%</span>
             </div>
-            <div className="h-4 w-full rounded-full bg-muted overflow-hidden">
+            <div className="bg-muted h-4 w-full overflow-hidden rounded-full">
               <div
                 className={`h-full rounded-full transition-all ${occupancyColor}`}
                 style={{ width: `${Math.min(occupancyPct, 100)}%` }}
@@ -122,7 +139,9 @@ export default function ShelterDetailPage() {
                   <div
                     key={key}
                     className={`flex items-center gap-2 rounded-md border p-3 text-sm ${
-                      available ? 'border-green-300 bg-green-50 dark:border-green-800 dark:bg-green-950' : 'border-muted opacity-50'
+                      available
+                        ? 'border-green-300 bg-green-50 dark:border-green-800 dark:bg-green-950'
+                        : 'border-muted opacity-50'
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -132,7 +151,7 @@ export default function ShelterDetailPage() {
               })}
             </div>
             {shelter.facilityNotes && (
-              <p className="mt-4 text-sm text-muted-foreground">{shelter.facilityNotes}</p>
+              <p className="text-muted-foreground mt-4 text-sm">{shelter.facilityNotes}</p>
             )}
           </div>
 
@@ -160,28 +179,32 @@ export default function ShelterDetailPage() {
             <dl className="space-y-3">
               {shelter.address_en && (
                 <div>
-                  <dt className="text-sm text-muted-foreground">{t('addressEn')}</dt>
+                  <dt className="text-muted-foreground text-sm">{t('addressEn')}</dt>
                   <dd className="mt-1 text-sm">{shelter.address_en}</dd>
                 </div>
               )}
               {shelter.address_ar && (
                 <div>
-                  <dt className="text-sm text-muted-foreground">{t('addressAr')}</dt>
-                  <dd className="mt-1 text-sm" dir="rtl">{shelter.address_ar}</dd>
+                  <dt className="text-muted-foreground text-sm">{t('addressAr')}</dt>
+                  <dd className="mt-1 text-sm" dir="rtl">
+                    {shelter.address_ar}
+                  </dd>
                 </div>
               )}
               <div>
-                <dt className="text-sm text-muted-foreground">{t('capacity')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('capacity')}</dt>
                 <dd className="mt-1 text-sm">{shelter.capacity}</dd>
               </div>
               {shelter.openedAt && (
                 <div>
-                  <dt className="text-sm text-muted-foreground">{t('openedAt')}</dt>
-                  <dd className="mt-1 text-sm">{new Date(shelter.openedAt).toLocaleDateString()}</dd>
+                  <dt className="text-muted-foreground text-sm">{t('openedAt')}</dt>
+                  <dd className="mt-1 text-sm">
+                    {new Date(shelter.openedAt).toLocaleDateString()}
+                  </dd>
                 </div>
               )}
               <div>
-                <dt className="text-sm text-muted-foreground">{t('createdAt')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('createdAt')}</dt>
                 <dd className="mt-1 text-sm">{new Date(shelter.createdAt).toLocaleString()}</dd>
               </div>
             </dl>
@@ -189,7 +212,7 @@ export default function ShelterDetailPage() {
 
           <Link
             href={`/dashboard/displaced-persons?shelterId=${shelter.id}`}
-            className="flex items-center gap-2 rounded-lg border bg-card p-4 text-sm font-medium hover:bg-accent"
+            className="bg-card hover:bg-accent flex items-center gap-2 rounded-lg border p-4 text-sm font-medium"
           >
             <Users className="h-4 w-4" />
             {t('viewDisplacedPersons')}

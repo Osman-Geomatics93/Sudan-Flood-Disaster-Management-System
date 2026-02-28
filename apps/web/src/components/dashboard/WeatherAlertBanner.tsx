@@ -24,24 +24,24 @@ export default function WeatherAlertBanner() {
   // Show most severe alert
   const severityOrder = ['emergency', 'warning', 'watch', 'advisory'];
   const sorted = [...alerts].sort(
-    (a, b) => severityOrder.indexOf(a.severity) - severityOrder.indexOf(b.severity)
+    (a, b) => severityOrder.indexOf(a.severity) - severityOrder.indexOf(b.severity),
   );
   const topAlert = sorted[0];
   if (!topAlert) return null;
 
   return (
-    <Link href="/dashboard/weather-alerts" className="block mb-4">
-      <div className={`rounded-lg border p-3 flex items-center gap-3 ${SEVERITY_BG[topAlert.severity] || SEVERITY_BG.advisory}`}>
+    <Link href="/dashboard/weather-alerts" className="mb-4 block">
+      <div
+        className={`flex items-center gap-3 rounded-lg border p-3 ${SEVERITY_BG[topAlert.severity] || SEVERITY_BG.advisory}`}
+      >
         <CloudLightning className="h-5 w-5 shrink-0" />
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">{topAlert.title_en}</p>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium">{topAlert.title_en}</p>
           {alerts.length > 1 && (
-            <p className="text-xs text-muted-foreground">
-              +{alerts.length - 1} more active alerts
-            </p>
+            <p className="text-muted-foreground text-xs">+{alerts.length - 1} more active alerts</p>
           )}
         </div>
-        <span className="text-xs font-medium shrink-0">
+        <span className="shrink-0 text-xs font-medium">
           {t(`severity_${topAlert.severity}` as any)}
         </span>
       </div>

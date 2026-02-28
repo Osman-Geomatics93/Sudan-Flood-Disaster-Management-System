@@ -57,7 +57,10 @@ export const floodIncidentsRelations = relations(floodIncidents, ({ one, many })
   state: one(states, { fields: [floodIncidents.stateId], references: [states.id] }),
   locality: one(localities, { fields: [floodIncidents.localityId], references: [localities.id] }),
   declaredBy: one(users, { fields: [floodIncidents.declaredByUserId], references: [users.id] }),
-  leadOrg: one(organizations, { fields: [floodIncidents.leadOrgId], references: [organizations.id] }),
+  leadOrg: one(organizations, {
+    fields: [floodIncidents.leadOrgId],
+    references: [organizations.id],
+  }),
   floodZones: many(floodZones),
 }));
 

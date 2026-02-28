@@ -84,9 +84,7 @@ export const reportRouter = router({
   }),
 
   // ── Stats ───────────────────────────────────────────────────────
-  stats: protectedProcedure
-    .use(requirePermission('report:read'))
-    .query(async ({ ctx }) => {
-      return getReportStats(ctx.db);
-    }),
+  stats: protectedProcedure.use(requirePermission('report:read')).query(async ({ ctx }) => {
+    return getReportStats(ctx.db);
+  }),
 });

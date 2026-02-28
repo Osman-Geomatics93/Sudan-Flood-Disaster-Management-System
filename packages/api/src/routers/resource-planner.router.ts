@@ -8,11 +8,9 @@ import {
 } from '../services/resource-planner.service.js';
 
 export const resourcePlannerRouter = router({
-  nearestShelters: adminProcedure
-    .input(nearestSheltersSchema)
-    .query(async ({ input, ctx }) => {
-      return findNearestAvailableShelters(ctx.db, input);
-    }),
+  nearestShelters: adminProcedure.input(nearestSheltersSchema).query(async ({ input, ctx }) => {
+    return findNearestAvailableShelters(ctx.db, input);
+  }),
 
   supplyGaps: adminProcedure.query(async ({ ctx }) => {
     return getSupplyGapAnalysis(ctx.db);

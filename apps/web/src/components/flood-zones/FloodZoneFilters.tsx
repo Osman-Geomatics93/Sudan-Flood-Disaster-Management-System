@@ -23,7 +23,7 @@ export function FloodZoneFilters({
       <select
         value={severity}
         onChange={(e) => onSeverityChange(e.target.value)}
-        className="rounded-md border bg-card px-3 py-2 text-sm"
+        className="bg-card rounded-md border px-3 py-2 text-sm"
       >
         <option value="">{t('allSeverities')}</option>
         {FLOOD_SEVERITIES.map((s) => (
@@ -36,7 +36,7 @@ export function FloodZoneFilters({
       <select
         value={status}
         onChange={(e) => onStatusChange(e.target.value)}
-        className="rounded-md border bg-card px-3 py-2 text-sm"
+        className="bg-card rounded-md border px-3 py-2 text-sm"
       >
         <option value="">{t('allStatuses')}</option>
         {FLOOD_ZONE_STATUSES.map((s) => (

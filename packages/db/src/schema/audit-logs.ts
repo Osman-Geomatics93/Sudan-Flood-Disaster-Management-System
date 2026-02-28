@@ -1,13 +1,4 @@
-import {
-  pgTable,
-  uuid,
-  varchar,
-  text,
-  timestamp,
-  jsonb,
-  index,
-  inet,
-} from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, text, timestamp, jsonb, index, inet } from 'drizzle-orm/pg-core';
 import { auditActionEnum } from './enums.js';
 import { users } from './users.js';
 import { organizations } from './organizations.js';

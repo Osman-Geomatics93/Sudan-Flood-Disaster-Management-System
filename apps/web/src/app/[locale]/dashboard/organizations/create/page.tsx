@@ -176,11 +176,7 @@ export default function CreateOrganizationPage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={createMutation.isPending}
-            className="btn-primary"
-          >
+          <button type="submit" disabled={createMutation.isPending} className="btn-primary">
             {createMutation.isPending ? t('creating') : t('createOrg')}
           </button>
           <Link href="/dashboard/organizations" className="btn-secondary">

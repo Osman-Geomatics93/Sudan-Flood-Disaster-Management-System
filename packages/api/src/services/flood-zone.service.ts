@@ -111,10 +111,7 @@ export async function getFloodZoneById(db: Database, id: string) {
   return zone;
 }
 
-export async function getFloodZonesByBounds(
-  db: Database,
-  bbox: [number, number, number, number],
-) {
+export async function getFloodZonesByBounds(db: Database, bbox: [number, number, number, number]) {
   const [west, south, east, north] = bbox;
 
   const zones = await db
@@ -160,9 +157,7 @@ export async function getFloodZonesByBounds(
 }
 
 export async function createFloodZone(db: Database, input: CreateFloodZoneInput) {
-  const countResult = await db
-    .select({ count: drizzleCount() })
-    .from(floodZones);
+  const countResult = await db.select({ count: drizzleCount() }).from(floodZones);
   const seq = (countResult[0]?.count ?? 0) + 1;
   const zoneCode = generateEntityCode(CODE_PREFIXES.FLOOD_ZONE, seq);
 
@@ -182,7 +177,7 @@ export async function createFloodZone(db: Database, input: CreateFloodZoneInput)
         RETURNING id`,
   );
 
-  const zoneId = (result as unknown as Array<{ id: string }>)[0]?.id;
+  const zoneId = (result as unknown as { id: string }[])[0]?.id;
   if (!zoneId) {
     throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create flood zone' });
   }
@@ -234,7 +229,7 @@ export async function updateFloodZoneSeverity(
   await db
     .update(floodZones)
     .set({
-      severity: input.severity as typeof floodZones.severity.enumValues[number],
+      severity: input.severity as (typeof floodZones.severity.enumValues)[number],
       ...(input.waterLevel !== undefined && { waterLevel_m: input.waterLevel.toString() }),
       ...(input.waterLevelTrend !== undefined && { waterLevelTrend: input.waterLevelTrend }),
       lastAssessedAt: new Date(),
@@ -249,10 +244,7 @@ export async function updateFloodZoneSeverity(
 export async function archiveFloodZone(db: Database, id: string) {
   await getFloodZoneById(db, id);
 
-  await db
-    .update(floodZones)
-    .set({ deletedAt: new Date() })
-    .where(eq(floodZones.id, id));
+  await db.update(floodZones).set({ deletedAt: new Date() }).where(eq(floodZones.id, id));
 
   return { success: true };
 }

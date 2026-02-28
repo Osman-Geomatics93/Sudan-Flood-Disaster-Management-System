@@ -39,14 +39,14 @@ export default function FloodZoneDetailPage() {
   if (zoneQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }
 
   if (zoneQuery.error) {
     return (
-      <div className="rounded-md bg-destructive/10 p-4 text-destructive">
+      <div className="bg-destructive/10 text-destructive rounded-md p-4">
         {zoneQuery.error.message}
       </div>
     );
@@ -83,12 +83,12 @@ export default function FloodZoneDetailPage() {
     <div className="animate-in">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+          <button onClick={() => router.back()} className="hover:bg-accent rounded-md p-2">
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
             <h1 className="font-heading text-2xl font-semibold tracking-tight">{zone.name_en}</h1>
-            <p className="text-sm text-muted-foreground font-mono">{zone.zoneCode}</p>
+            <p className="text-muted-foreground font-mono text-sm">{zone.zoneCode}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -102,7 +102,7 @@ export default function FloodZoneDetailPage() {
           <button
             onClick={handleDelete}
             disabled={archiveMutation.isPending}
-            className="inline-flex items-center gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/20 disabled:opacity-50"
+            className="border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium disabled:opacity-50"
           >
             <Trash2 className="h-4 w-4" />
             {archiveMutation.isPending ? tCommon('loading') : tCommon('delete')}
@@ -111,9 +111,9 @@ export default function FloodZoneDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {featureCollection && (
-            <div className="rounded-lg border overflow-hidden">
+            <div className="overflow-hidden rounded-lg border">
               <LeafletMap className="h-[400px] w-full">
                 <FloodZoneLayer data={featureCollection} />
               </LeafletMap>
@@ -123,36 +123,42 @@ export default function FloodZoneDetailPage() {
 
         <div className="space-y-6">
           <div className="card">
-            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('details')}</h2>
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+              {t('details')}
+            </h2>
             <dl className="space-y-3">
               <div>
-                <dt className="text-sm text-muted-foreground">{t('severity')}</dt>
-                <dd className="mt-1"><SeverityBadge severity={zone.severity} /></dd>
+                <dt className="text-muted-foreground text-sm">{t('severity')}</dt>
+                <dd className="mt-1">
+                  <SeverityBadge severity={zone.severity} />
+                </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('status')}</dt>
-                <dd className="mt-1"><StatusBadge status={zone.status} /></dd>
+                <dt className="text-muted-foreground text-sm">{t('status')}</dt>
+                <dd className="mt-1">
+                  <StatusBadge status={zone.status} />
+                </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('waterLevel')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('waterLevel')}</dt>
                 <dd className="mt-1 text-sm">
                   {zone.waterLevel_m ? `${zone.waterLevel_m}m` : '-'}
                   {zone.waterLevelTrend && ` (${zone.waterLevelTrend})`}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('affectedPopulation')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('affectedPopulation')}</dt>
                 <dd className="mt-1 text-sm">{zone.affectedPopulation?.toLocaleString() ?? '0'}</dd>
               </div>
               {zone.area_km2 && (
                 <div>
-                  <dt className="text-sm text-muted-foreground">Area</dt>
+                  <dt className="text-muted-foreground text-sm">Area</dt>
                   <dd className="mt-1 text-sm">{Number(zone.area_km2).toFixed(2)} km2</dd>
                 </div>
               )}
               {zone.lastAssessedAt && (
                 <div>
-                  <dt className="text-sm text-muted-foreground">Last Assessed</dt>
+                  <dt className="text-muted-foreground text-sm">Last Assessed</dt>
                   <dd className="mt-1 text-sm">
                     {new Date(zone.lastAssessedAt).toLocaleDateString()}
                   </dd>

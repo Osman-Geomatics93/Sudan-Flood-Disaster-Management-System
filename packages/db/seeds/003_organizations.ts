@@ -54,7 +54,7 @@ const SEED_ORGS: OrgSeed[] = [
     stateCode: 'KRT',
   },
   {
-    name_en: 'United Nations Children\'s Fund',
+    name_en: "United Nations Children's Fund",
     name_ar: 'منظمة الأمم المتحدة للطفولة',
     acronym: 'UNICEF',
     orgType: 'un_agency',

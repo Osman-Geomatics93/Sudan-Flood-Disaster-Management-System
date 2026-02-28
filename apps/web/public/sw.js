@@ -1,9 +1,5 @@
 const CACHE_NAME = 'sudanflood-v1';
-const PRECACHE_URLS = [
-  '/',
-  '/dashboard',
-  '/manifest.json',
-];
+const PRECACHE_URLS = ['/', '/dashboard', '/manifest.json'];
 
 // Install - precache app shell
 self.addEventListener('install', (event) => {
@@ -12,7 +8,7 @@ self.addEventListener('install', (event) => {
       return cache.addAll(PRECACHE_URLS).catch(() => {
         // Ignore precache failures for dynamic routes
       });
-    })
+    }),
   );
   self.skipWaiting();
 });
@@ -20,9 +16,11 @@ self.addEventListener('install', (event) => {
 // Activate - clean old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))),
+      ),
   );
   self.clients.claim();
 });
@@ -46,7 +44,7 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           return response;
         })
-        .catch(() => caches.match(event.request))
+        .catch(() => caches.match(event.request)),
     );
     return;
   }
@@ -55,20 +53,21 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.match(/\.(js|css|png|jpg|svg|woff2?)$/)) {
     event.respondWith(
       caches.match(event.request).then((cached) => {
-        return cached || fetch(event.request).then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          return response;
-        });
-      })
+        return (
+          cached ||
+          fetch(event.request).then((response) => {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+            return response;
+          })
+        );
+      }),
     );
     return;
   }
 
   // Pages - Network first
-  event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
-  );
+  event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
 });
 
 // Handle offline mutation queue messages from the app

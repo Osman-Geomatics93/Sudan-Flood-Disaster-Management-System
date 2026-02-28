@@ -2,10 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-const CommandCenterMap = dynamic(
-  () => import('@/components/map/CommandCenterMap'),
-  { ssr: false }
-);
+const CommandCenterMap = dynamic(() => import('@/components/map/CommandCenterMap'), { ssr: false });
 
 export default function MapPage() {
   return (

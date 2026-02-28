@@ -48,7 +48,7 @@ export default function ExportButton({ onExport }: ExportButtonProps) {
       <button
         onClick={() => setShowMenu(!showMenu)}
         disabled={exporting}
-        className="flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm hover:bg-accent disabled:opacity-50"
+        className="hover:bg-accent flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
       >
         <Download className="h-4 w-4" />
         {exporting ? t('exporting') : <>{t('excel').split(' ')[0]}</>}
@@ -56,16 +56,16 @@ export default function ExportButton({ onExport }: ExportButtonProps) {
       {showMenu && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-          <div className="absolute end-0 top-full z-50 mt-1 w-40 rounded-md border bg-card py-1 shadow-md">
+          <div className="bg-card absolute end-0 top-full z-50 mt-1 w-40 rounded-md border py-1 shadow-md">
             <button
               onClick={() => handleExport('excel')}
-              className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent"
+              className="hover:bg-accent flex w-full items-center gap-2 px-3 py-2 text-sm"
             >
               {t('excel')}
             </button>
             <button
               onClick={() => handleExport('pdf')}
-              className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent"
+              className="hover:bg-accent flex w-full items-center gap-2 px-3 py-2 text-sm"
             >
               {t('pdf')}
             </button>

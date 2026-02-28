@@ -14,12 +14,15 @@ export async function listEmergencyCalls(
 
   if (input.status) {
     conditions.push(
-      eq(emergencyCalls.status, input.status as typeof emergencyCalls.status.enumValues[number]),
+      eq(emergencyCalls.status, input.status as (typeof emergencyCalls.status.enumValues)[number]),
     );
   }
   if (input.urgency) {
     conditions.push(
-      eq(emergencyCalls.urgency, input.urgency as typeof emergencyCalls.urgency.enumValues[number]),
+      eq(
+        emergencyCalls.urgency,
+        input.urgency as (typeof emergencyCalls.urgency.enumValues)[number],
+      ),
     );
   }
   if (input.stateId) {
@@ -119,9 +122,7 @@ export async function createEmergencyCall(
   input: CreateEmergencyCallInput,
   receivedByUserId: string,
 ) {
-  const countResult = await db
-    .select({ count: drizzleCount() })
-    .from(emergencyCalls);
+  const countResult = await db.select({ count: drizzleCount() }).from(emergencyCalls);
   const seq = (countResult[0]?.count ?? 0) + 1;
   const callCode = generateEntityCode(CODE_PREFIXES.EMERGENCY_CALL, seq);
 
@@ -145,7 +146,10 @@ export async function createEmergencyCall(
     .returning();
 
   if (!call) {
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create emergency call' });
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Failed to create emergency call',
+    });
   }
 
   // Set caller location via raw SQL if provided
@@ -175,7 +179,7 @@ export async function triageEmergencyCall(
   await db
     .update(emergencyCalls)
     .set({
-      urgency: input.urgency as typeof emergencyCalls.urgency.enumValues[number],
+      urgency: input.urgency as (typeof emergencyCalls.urgency.enumValues)[number],
       status: 'triaged',
       floodZoneId: input.floodZoneId ?? call.floodZoneId,
       notes: input.notes ?? call.notes,
@@ -210,7 +214,12 @@ export async function dispatchEmergencyCall(
         floodZoneId: call.floodZoneId,
         assignedOrgId: input.dispatchToOrgId,
         operationType: 'mixed',
-        priority: call.urgency === 'life_threatening' ? 'critical' : call.urgency === 'high' ? 'high' : 'medium',
+        priority:
+          call.urgency === 'life_threatening'
+            ? 'critical'
+            : call.urgency === 'high'
+              ? 'high'
+              : 'medium',
         title_en: `Rescue for call ${call.callCode}`,
         targetLocation: call.callerLocation
           ? (call.callerLocation as { coordinates: [number, number] }).coordinates
@@ -240,10 +249,7 @@ export async function dispatchEmergencyCall(
   };
 }
 
-export async function resolveEmergencyCall(
-  db: Database,
-  input: { id: string; notes?: string },
-) {
+export async function resolveEmergencyCall(db: Database, input: { id: string; notes?: string }) {
   const call = await getEmergencyCallById(db, input.id);
 
   if (call.status === 'resolved') {

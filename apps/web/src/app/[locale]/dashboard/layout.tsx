@@ -41,21 +41,96 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard, roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'] },
-  { href: '/dashboard/flood-zones', labelKey: 'floodZones', icon: Map, roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'] },
-  { href: '/dashboard/rescue-operations', labelKey: 'rescue', icon: LifeBuoy, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/emergency-calls', labelKey: 'emergencyCalls', icon: Phone, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/shelters', labelKey: 'shelters', icon: Home, roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'] },
-  { href: '/dashboard/displaced-persons', labelKey: 'displacedPersons', icon: Users, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/supplies', labelKey: 'supplies', icon: Package, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/tasks', labelKey: 'tasks', icon: CheckSquare, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/organizations', labelKey: 'organizations', icon: Building2, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/reports', labelKey: 'reports', icon: FileText, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/analytics', labelKey: 'analytics', icon: BarChart3, roles: ['super_admin', 'agency_admin'] },
-  { href: '/dashboard/map', labelKey: 'commandCenter', icon: MapPin, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/weather-alerts', labelKey: 'weatherAlerts', icon: CloudLightning, roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'] },
-  { href: '/dashboard/family-reunification', labelKey: 'familyReunification', icon: Heart, roles: ['super_admin', 'agency_admin', 'field_worker'] },
-  { href: '/dashboard/resource-planner', labelKey: 'resourcePlanner', icon: Calculator, roles: ['super_admin', 'agency_admin'] },
+  {
+    href: '/dashboard',
+    labelKey: 'dashboard',
+    icon: LayoutDashboard,
+    roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'],
+  },
+  {
+    href: '/dashboard/flood-zones',
+    labelKey: 'floodZones',
+    icon: Map,
+    roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'],
+  },
+  {
+    href: '/dashboard/rescue-operations',
+    labelKey: 'rescue',
+    icon: LifeBuoy,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/emergency-calls',
+    labelKey: 'emergencyCalls',
+    icon: Phone,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/shelters',
+    labelKey: 'shelters',
+    icon: Home,
+    roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'],
+  },
+  {
+    href: '/dashboard/displaced-persons',
+    labelKey: 'displacedPersons',
+    icon: Users,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/supplies',
+    labelKey: 'supplies',
+    icon: Package,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/tasks',
+    labelKey: 'tasks',
+    icon: CheckSquare,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/organizations',
+    labelKey: 'organizations',
+    icon: Building2,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/reports',
+    labelKey: 'reports',
+    icon: FileText,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/analytics',
+    labelKey: 'analytics',
+    icon: BarChart3,
+    roles: ['super_admin', 'agency_admin'],
+  },
+  {
+    href: '/dashboard/map',
+    labelKey: 'commandCenter',
+    icon: MapPin,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/weather-alerts',
+    labelKey: 'weatherAlerts',
+    icon: CloudLightning,
+    roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'],
+  },
+  {
+    href: '/dashboard/family-reunification',
+    labelKey: 'familyReunification',
+    icon: Heart,
+    roles: ['super_admin', 'agency_admin', 'field_worker'],
+  },
+  {
+    href: '/dashboard/resource-planner',
+    labelKey: 'resourcePlanner',
+    icon: Calculator,
+    roles: ['super_admin', 'agency_admin'],
+  },
   { href: '/dashboard/audit-logs', labelKey: 'auditLogs', icon: Shield, roles: ['super_admin'] },
 ];
 
@@ -67,7 +142,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (status === 'loading') {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
       </div>
     );
   }
@@ -83,7 +158,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-[260px] flex-col border-e bg-card/80 backdrop-blur-sm">
+      <aside className="bg-card/80 hidden w-[260px] flex-col border-e backdrop-blur-sm md:flex">
         <SidebarContent items={filteredNavItems} session={session} />
       </aside>
 
@@ -91,10 +166,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div
-            className="fixed inset-0 bg-foreground/20 backdrop-blur-sm"
+            className="bg-foreground/20 fixed inset-0 backdrop-blur-sm"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <aside className="fixed inset-y-0 start-0 w-[260px] bg-card shadow-lg animate-slide-down">
+          <aside className="bg-card animate-slide-down fixed inset-y-0 start-0 w-[260px] shadow-lg">
             <SidebarContent items={filteredNavItems} session={session} />
           </aside>
         </div>
@@ -124,20 +199,18 @@ function SidebarContent({
 
   return (
     <>
-      <div className="px-5 py-5 border-b">
+      <div className="border-b px-5 py-5">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-md bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold tracking-tight">
+          <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-md text-xs font-bold tracking-tight">
             SF
           </div>
           <span className="font-heading text-base font-semibold tracking-tight">SudanFlood</span>
         </Link>
         {session?.user && (
-          <p className="mt-2.5 text-xs text-muted-foreground truncate">
-            {session.user.email}
-          </p>
+          <p className="text-muted-foreground mt-2.5 truncate text-xs">{session.user.email}</p>
         )}
       </div>
-      <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-auto custom-scrollbar">
+      <nav className="custom-scrollbar flex-1 space-y-0.5 overflow-auto px-3 py-3">
         {items.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
@@ -189,40 +262,28 @@ function Header({
   const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
-    <header className="flex items-center justify-between border-b px-4 md:px-6 h-14">
+    <header className="flex h-14 items-center justify-between border-b px-4 md:px-6">
       <div className="flex items-center gap-3">
-        <button
-          onClick={onMenuToggle}
-          className="btn-ghost md:hidden p-2"
-          aria-label="Toggle menu"
-        >
+        <button onClick={onMenuToggle} className="btn-ghost p-2 md:hidden" aria-label="Toggle menu">
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       <div className="flex items-center gap-1">
         {/* Language Switcher */}
-        <Link
-          href="/dashboard"
-          locale="en"
-          className="btn-ghost text-xs px-2.5 py-1.5"
-        >
+        <Link href="/dashboard" locale="en" className="btn-ghost px-2.5 py-1.5 text-xs">
           EN
         </Link>
-        <Link
-          href="/dashboard"
-          locale="ar"
-          className="btn-ghost text-xs px-2.5 py-1.5 font-arabic"
-        >
+        <Link href="/dashboard" locale="ar" className="btn-ghost font-arabic px-2.5 py-1.5 text-xs">
           عربي
         </Link>
 
-        <div className="w-px h-5 bg-border mx-1" />
+        <div className="bg-border mx-1 h-5 w-px" />
 
         {/* Dark Mode Toggle */}
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="btn-ghost p-2 text-muted-foreground hover:text-foreground"
+          className="btn-ghost text-muted-foreground hover:text-foreground p-2"
           aria-label={theme === 'dark' ? t('lightMode') : t('darkMode')}
         >
           {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -231,39 +292,41 @@ function Header({
         {/* Notification Bell */}
         <NotificationBell />
 
-        <div className="w-px h-5 bg-border mx-1" />
+        <div className="bg-border mx-1 h-5 w-px" />
 
         {/* User Dropdown */}
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-accent"
+            className="hover:bg-accent flex items-center gap-2 rounded-md px-2 py-1.5"
             style={{
               transitionProperty: 'background-color',
               transitionDuration: 'var(--duration-fast)',
               transitionTimingFunction: 'var(--ease-smooth)',
             }}
           >
-            <div className="h-7 w-7 rounded-md bg-primary/10 flex items-center justify-center text-xs font-medium text-primary">
+            <div className="bg-primary/10 text-primary flex h-7 w-7 items-center justify-center rounded-md text-xs font-medium">
               {initials}
             </div>
-            <ChevronDown className="h-3 w-3 text-muted-foreground" />
+            <ChevronDown className="text-muted-foreground h-3 w-3" />
           </button>
 
           {dropdownOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
-              <div className="absolute end-0 top-full z-50 mt-1.5 w-52 rounded-md border bg-card py-1 shadow-md animate-in">
-                <div className="px-3.5 py-2.5 border-b">
-                  <p className="text-sm font-medium truncate">{displayName}</p>
-                  <p className="text-xs text-muted-foreground truncate mt-0.5">{session?.user?.email}</p>
-                  <p className="text-xs text-muted-foreground capitalize mt-0.5">
+              <div className="bg-card animate-in absolute end-0 top-full z-50 mt-1.5 w-52 rounded-md border py-1 shadow-md">
+                <div className="border-b px-3.5 py-2.5">
+                  <p className="truncate text-sm font-medium">{displayName}</p>
+                  <p className="text-muted-foreground mt-0.5 truncate text-xs">
+                    {session?.user?.email}
+                  </p>
+                  <p className="text-muted-foreground mt-0.5 text-xs capitalize">
                     {session?.user?.role?.replace('_', ' ')}
                   </p>
                 </div>
                 <button
                   onClick={() => signOut({ callbackUrl: '/login' })}
-                  className="flex w-full items-center gap-2 px-3.5 py-2 text-sm text-destructive hover:bg-accent"
+                  className="text-destructive hover:bg-accent flex w-full items-center gap-2 px-3.5 py-2 text-sm"
                   style={{
                     transitionProperty: 'background-color',
                     transitionDuration: 'var(--duration-fast)',
@@ -291,12 +354,12 @@ function NotificationBell() {
   return (
     <Link
       href="/dashboard/notifications"
-      className="relative rounded-md p-2 hover:bg-accent text-muted-foreground hover:text-foreground"
+      className="hover:bg-accent text-muted-foreground hover:text-foreground relative rounded-md p-2"
       aria-label="Notifications"
     >
       <Bell className="h-4 w-4" />
       {count > 0 && (
-        <span className="absolute -end-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-medium text-destructive-foreground">
+        <span className="bg-destructive text-destructive-foreground absolute -end-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-medium">
           {count > 99 ? '99+' : count}
         </span>
       )}

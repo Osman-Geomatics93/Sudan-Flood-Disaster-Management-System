@@ -69,14 +69,14 @@ export default function DisplacedPersonDetailPage() {
   if (personQuery.isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }
 
   if (personQuery.error) {
     return (
-      <div className="rounded-md bg-destructive/10 p-4 text-destructive">
+      <div className="bg-destructive/10 text-destructive rounded-md p-4">
         {personQuery.error.message}
       </div>
     );
@@ -110,7 +110,7 @@ export default function DisplacedPersonDetailPage() {
     <div className="animate-in">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+          <button onClick={() => router.back()} className="hover:bg-accent rounded-md p-2">
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div>
@@ -118,11 +118,11 @@ export default function DisplacedPersonDetailPage() {
               {person.firstName_ar} {person.lastName_ar}
             </h1>
             {person.firstName_en && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {person.firstName_en} {person.lastName_en}
               </p>
             )}
-            <p className="font-mono text-sm text-muted-foreground">{person.registrationCode}</p>
+            <p className="text-muted-foreground font-mono text-sm">{person.registrationCode}</p>
           </div>
         </div>
         <Link
@@ -138,27 +138,31 @@ export default function DisplacedPersonDetailPage() {
         <div className="space-y-6 lg:col-span-2">
           {/* Personal Info */}
           <div className="card">
-            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('personalInfo')}</h2>
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+              {t('personalInfo')}
+            </h2>
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <dt className="text-sm text-muted-foreground">{t('dateOfBirth')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('dateOfBirth')}</dt>
                 <dd className="mt-1 text-sm">{person.dateOfBirth ?? '-'}</dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('gender')}</dt>
-                <dd className="mt-1 text-sm">{person.gender ? t(`gender_${person.gender}`) : '-'}</dd>
+                <dt className="text-muted-foreground text-sm">{t('gender')}</dt>
+                <dd className="mt-1 text-sm">
+                  {person.gender ? t(`gender_${person.gender}`) : '-'}
+                </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('nationalId')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('nationalId')}</dt>
                 <dd className="mt-1 text-sm">{person.nationalId ?? '-'}</dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('phone')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('phone')}</dt>
                 <dd className="mt-1 text-sm">{person.phone ?? '-'}</dd>
               </div>
               {person.specialNeeds && (
                 <div className="sm:col-span-2">
-                  <dt className="text-sm text-muted-foreground">{t('specialNeeds')}</dt>
+                  <dt className="text-muted-foreground text-sm">{t('specialNeeds')}</dt>
                   <dd className="mt-1 text-sm">{person.specialNeeds}</dd>
                 </div>
               )}
@@ -167,10 +171,12 @@ export default function DisplacedPersonDetailPage() {
 
           {/* Health Info */}
           <div className="card">
-            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('healthInfo')}</h2>
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+              {t('healthInfo')}
+            </h2>
             <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <dt className="text-sm text-muted-foreground">{t('healthStatus')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('healthStatus')}</dt>
                 <dd className="mt-1">
                   <span className={`badge ${HEALTH_STYLES[person.healthStatus] ?? ''}`}>
                     {t(`health_${person.healthStatus}`)}
@@ -178,16 +184,20 @@ export default function DisplacedPersonDetailPage() {
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('hasDisability')}</dt>
-                <dd className="mt-1 text-sm">{person.hasDisability ? tCommon('yes') : tCommon('no')}</dd>
+                <dt className="text-muted-foreground text-sm">{t('hasDisability')}</dt>
+                <dd className="mt-1 text-sm">
+                  {person.hasDisability ? tCommon('yes') : tCommon('no')}
+                </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('isUnaccompaniedMinor')}</dt>
-                <dd className="mt-1 text-sm">{person.isUnaccompaniedMinor ? tCommon('yes') : tCommon('no')}</dd>
+                <dt className="text-muted-foreground text-sm">{t('isUnaccompaniedMinor')}</dt>
+                <dd className="mt-1 text-sm">
+                  {person.isUnaccompaniedMinor ? tCommon('yes') : tCommon('no')}
+                </dd>
               </div>
               {person.healthNotes && (
                 <div>
-                  <dt className="text-sm text-muted-foreground">{t('healthNotes')}</dt>
+                  <dt className="text-muted-foreground text-sm">{t('healthNotes')}</dt>
                   <dd className="mt-1 text-sm">{person.healthNotes}</dd>
                 </div>
               )}
@@ -204,7 +214,7 @@ export default function DisplacedPersonDetailPage() {
               <select
                 value={selectedShelterId}
                 onChange={(e) => setSelectedShelterId(e.target.value)}
-                className="input-field flex-1 min-w-[200px]"
+                className="input-field min-w-[200px] flex-1"
               >
                 <option value="">{t('selectShelter')}</option>
                 {(sheltersQuery.data?.items ?? []).map((s) => (
@@ -234,11 +244,13 @@ export default function DisplacedPersonDetailPage() {
                 <select
                   value={healthStatus}
                   onChange={(e) => setHealthStatus(e.target.value)}
-                  className="input-field flex-1 min-w-[200px]"
+                  className="input-field min-w-[200px] flex-1"
                 >
                   <option value="">{t('selectHealthStatus')}</option>
                   {HEALTH_STATUSES.map((h) => (
-                    <option key={h} value={h}>{t(`health_${h}`)}</option>
+                    <option key={h} value={h}>
+                      {t(`health_${h}`)}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -294,10 +306,12 @@ export default function DisplacedPersonDetailPage() {
         {/* Sidebar */}
         <div className="space-y-6">
           <div className="card">
-            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('status')}</h2>
+            <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+              {t('status')}
+            </h2>
             <dl className="space-y-3">
               <div>
-                <dt className="text-sm text-muted-foreground">{t('status')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('status')}</dt>
                 <dd className="mt-1">
                   <span className={`badge ${STATUS_STYLES[person.status] ?? ''}`}>
                     {t(`status_${person.status}`)}
@@ -305,7 +319,7 @@ export default function DisplacedPersonDetailPage() {
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-muted-foreground">{t('registeredAt')}</dt>
+                <dt className="text-muted-foreground text-sm">{t('registeredAt')}</dt>
                 <dd className="mt-1 text-sm">{new Date(person.registeredAt).toLocaleString()}</dd>
               </div>
             </dl>
@@ -320,12 +334,12 @@ export default function DisplacedPersonDetailPage() {
               </h2>
               <Link
                 href={`/dashboard/shelters/${person.currentShelterId}`}
-                className="block text-sm text-primary dark:text-primary hover:underline"
+                className="text-primary dark:text-primary block text-sm hover:underline"
               >
                 {person.shelterName ?? person.shelterCode}
               </Link>
               {person.shelterCode && (
-                <p className="mt-1 font-mono text-xs text-muted-foreground">{person.shelterCode}</p>
+                <p className="text-muted-foreground mt-1 font-mono text-xs">{person.shelterCode}</p>
               )}
             </div>
           )}
@@ -338,7 +352,7 @@ export default function DisplacedPersonDetailPage() {
                 {t('familyGroup')}
               </h2>
               <p className="font-mono text-sm">{person.familyCode}</p>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-sm">
                 {t('familySize')}: {person.familySize}
               </p>
             </div>

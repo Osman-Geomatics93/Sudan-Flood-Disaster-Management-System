@@ -62,15 +62,13 @@ export default function ReportDetailPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
       </div>
     );
   }
 
   if (hasError) {
-    return (
-      <div className="py-12 text-center text-muted-foreground">{tCommon('error')}</div>
-    );
+    return <div className="text-muted-foreground py-12 text-center">{tCommon('error')}</div>;
   }
 
   // ── Situation Report Detail ───────────────────────────────────
@@ -84,7 +82,7 @@ export default function ReportDetailPage() {
           </Link>
           <div>
             <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
-            <p className="text-sm text-muted-foreground font-mono">{report.reportCode}</p>
+            <p className="text-muted-foreground font-mono text-sm">{report.reportCode}</p>
           </div>
         </div>
 
@@ -92,49 +90,59 @@ export default function ReportDetailPage() {
           <span className="badge bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
             {t(`type_${report.reportType}`)}
           </span>
-          <span className={`badge ${report.isPublished ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'}`}>
+          <span
+            className={`badge ${report.isPublished ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'}`}
+          >
             {report.isPublished ? t('published') : t('draft')}
           </span>
         </div>
 
         <div className="card mb-6">
           <h2 className="font-heading text-lg font-semibold tracking-tight">{report.title_en}</h2>
-          {report.title_ar && <p className="text-sm text-muted-foreground" dir="rtl">{report.title_ar}</p>}
+          {report.title_ar && (
+            <p className="text-muted-foreground text-sm" dir="rtl">
+              {report.title_ar}
+            </p>
+          )}
 
           {report.summary_en && (
             <div className="mt-4">
-              <p className="text-xs text-muted-foreground">{t('summary')}</p>
+              <p className="text-muted-foreground text-xs">{t('summary')}</p>
               <p className="mt-1 text-sm">{report.summary_en}</p>
             </div>
           )}
           {report.summary_ar && (
             <div className="mt-2">
-              <p className="text-xs text-muted-foreground">{t('summaryAr')}</p>
-              <p className="mt-1 text-sm" dir="rtl">{report.summary_ar}</p>
+              <p className="text-muted-foreground text-xs">{t('summaryAr')}</p>
+              <p className="mt-1 text-sm" dir="rtl">
+                {report.summary_ar}
+              </p>
             </div>
           )}
 
-          {report.content != null && typeof report.content === 'object' && Object.keys(report.content as Record<string, unknown>).length > 0 && (
-            <div className="mt-4">
-              <p className="text-xs text-muted-foreground">{t('content')}</p>
-              <pre className="mt-1 rounded-md bg-muted p-3 text-xs overflow-auto max-h-64">
-                {JSON.stringify(report.content as Record<string, unknown>, null, 2)}
-              </pre>
-            </div>
-          )}
+          {report.content != null &&
+            typeof report.content === 'object' &&
+            Object.keys(report.content as Record<string, unknown>).length > 0 && (
+              <div className="mt-4">
+                <p className="text-muted-foreground text-xs">{t('content')}</p>
+                <pre className="bg-muted mt-1 max-h-64 overflow-auto rounded-md p-3 text-xs">
+                  {JSON.stringify(report.content as Record<string, unknown>, null, 2)}
+                </pre>
+              </div>
+            )}
 
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm">
+          <div className="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
             <div>
-              <p className="text-xs text-muted-foreground">{t('reportNumber')}</p>
+              <p className="text-muted-foreground text-xs">{t('reportNumber')}</p>
               <p>#{report.reportNumber}</p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">{t('createdAt')}</p>
+              <p className="text-muted-foreground text-xs">{t('createdAt')}</p>
               <p>{report.createdAt ? new Date(report.createdAt).toLocaleString() : '-'}</p>
             </div>
             {report.publishedAt && (
               <div>
-                <p className="text-xs text-muted-foreground">{t('publishedAt')}</p>
+                <p className="text-muted-foreground text-xs">{t('publishedAt')}</p>
                 <p>{new Date(report.publishedAt).toLocaleString()}</p>
               </div>
             )}
@@ -176,7 +184,7 @@ export default function ReportDetailPage() {
           </Link>
           <div>
             <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
-            <p className="text-sm text-muted-foreground font-mono">{report.reportCode}</p>
+            <p className="text-muted-foreground font-mono text-sm">{report.reportCode}</p>
           </div>
         </div>
 
@@ -195,42 +203,50 @@ export default function ReportDetailPage() {
         <div className="card mb-6">
           {report.description_en && (
             <div>
-              <p className="text-xs text-muted-foreground">{t('descriptionEn')}</p>
+              <p className="text-muted-foreground text-xs">{t('descriptionEn')}</p>
               <p className="mt-1 text-sm">{report.description_en}</p>
             </div>
           )}
           {report.description_ar && (
             <div className="mt-3">
-              <p className="text-xs text-muted-foreground">{t('descriptionAr')}</p>
-              <p className="mt-1 text-sm" dir="rtl">{report.description_ar}</p>
+              <p className="text-muted-foreground text-xs">{t('descriptionAr')}</p>
+              <p className="mt-1 text-sm" dir="rtl">
+                {report.description_ar}
+              </p>
             </div>
           )}
 
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm">
+          <div className="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
             <div>
-              <p className="text-xs text-muted-foreground">{t('reporter')}</p>
+              <p className="text-muted-foreground text-xs">{t('reporter')}</p>
               <p>{report.reporterName || '-'}</p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">{t('reporterPhone')}</p>
+              <p className="text-muted-foreground text-xs">{t('reporterPhone')}</p>
               <p>{report.reporterPhone || '-'}</p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">{t('createdAt')}</p>
+              <p className="text-muted-foreground text-xs">{t('createdAt')}</p>
               <p>{report.createdAt ? new Date(report.createdAt).toLocaleString() : '-'}</p>
             </div>
             {report.linkedTaskId && (
               <div>
-                <p className="text-xs text-muted-foreground">{t('linkedTask')}</p>
-                <Link href={`/dashboard/tasks/${report.linkedTaskId}`} className="text-primary hover:underline">
+                <p className="text-muted-foreground text-xs">{t('linkedTask')}</p>
+                <Link
+                  href={`/dashboard/tasks/${report.linkedTaskId}`}
+                  className="text-primary hover:underline"
+                >
                   {report.linkedTaskId}
                 </Link>
               </div>
             )}
             {report.linkedRescueId && (
               <div>
-                <p className="text-xs text-muted-foreground">{t('linkedRescue')}</p>
-                <Link href={`/dashboard/rescue-operations/${report.linkedRescueId}`} className="text-primary hover:underline">
+                <p className="text-muted-foreground text-xs">{t('linkedRescue')}</p>
+                <Link
+                  href={`/dashboard/rescue-operations/${report.linkedRescueId}`}
+                  className="text-primary hover:underline"
+                >
                   {report.linkedRescueId}
                 </Link>
               </div>
@@ -241,7 +257,9 @@ export default function ReportDetailPage() {
         {/* Review */}
         {report.status === 'submitted' && (
           <div className="card mb-6">
-            <h2 className="font-heading mb-3 text-lg font-semibold tracking-tight">{t('review')}</h2>
+            <h2 className="font-heading mb-3 text-lg font-semibold tracking-tight">
+              {t('review')}
+            </h2>
             <div className="flex gap-3">
               <select
                 value={selectedStatus}
@@ -250,7 +268,9 @@ export default function ReportDetailPage() {
               >
                 <option value="">{t('selectStatus')}</option>
                 {CITIZEN_REPORT_STATUSES.filter((s) => s !== 'submitted').map((s) => (
-                  <option key={s} value={s}>{t(`status_${s}`)}</option>
+                  <option key={s} value={s}>
+                    {t(`status_${s}`)}
+                  </option>
                 ))}
               </select>
               <button
@@ -267,7 +287,5 @@ export default function ReportDetailPage() {
     );
   }
 
-  return (
-    <div className="py-12 text-center text-muted-foreground">{tCommon('error')}</div>
-  );
+  return <div className="text-muted-foreground py-12 text-center">{tCommon('error')}</div>;
 }

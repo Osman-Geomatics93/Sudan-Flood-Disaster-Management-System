@@ -12,7 +12,9 @@ export async function listFloodIncidents(
   const conditions = [];
 
   if (input.status) {
-    conditions.push(eq(floodIncidents.status, input.status as typeof floodIncidents.status.enumValues[number]));
+    conditions.push(
+      eq(floodIncidents.status, input.status as (typeof floodIncidents.status.enumValues)[number]),
+    );
   }
   if (input.stateId) {
     conditions.push(eq(floodIncidents.stateId, input.stateId));
@@ -62,9 +64,7 @@ export async function createFloodIncident(
   input: CreateFloodIncidentInput,
   declaredByUserId?: string,
 ) {
-  const countResult = await db
-    .select({ count: drizzleCount() })
-    .from(floodIncidents);
+  const countResult = await db.select({ count: drizzleCount() }).from(floodIncidents);
   const seq = (countResult[0]?.count ?? 0) + 1;
   const incidentCode = generateEntityCode(CODE_PREFIXES.FLOOD_INCIDENT, seq);
 
@@ -117,13 +117,13 @@ export async function updateFloodIncident(
       ...(input.title_en !== undefined && { title_en: input.title_en }),
       ...(input.title_ar !== undefined && { title_ar: input.title_ar }),
       ...(input.incidentType !== undefined && {
-        incidentType: input.incidentType as typeof floodIncidents.incidentType.enumValues[number],
+        incidentType: input.incidentType as (typeof floodIncidents.incidentType.enumValues)[number],
       }),
       ...(input.status !== undefined && {
-        status: input.status as typeof floodIncidents.status.enumValues[number],
+        status: input.status as (typeof floodIncidents.status.enumValues)[number],
       }),
       ...(input.severity !== undefined && {
-        severity: input.severity as typeof floodIncidents.severity.enumValues[number],
+        severity: input.severity as (typeof floodIncidents.severity.enumValues)[number],
       }),
       ...(input.stateId !== undefined && { stateId: input.stateId }),
       ...(input.localityId !== undefined && { localityId: input.localityId }),

@@ -66,7 +66,7 @@ export default function CreateWeatherAlertPage() {
   return (
     <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
-        <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+        <button onClick={() => router.back()} className="hover:bg-accent rounded-md p-2">
           <ArrowLeft className="h-5 w-5" />
         </button>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('createAlert')}</h1>
@@ -74,7 +74,9 @@ export default function CreateWeatherAlertPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('alertType')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('alertType')}
+          </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('alertType')} *</label>
@@ -84,7 +86,9 @@ export default function CreateWeatherAlertPage() {
                 className="input-field w-full"
               >
                 {WEATHER_ALERT_TYPES.map((type) => (
-                  <option key={type} value={type}>{t(`type_${type}`)}</option>
+                  <option key={type} value={type}>
+                    {t(`type_${type}`)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -96,7 +100,9 @@ export default function CreateWeatherAlertPage() {
                 className="input-field w-full"
               >
                 {WEATHER_ALERT_SEVERITIES.map((sev) => (
-                  <option key={sev} value={sev}>{t(`severity_${sev}`)}</option>
+                  <option key={sev} value={sev}>
+                    {t(`severity_${sev}`)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -109,7 +115,9 @@ export default function CreateWeatherAlertPage() {
               >
                 <option value="">{t('selectState')}</option>
                 {(statesQuery.data ?? []).map((s) => (
-                  <option key={s.id} value={s.id}>{s.name_en}</option>
+                  <option key={s.id} value={s.id}>
+                    {s.name_en}
+                  </option>
                 ))}
               </select>
             </div>
@@ -162,7 +170,9 @@ export default function CreateWeatherAlertPage() {
         </div>
 
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('description')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('description')}
+          </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('descriptionEn')}</label>
@@ -187,7 +197,7 @@ export default function CreateWeatherAlertPage() {
         </div>
 
         {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+          <div className="bg-destructive/10 text-destructive rounded-md p-3 text-sm">{error}</div>
         )}
 
         <div className="flex gap-3">
@@ -198,11 +208,7 @@ export default function CreateWeatherAlertPage() {
           >
             {createMutation.isPending ? t('creating') : t('createAlert')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

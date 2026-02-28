@@ -1,7 +1,7 @@
 /**
  * Format a date for display. Returns ISO date string if no Intl support.
  */
-export function formatDate(date: Date | string, locale: string = 'ar-SD'): string {
+export function formatDate(date: Date | string, locale = 'ar-SD'): string {
   const d = typeof date === 'string' ? new Date(date) : date;
   try {
     return new Intl.DateTimeFormat(locale, {
@@ -17,7 +17,7 @@ export function formatDate(date: Date | string, locale: string = 'ar-SD'): strin
 /**
  * Format date + time
  */
-export function formatDateTime(date: Date | string, locale: string = 'ar-SD'): string {
+export function formatDateTime(date: Date | string, locale = 'ar-SD'): string {
   const d = typeof date === 'string' ? new Date(date) : date;
   try {
     return new Intl.DateTimeFormat(locale, {
@@ -35,7 +35,7 @@ export function formatDateTime(date: Date | string, locale: string = 'ar-SD'): s
 /**
  * Relative time (e.g. "5 minutes ago")
  */
-export function timeAgo(date: Date | string, locale: string = 'ar'): string {
+export function timeAgo(date: Date | string, locale = 'ar'): string {
   const d = typeof date === 'string' ? new Date(date) : date;
   const seconds = Math.floor((Date.now() - d.getTime()) / 1000);
 

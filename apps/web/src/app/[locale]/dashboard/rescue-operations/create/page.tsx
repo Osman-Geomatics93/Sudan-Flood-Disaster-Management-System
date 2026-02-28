@@ -85,7 +85,9 @@ export default function CreateRescueOperationPage() {
       floodZoneId: form.floodZoneId,
       assignedOrgId: form.assignedOrgId,
       targetLocation: [lng, lat],
-      estimatedPersonsAtRisk: form.estimatedPersonsAtRisk ? Number(form.estimatedPersonsAtRisk) : undefined,
+      estimatedPersonsAtRisk: form.estimatedPersonsAtRisk
+        ? Number(form.estimatedPersonsAtRisk)
+        : undefined,
       teamLeaderId: form.teamLeaderId || undefined,
     });
   };
@@ -93,15 +95,19 @@ export default function CreateRescueOperationPage() {
   return (
     <div className="animate-in">
       <div className="mb-6 flex items-center gap-3">
-        <button onClick={() => router.back()} className="rounded-md p-2 hover:bg-accent">
+        <button onClick={() => router.back()} className="hover:bg-accent rounded-md p-2">
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('createOperation')}</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">
+          {t('createOperation')}
+        </h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('operationDetails')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('operationDetails')}
+          </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('titleLabel')} (EN) *</label>
@@ -131,7 +137,9 @@ export default function CreateRescueOperationPage() {
                 className="input-field w-full"
               >
                 {RESCUE_OPERATION_TYPES.map((type) => (
-                  <option key={type} value={type}>{type.replace(/_/g, ' ')}</option>
+                  <option key={type} value={type}>
+                    {type.replace(/_/g, ' ')}
+                  </option>
                 ))}
               </select>
             </div>
@@ -143,7 +151,9 @@ export default function CreateRescueOperationPage() {
                 className="input-field w-full"
               >
                 {TASK_PRIORITIES.map((p) => (
-                  <option key={p} value={p}>{t(`priority_${p}`)}</option>
+                  <option key={p} value={p}>
+                    {t(`priority_${p}`)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -157,7 +167,9 @@ export default function CreateRescueOperationPage() {
               >
                 <option value="">{t('selectFloodZone')}</option>
                 {zonesQuery.data?.items.map((zone) => (
-                  <option key={zone.id} value={zone.id}>{zone.name_en}</option>
+                  <option key={zone.id} value={zone.id}>
+                    {zone.name_en}
+                  </option>
                 ))}
               </select>
             </div>
@@ -171,7 +183,9 @@ export default function CreateRescueOperationPage() {
               >
                 <option value="">{t('selectOrg')}</option>
                 {orgsQuery.data?.items.map((org) => (
-                  <option key={org.id} value={org.id}>{org.name_en}</option>
+                  <option key={org.id} value={org.id}>
+                    {org.name_en}
+                  </option>
                 ))}
               </select>
             </div>
@@ -189,7 +203,9 @@ export default function CreateRescueOperationPage() {
         </div>
 
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('targetLocation')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('targetLocation')}
+          </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium">{t('latitude')} *</label>
@@ -223,7 +239,9 @@ export default function CreateRescueOperationPage() {
         </div>
 
         <div className="card">
-          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">{t('description')}</h2>
+          <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
+            {t('description')}
+          </h2>
           <div>
             <textarea
               rows={4}
@@ -236,7 +254,7 @@ export default function CreateRescueOperationPage() {
         </div>
 
         {error && (
-          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+          <div className="bg-destructive/10 text-destructive rounded-md p-3 text-sm">{error}</div>
         )}
 
         <div className="flex gap-3">
@@ -247,11 +265,7 @@ export default function CreateRescueOperationPage() {
           >
             {createMutation.isPending ? tCommon('loading') : t('createOperation')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

@@ -22,9 +22,11 @@ export async function findNearestAvailableShelters(db: Database, input: NearestS
     })
     .from(shelters)
     .where(
-      sql`${shelters.status} IN ('open', 'preparing') AND (${shelters.capacity} - ${shelters.currentOccupancy}) >= ${input.requiredCapacity}`
+      sql`${shelters.status} IN ('open', 'preparing') AND (${shelters.capacity} - ${shelters.currentOccupancy}) >= ${input.requiredCapacity}`,
     )
-    .orderBy(sql`ST_Distance(location::geography, ST_SetSRID(ST_MakePoint(${input.lng}, ${input.lat}), 4326)::geography)`)
+    .orderBy(
+      sql`ST_Distance(location::geography, ST_SetSRID(ST_MakePoint(${input.lng}, ${input.lat}), 4326)::geography)`,
+    )
     .limit(input.limit);
 
   return result.map((r) => ({
@@ -39,9 +41,17 @@ export async function getSupplyGapAnalysis(db: Database) {
   const result = await db
     .select({
       supplyType: reliefSupplies.supplyType,
-      totalQuantity: sql<number>`COALESCE(SUM(${reliefSupplies.quantity}), 0)::int`.as('totalQuantity'),
-      deliveredQuantity: sql<number>`COALESCE(SUM(CASE WHEN ${reliefSupplies.status} = 'delivered' THEN ${reliefSupplies.quantity} ELSE 0 END), 0)::int`.as('deliveredQuantity'),
-      requestedQuantity: sql<number>`COALESCE(SUM(CASE WHEN ${reliefSupplies.status} = 'requested' THEN ${reliefSupplies.quantity} ELSE 0 END), 0)::int`.as('requestedQuantity'),
+      totalQuantity: sql<number>`COALESCE(SUM(${reliefSupplies.quantity}), 0)::int`.as(
+        'totalQuantity',
+      ),
+      deliveredQuantity:
+        sql<number>`COALESCE(SUM(CASE WHEN ${reliefSupplies.status} = 'delivered' THEN ${reliefSupplies.quantity} ELSE 0 END), 0)::int`.as(
+          'deliveredQuantity',
+        ),
+      requestedQuantity:
+        sql<number>`COALESCE(SUM(CASE WHEN ${reliefSupplies.status} = 'requested' THEN ${reliefSupplies.quantity} ELSE 0 END), 0)::int`.as(
+          'requestedQuantity',
+        ),
     })
     .from(reliefSupplies)
     .groupBy(reliefSupplies.supplyType)
@@ -59,11 +69,14 @@ export async function getCriticalShortages(db: Database) {
       shelterCode: shelters.shelterCode,
       capacity: shelters.capacity,
       currentOccupancy: shelters.currentOccupancy,
-      occupancyRate: sql<number>`ROUND((${shelters.currentOccupancy}::numeric / NULLIF(${shelters.capacity}, 0)) * 100, 1)`.as('occupancyRate'),
+      occupancyRate:
+        sql<number>`ROUND((${shelters.currentOccupancy}::numeric / NULLIF(${shelters.capacity}, 0)) * 100, 1)`.as(
+          'occupancyRate',
+        ),
     })
     .from(shelters)
     .where(
-      sql`${shelters.status} IN ('open', 'at_capacity', 'overcrowded') AND ${shelters.currentOccupancy}::numeric / NULLIF(${shelters.capacity}, 0) > 0.8`
+      sql`${shelters.status} IN ('open', 'at_capacity', 'overcrowded') AND ${shelters.currentOccupancy}::numeric / NULLIF(${shelters.capacity}, 0) > 0.8`,
     )
     .orderBy(desc(sql`${shelters.currentOccupancy}::numeric / NULLIF(${shelters.capacity}, 0)`))
     .limit(10);

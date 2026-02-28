@@ -33,31 +33,28 @@ export default function InstallPrompt() {
   };
 
   return (
-    <div className="fixed bottom-4 start-4 z-[9998] max-w-sm rounded-lg border bg-card p-4 shadow-lg animate-in">
+    <div className="bg-card animate-in fixed bottom-4 start-4 z-[9998] max-w-sm rounded-lg border p-4 shadow-lg">
       <div className="flex items-start gap-3">
-        <Download className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+        <Download className="text-primary mt-0.5 h-5 w-5 shrink-0" />
         <div className="flex-1">
           <p className="text-sm font-medium">Install SudanFlood</p>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 text-xs">
             Install this app for offline access and faster loading
           </p>
-          <div className="flex gap-2 mt-3">
+          <div className="mt-3 flex gap-2">
             <button
               onClick={handleInstall}
-              className="rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground hover:bg-primary/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-3 py-1.5 text-xs"
             >
               Install
             </button>
-            <button
-              onClick={() => setDismissed(true)}
-              className="btn-ghost px-3 py-1.5 text-xs"
-            >
+            <button onClick={() => setDismissed(true)} className="btn-ghost px-3 py-1.5 text-xs">
               Not now
             </button>
           </div>
         </div>
         <button onClick={() => setDismissed(true)} className="shrink-0">
-          <X className="h-4 w-4 text-muted-foreground" />
+          <X className="text-muted-foreground h-4 w-4" />
         </button>
       </div>
     </div>

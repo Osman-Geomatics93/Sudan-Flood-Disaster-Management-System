@@ -3,15 +3,17 @@ import * as XLSX from 'xlsx';
 export function generateExcelExport(
   data: Record<string, unknown>[],
   columns: { key: string; header: string }[],
-  sheetName: string = 'Sheet1',
+  sheetName = 'Sheet1',
 ): Buffer {
   const headers = columns.map((c) => c.header);
-  const rows = data.map((row) => columns.map((c) => {
-    const val = row[c.key];
-    if (val instanceof Date) return val.toISOString();
-    if (val === null || val === undefined) return '';
-    return String(val);
-  }));
+  const rows = data.map((row) =>
+    columns.map((c) => {
+      const val = row[c.key];
+      if (val instanceof Date) return val.toISOString();
+      if (val === null || val === undefined) return '';
+      return String(val);
+    }),
+  );
 
   const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
   const wb = XLSX.utils.book_new();
@@ -26,15 +28,24 @@ export function generatePdfTable(
   columns: { key: string; header: string }[],
   title: string,
 ): Buffer {
-  const headerRow = columns.map((c) => `<th style="border:1px solid #ccc;padding:6px 10px;text-align:left;background:#f5f5f5;font-size:12px">${c.header}</th>`).join('');
-  const bodyRows = data.map((row) => {
-    const cells = columns.map((c) => {
-      const val = row[c.key];
-      const display = val instanceof Date ? val.toISOString().split('T')[0] : (val ?? '');
-      return `<td style="border:1px solid #ccc;padding:6px 10px;font-size:11px">${display}</td>`;
-    }).join('');
-    return `<tr>${cells}</tr>`;
-  }).join('');
+  const headerRow = columns
+    .map(
+      (c) =>
+        `<th style="border:1px solid #ccc;padding:6px 10px;text-align:left;background:#f5f5f5;font-size:12px">${c.header}</th>`,
+    )
+    .join('');
+  const bodyRows = data
+    .map((row) => {
+      const cells = columns
+        .map((c) => {
+          const val = row[c.key];
+          const display = val instanceof Date ? val.toISOString().split('T')[0] : (val ?? '');
+          return `<td style="border:1px solid #ccc;padding:6px 10px;font-size:11px">${display}</td>`;
+        })
+        .join('');
+      return `<tr>${cells}</tr>`;
+    })
+    .join('');
 
   const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>${title}</title></head>

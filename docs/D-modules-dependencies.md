@@ -4,43 +4,43 @@
 
 ### P0 — Critical Path (Must ship for MVP)
 
-| Module | Description | Key Entities |
-|--------|-------------|--------------|
-| **M01: Auth & RBAC** | User authentication, session management, role-based access control | users, sessions |
-| **M02: Org Management** | Organization CRUD, hierarchy, operating areas | organizations |
-| **M03: Location Hierarchy** | Sudan states + localities reference data | states, localities |
-| **M04: Flood Zone Management** | Create/edit/monitor flood zones with map polygons, severity tracking | flood_zones, flood_incidents |
-| **M05: Rescue Dispatch** | Create/assign/track rescue operations, team management | rescue_operations, rescue_team_members |
-| **M06: Emergency Call Processing** | Intake 112/999 calls, triage, dispatch to rescue | emergency_calls |
+| Module                             | Description                                                          | Key Entities                           |
+| ---------------------------------- | -------------------------------------------------------------------- | -------------------------------------- |
+| **M01: Auth & RBAC**               | User authentication, session management, role-based access control   | users, sessions                        |
+| **M02: Org Management**            | Organization CRUD, hierarchy, operating areas                        | organizations                          |
+| **M03: Location Hierarchy**        | Sudan states + localities reference data                             | states, localities                     |
+| **M04: Flood Zone Management**     | Create/edit/monitor flood zones with map polygons, severity tracking | flood_zones, flood_incidents           |
+| **M05: Rescue Dispatch**           | Create/assign/track rescue operations, team management               | rescue_operations, rescue_team_members |
+| **M06: Emergency Call Processing** | Intake 112/999 calls, triage, dispatch to rescue                     | emergency_calls                        |
 
 ### P1 — High Priority (Needed for operational effectiveness)
 
-| Module | Description | Key Entities |
-|--------|-------------|--------------|
-| **M07: Displaced Persons** | Register individuals/families, track shelter placement, health status | displaced_persons, family_groups |
-| **M08: Shelter Dashboard** | Manage shelters, capacity tracking, facility status | shelters |
-| **M09: Relief Supplies** | Track supplies from source → destination, inventory management | relief_supplies |
-| **M10: Task Assignment** | Inter-agency task creation, assignment, progress tracking | tasks, task_dependencies |
-| **M11: Real-time Notifications** | In-app + push notifications for critical events | notifications |
+| Module                           | Description                                                           | Key Entities                     |
+| -------------------------------- | --------------------------------------------------------------------- | -------------------------------- |
+| **M07: Displaced Persons**       | Register individuals/families, track shelter placement, health status | displaced_persons, family_groups |
+| **M08: Shelter Dashboard**       | Manage shelters, capacity tracking, facility status                   | shelters                         |
+| **M09: Relief Supplies**         | Track supplies from source → destination, inventory management        | relief_supplies                  |
+| **M10: Task Assignment**         | Inter-agency task creation, assignment, progress tracking             | tasks, task_dependencies         |
+| **M11: Real-time Notifications** | In-app + push notifications for critical events                       | notifications                    |
 
 ### P2 — Medium Priority (Enhanced capabilities)
 
-| Module | Description | Key Entities |
-|--------|-------------|--------------|
-| **M12: Infrastructure Assessment** | Damage assessment, repair tracking, priority management | infrastructure |
-| **M13: Weather Integration** | Weather station data, river levels, forecasts | weather_stations, weather_data |
-| **M14: UAV Survey Management** | Plan/track drone surveys, manage imagery, link to zones | uav_surveys |
-| **M15: Situation Reports** | Create/publish sitreps, attachments, structured content | situation_reports, attachments |
-| **M16: Reports & Analytics** | Dashboard KPIs, CSV/PDF exports, cross-module analytics | (views/aggregates) |
+| Module                             | Description                                             | Key Entities                   |
+| ---------------------------------- | ------------------------------------------------------- | ------------------------------ |
+| **M12: Infrastructure Assessment** | Damage assessment, repair tracking, priority management | infrastructure                 |
+| **M13: Weather Integration**       | Weather station data, river levels, forecasts           | weather_stations, weather_data |
+| **M14: UAV Survey Management**     | Plan/track drone surveys, manage imagery, link to zones | uav_surveys                    |
+| **M15: Situation Reports**         | Create/publish sitreps, attachments, structured content | situation_reports, attachments |
+| **M16: Reports & Analytics**       | Dashboard KPIs, CSV/PDF exports, cross-module analytics | (views/aggregates)             |
 
 ### P3 — Lower Priority (Future enhancements)
 
-| Module | Description | Key Entities |
-|--------|-------------|--------------|
-| **M17: Citizen Mobile/PWA** | Public reporting interface, shelter finder, personal tracking | citizen_reports |
-| **M18: AI Flood Prediction** | ML-based flood forecasting from weather + historical data | (derived) |
-| **M19: SMS Alerts** | SMS gateway integration for mass alerts, 2-way messaging | (external) |
-| **M20: Offline-First Field Mode** | Full offline data entry, background sync, conflict resolution | (client-side) |
+| Module                            | Description                                                   | Key Entities    |
+| --------------------------------- | ------------------------------------------------------------- | --------------- |
+| **M17: Citizen Mobile/PWA**       | Public reporting interface, shelter finder, personal tracking | citizen_reports |
+| **M18: AI Flood Prediction**      | ML-based flood forecasting from weather + historical data     | (derived)       |
+| **M19: SMS Alerts**               | SMS gateway integration for mass alerts, 2-way messaging      | (external)      |
+| **M20: Offline-First Field Mode** | Full offline data entry, background sync, conflict resolution | (client-side)   |
 
 ---
 

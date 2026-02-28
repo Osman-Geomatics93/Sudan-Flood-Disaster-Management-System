@@ -55,34 +55,44 @@ export default function SuppliesPage() {
       <div className="mb-4 flex gap-3">
         <select
           value={typeFilter}
-          onChange={(e) => { setTypeFilter(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setTypeFilter(e.target.value);
+            setPage(1);
+          }}
           className="input-field"
         >
           <option value="">{t('allTypes')}</option>
           {SUPPLY_TYPES.map((s) => (
-            <option key={s} value={s}>{t(`type_${s}`)}</option>
+            <option key={s} value={s}>
+              {t(`type_${s}`)}
+            </option>
           ))}
         </select>
         <select
           value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setStatusFilter(e.target.value);
+            setPage(1);
+          }}
           className="input-field"
         >
           <option value="">{t('allStatuses')}</option>
           {SUPPLY_STATUSES.map((s) => (
-            <option key={s} value={s}>{t(`status_${s}`)}</option>
+            <option key={s} value={s}>
+              {t(`status_${s}`)}
+            </option>
           ))}
         </select>
       </div>
 
       {listQuery.isLoading && (
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       )}
 
       {listQuery.data && listQuery.data.items.length === 0 && (
-        <div className="rounded-lg border py-12 text-center text-muted-foreground">
+        <div className="text-muted-foreground rounded-lg border py-12 text-center">
           {tCommon('noData')}
         </div>
       )}
@@ -91,7 +101,7 @@ export default function SuppliesPage() {
         <>
           <div className="overflow-x-auto rounded-lg border">
             <table className="table-premium w-full text-sm">
-              <thead className="border-b bg-muted/50">
+              <thead className="bg-muted/50 border-b">
                 <tr>
                   <th className="px-4 py-3 text-start font-medium">{t('trackingCode')}</th>
                   <th className="px-4 py-3 text-start font-medium">{t('itemName')}</th>
@@ -102,9 +112,12 @@ export default function SuppliesPage() {
               </thead>
               <tbody>
                 {listQuery.data.items.map((supply) => (
-                  <tr key={supply.id} className="border-b hover:bg-muted/30">
+                  <tr key={supply.id} className="hover:bg-muted/30 border-b">
                     <td className="px-4 py-3 font-mono">
-                      <Link href={`/dashboard/supplies/${supply.id}`} className="text-primary hover:underline">
+                      <Link
+                        href={`/dashboard/supplies/${supply.id}`}
+                        className="text-primary hover:underline"
+                      >
                         {supply.trackingCode}
                       </Link>
                     </td>
@@ -115,7 +128,9 @@ export default function SuppliesPage() {
                         {t(`status_${supply.status}`)}
                       </span>
                     </td>
-                    <td className="px-4 py-3">{supply.quantity} {supply.unit}</td>
+                    <td className="px-4 py-3">
+                      {supply.quantity} {supply.unit}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -124,8 +139,9 @@ export default function SuppliesPage() {
 
           {listQuery.data.totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
-                {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} ({listQuery.data.total} {t('total')})
+              <span className="text-muted-foreground text-sm">
+                {t('page')} {listQuery.data.page} / {listQuery.data.totalPages} (
+                {listQuery.data.total} {t('total')})
               </span>
               <div className="flex gap-2">
                 <button

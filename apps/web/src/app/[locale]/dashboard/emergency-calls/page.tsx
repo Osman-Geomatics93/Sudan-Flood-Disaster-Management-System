@@ -55,34 +55,44 @@ export default function EmergencyCallsPage() {
       <div className="mb-4 flex flex-wrap gap-3">
         <select
           value={urgency}
-          onChange={(e) => { setUrgency(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setUrgency(e.target.value);
+            setPage(1);
+          }}
           className="input-field"
         >
           <option value="">{t('allUrgencies')}</option>
           {CALL_URGENCIES.map((u) => (
-            <option key={u} value={u}>{t(`urgency_${u}`)}</option>
+            <option key={u} value={u}>
+              {t(`urgency_${u}`)}
+            </option>
           ))}
         </select>
         <select
           value={status}
-          onChange={(e) => { setStatus(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setPage(1);
+          }}
           className="input-field"
         >
           <option value="">{t('allStatuses')}</option>
           {CALL_STATUSES.map((s) => (
-            <option key={s} value={s}>{t(`status_${s}`)}</option>
+            <option key={s} value={s}>
+              {t(`status_${s}`)}
+            </option>
           ))}
         </select>
       </div>
 
       {listQuery.isLoading && (
         <div className="flex items-center justify-center py-12">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
         </div>
       )}
 
       {listQuery.data && listQuery.data.items.length === 0 && (
-        <div className="rounded-lg border py-12 text-center text-muted-foreground">
+        <div className="text-muted-foreground rounded-lg border py-12 text-center">
           {tCommon('noData')}
         </div>
       )}
@@ -104,18 +114,18 @@ export default function EmergencyCallsPage() {
               </thead>
               <tbody className="table-premium tbody">
                 {listQuery.data.items.map((call) => (
-                  <tr key={call.id} className="border-b hover:bg-muted/30">
+                  <tr key={call.id} className="hover:bg-muted/30 border-b">
                     <td className="px-4 py-3">
                       <Link
                         href={`/dashboard/emergency-calls/${call.id}`}
-                        className="font-mono text-primary dark:text-primary hover:underline"
+                        className="text-primary dark:text-primary font-mono hover:underline"
                       >
                         {call.callCode}
                       </Link>
                     </td>
                     <td className="px-4 py-3">
                       <div>{call.callerName ?? '-'}</div>
-                      <div className="text-xs text-muted-foreground">{call.callerPhone}</div>
+                      <div className="text-muted-foreground text-xs">{call.callerPhone}</div>
                     </td>
                     <td className="px-4 py-3">
                       <span className="flex items-center gap-1">
@@ -145,14 +155,22 @@ export default function EmergencyCallsPage() {
 
           {listQuery.data.totalPages > 1 && (
             <div className="mt-4 flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">
+              <span className="text-muted-foreground text-sm">
                 {t('page')} {listQuery.data.page} / {listQuery.data.totalPages}
               </span>
               <div className="flex gap-2">
-                <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => setPage((p) => p - 1)}
+                  className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
-                <button disabled={page >= (listQuery.data?.totalPages ?? 1)} onClick={() => setPage((p) => p + 1)} className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50">
+                <button
+                  disabled={page >= (listQuery.data?.totalPages ?? 1)}
+                  onClick={() => setPage((p) => p + 1)}
+                  className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50"
+                >
                   <ChevronRight className="h-4 w-4" />
                 </button>
               </div>

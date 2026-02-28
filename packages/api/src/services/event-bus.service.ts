@@ -34,6 +34,6 @@ export function getEventsSince(sinceTimestamp: number): AppEvent[] {
   return events.filter((e) => e.timestamp > sinceTimestamp);
 }
 
-export function getLatestEvents(count: number = 10): AppEvent[] {
+export function getLatestEvents(count = 10): AppEvent[] {
   return events.slice(-count);
 }

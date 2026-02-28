@@ -18,8 +18,8 @@ interface FloodZoneFormData {
 interface FloodZoneFormProps {
   data: FloodZoneFormData;
   onChange: (data: FloodZoneFormData) => void;
-  states: Array<{ id: string; name_en: string; name_ar: string }>;
-  localities: Array<{ id: string; name_en: string; name_ar: string }>;
+  states: { id: string; name_en: string; name_ar: string }[];
+  localities: { id: string; name_en: string; name_ar: string }[];
 }
 
 export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneFormProps) {
@@ -38,7 +38,7 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
             type="text"
             value={data.name_en}
             onChange={(e) => update('name_en', e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
             required
           />
         </div>
@@ -48,7 +48,7 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
             type="text"
             value={data.name_ar}
             onChange={(e) => update('name_ar', e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
             dir="rtl"
           />
         </div>
@@ -60,11 +60,13 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
           <select
             value={data.severity}
             onChange={(e) => update('severity', e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
           >
             <option value="">{t('selectSeverity')}</option>
             {FLOOD_SEVERITIES.map((s) => (
-              <option key={s} value={s}>{t(`severity_${s}`)}</option>
+              <option key={s} value={s}>
+                {t(`severity_${s}`)}
+              </option>
             ))}
           </select>
         </div>
@@ -73,11 +75,13 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
           <select
             value={data.status}
             onChange={(e) => update('status', e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
           >
             <option value="">{t('selectStatus')}</option>
             {FLOOD_ZONE_STATUSES.map((s) => (
-              <option key={s} value={s}>{t(`status_${s}`)}</option>
+              <option key={s} value={s}>
+                {t(`status_${s}`)}
+              </option>
             ))}
           </select>
         </div>
@@ -91,11 +95,13 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
             onChange={(e) => {
               onChange({ ...data, stateId: e.target.value, localityId: '' });
             }}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
           >
             <option value="">{t('selectState')}</option>
             {states.map((s) => (
-              <option key={s.id} value={s.id}>{s.name_en}</option>
+              <option key={s.id} value={s.id}>
+                {s.name_en}
+              </option>
             ))}
           </select>
         </div>
@@ -104,12 +110,14 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
           <select
             value={data.localityId}
             onChange={(e) => update('localityId', e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
             disabled={!data.stateId}
           >
             <option value="">{t('selectLocality')}</option>
             {localities.map((l) => (
-              <option key={l.id} value={l.id}>{l.name_en}</option>
+              <option key={l.id} value={l.id}>
+                {l.name_en}
+              </option>
             ))}
           </select>
         </div>
@@ -122,7 +130,7 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
             type="number"
             value={data.waterLevel}
             onChange={(e) => update('waterLevel', e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
             min="0"
             max="100"
             step="0.1"
@@ -133,7 +141,7 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
           <select
             value={data.waterLevelTrend}
             onChange={(e) => update('waterLevelTrend', e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
           >
             <option value="">-</option>
             <option value="rising">Rising</option>
@@ -147,7 +155,7 @@ export function FloodZoneForm({ data, onChange, states, localities }: FloodZoneF
             type="number"
             value={data.affectedPopulation}
             onChange={(e) => update('affectedPopulation', e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+            className="bg-background w-full rounded-md border px-3 py-2 text-sm"
             min="0"
           />
         </div>

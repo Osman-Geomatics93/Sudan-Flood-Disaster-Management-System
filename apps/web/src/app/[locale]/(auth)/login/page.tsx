@@ -43,20 +43,20 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen">
       {/* Left panel — branding */}
-      <div className="hidden lg:flex lg:w-[45%] relative bg-primary items-end p-12">
+      <div className="bg-primary relative hidden items-end p-12 lg:flex lg:w-[45%]">
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-md bg-primary-foreground/20 backdrop-blur-sm flex items-center justify-center text-primary-foreground text-sm font-bold">
+          <div className="mb-8 flex items-center gap-3">
+            <div className="bg-primary-foreground/20 text-primary-foreground flex h-10 w-10 items-center justify-center rounded-md text-sm font-bold backdrop-blur-sm">
               SF
             </div>
-            <span className="font-heading text-lg font-semibold text-primary-foreground tracking-tight">
+            <span className="font-heading text-primary-foreground text-lg font-semibold tracking-tight">
               SudanFlood
             </span>
           </div>
-          <h2 className="font-heading text-3xl font-bold text-primary-foreground leading-tight mb-3">
+          <h2 className="font-heading text-primary-foreground mb-3 text-3xl font-bold leading-tight">
             {t('loginSubtitle')}
           </h2>
-          <p className="text-primary-foreground/70 text-sm max-w-md leading-relaxed">
+          <p className="text-primary-foreground/70 max-w-md text-sm leading-relaxed">
             Inter-agency emergency coordination platform for flood disaster management across Sudan.
           </p>
         </div>
@@ -70,11 +70,11 @@ export default function LoginPage() {
       </div>
 
       {/* Right panel — form */}
-      <div className="flex flex-1 items-center justify-center px-6 py-12 bg-background">
+      <div className="bg-background flex flex-1 items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
           {/* Mobile logo */}
-          <div className="lg:hidden flex items-center gap-2.5 mb-10">
-            <div className="w-9 h-9 rounded-md bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">
+          <div className="mb-10 flex items-center gap-2.5 lg:hidden">
+            <div className="bg-primary text-primary-foreground flex h-9 w-9 items-center justify-center rounded-md text-sm font-bold">
               SF
             </div>
             <span className="font-heading text-base font-semibold tracking-tight">SudanFlood</span>
@@ -82,12 +82,12 @@ export default function LoginPage() {
 
           <div className="mb-8">
             <h1 className="font-heading text-2xl font-bold tracking-tight">{t('loginTitle')}</h1>
-            <p className="mt-2 text-sm text-muted-foreground">{t('loginSubtitle')}</p>
+            <p className="text-muted-foreground mt-2 text-sm">{t('loginSubtitle')}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="rounded-md bg-destructive/8 border border-destructive/20 px-4 py-3 text-sm text-destructive animate-in">
+              <div className="bg-destructive/8 border-destructive/20 text-destructive animate-in rounded-md border px-4 py-3 text-sm">
                 {error}
               </div>
             )}
@@ -127,7 +127,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground absolute end-3 top-1/2 -translate-y-1/2"
                   tabIndex={-1}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
@@ -136,14 +136,10 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full"
-            >
+            <button type="submit" disabled={loading} className="btn-primary w-full">
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                  <span className="border-primary-foreground h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
                   {t('signingIn')}
                 </span>
               ) : (
@@ -152,11 +148,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-6 text-center text-sm">
             {t('noAccount')}{' '}
             <Link
               href="/register"
-              className="font-medium text-primary hover:text-primary/80"
+              className="text-primary hover:text-primary/80 font-medium"
               style={{
                 transitionProperty: 'color',
                 transitionDuration: 'var(--duration-fast)',

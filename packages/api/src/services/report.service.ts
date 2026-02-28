@@ -146,7 +146,10 @@ export async function createSituationReport(
     .returning();
 
   if (!report) {
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create situation report' });
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Failed to create situation report',
+    });
   }
 
   return getSituationReportById(db, report.id);
@@ -303,7 +306,10 @@ export async function createCitizenReport(
     );
     const id = (result as unknown as { rows: { id: string }[] }).rows?.[0]?.id;
     if (!id) {
-      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create citizen report' });
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to create citizen report',
+      });
     }
     return getCitizenReportById(db, id);
   }
@@ -326,7 +332,10 @@ export async function createCitizenReport(
     .returning();
 
   if (!report) {
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create citizen report' });
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Failed to create citizen report',
+    });
   }
 
   return getCitizenReportById(db, report.id);

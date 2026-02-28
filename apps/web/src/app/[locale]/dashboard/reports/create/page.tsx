@@ -69,7 +69,9 @@ export default function CreateReportPage() {
 
   return (
     <div className="animate-in mx-auto max-w-2xl">
-      <h1 className="font-heading mb-6 text-2xl font-semibold tracking-tight">{t('createReport')}</h1>
+      <h1 className="font-heading mb-6 text-2xl font-semibold tracking-tight">
+        {t('createReport')}
+      </h1>
 
       {error && (
         <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
@@ -104,7 +106,9 @@ export default function CreateReportPage() {
                 className="input-field w-full"
               >
                 {REPORT_TYPES.map((rt) => (
-                  <option key={rt} value={rt}>{t(`type_${rt}`)}</option>
+                  <option key={rt} value={rt}>
+                    {t(`type_${rt}`)}
+                  </option>
                 ))}
               </select>
             </div>
@@ -175,11 +179,7 @@ export default function CreateReportPage() {
           >
             {createMutation.isPending ? t('creating') : t('createReport')}
           </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => router.back()} className="btn-secondary">
             {tCommon('cancel')}
           </button>
         </div>

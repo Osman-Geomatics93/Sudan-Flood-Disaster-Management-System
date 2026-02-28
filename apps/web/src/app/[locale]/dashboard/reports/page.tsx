@@ -83,26 +83,31 @@ export default function ReportsPage() {
           <div className="mb-4 flex gap-3">
             <select
               value={typeFilter}
-              onChange={(e) => { setTypeFilter(e.target.value); setSitrepPage(1); }}
+              onChange={(e) => {
+                setTypeFilter(e.target.value);
+                setSitrepPage(1);
+              }}
               className="input-field"
             >
               <option value="">{t('allTypes')}</option>
               {REPORT_TYPES.map((rt) => (
-                <option key={rt} value={rt}>{t(`type_${rt}`)}</option>
+                <option key={rt} value={rt}>
+                  {t(`type_${rt}`)}
+                </option>
               ))}
             </select>
           </div>
 
           {sitrepQuery.isLoading && (
             <div className="flex items-center justify-center py-12">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
             </div>
           )}
 
           {sitrepQuery.data && (
             <>
               {sitrepQuery.data.items.length === 0 && (
-                <div className="rounded-lg border py-12 text-center text-muted-foreground">
+                <div className="text-muted-foreground rounded-lg border py-12 text-center">
                   {tCommon('noData')}
                 </div>
               )}
@@ -111,7 +116,7 @@ export default function ReportsPage() {
                 <>
                   <div className="overflow-x-auto rounded-lg border">
                     <table className="w-full text-sm">
-                      <thead className="border-b bg-muted/50">
+                      <thead className="bg-muted/50 border-b">
                         <tr>
                           <th className="px-4 py-3 text-start font-medium">{t('reportCode')}</th>
                           <th className="px-4 py-3 text-start font-medium">{t('titleEn')}</th>
@@ -123,9 +128,12 @@ export default function ReportsPage() {
                       </thead>
                       <tbody>
                         {sitrepQuery.data.items.map((report) => (
-                          <tr key={report.id} className="border-b hover:bg-muted/30">
+                          <tr key={report.id} className="hover:bg-muted/30 border-b">
                             <td className="px-4 py-3 font-mono">
-                              <Link href={`/dashboard/reports/${report.id}?type=sitrep`} className="text-primary hover:underline">
+                              <Link
+                                href={`/dashboard/reports/${report.id}?type=sitrep`}
+                                className="text-primary hover:underline"
+                              >
                                 {report.reportCode}
                               </Link>
                             </td>
@@ -137,12 +145,16 @@ export default function ReportsPage() {
                             </td>
                             <td className="px-4 py-3">#{report.reportNumber}</td>
                             <td className="px-4 py-3">
-                              <span className={`badge ${report.isPublished ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'}`}>
+                              <span
+                                className={`badge ${report.isPublished ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'}`}
+                              >
                                 {report.isPublished ? t('published') : t('draft')}
                               </span>
                             </td>
-                            <td className="px-4 py-3 text-muted-foreground">
-                              {report.createdAt ? new Date(report.createdAt).toLocaleDateString() : '-'}
+                            <td className="text-muted-foreground px-4 py-3">
+                              {report.createdAt
+                                ? new Date(report.createdAt).toLocaleDateString()
+                                : '-'}
                             </td>
                           </tr>
                         ))}
@@ -152,8 +164,9 @@ export default function ReportsPage() {
 
                   {sitrepQuery.data.totalPages > 1 && (
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">
-                        {t('page')} {sitrepQuery.data.page} / {sitrepQuery.data.totalPages} ({sitrepQuery.data.total} {t('total')})
+                      <span className="text-muted-foreground text-sm">
+                        {t('page')} {sitrepQuery.data.page} / {sitrepQuery.data.totalPages} (
+                        {sitrepQuery.data.total} {t('total')})
                       </span>
                       <div className="flex gap-2">
                         <button
@@ -186,36 +199,46 @@ export default function ReportsPage() {
           <div className="mb-4 flex gap-3">
             <select
               value={statusFilter}
-              onChange={(e) => { setStatusFilter(e.target.value); setCitizenPage(1); }}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setCitizenPage(1);
+              }}
               className="input-field"
             >
               <option value="">{t('allStatuses')}</option>
               {CITIZEN_REPORT_STATUSES.map((s) => (
-                <option key={s} value={s}>{t(`status_${s}`)}</option>
+                <option key={s} value={s}>
+                  {t(`status_${s}`)}
+                </option>
               ))}
             </select>
             <select
               value={urgencyFilter}
-              onChange={(e) => { setUrgencyFilter(e.target.value); setCitizenPage(1); }}
+              onChange={(e) => {
+                setUrgencyFilter(e.target.value);
+                setCitizenPage(1);
+              }}
               className="input-field"
             >
               <option value="">{t('allUrgencies')}</option>
               {CALL_URGENCIES.map((u) => (
-                <option key={u} value={u}>{t(`urgency_${u}`)}</option>
+                <option key={u} value={u}>
+                  {t(`urgency_${u}`)}
+                </option>
               ))}
             </select>
           </div>
 
           {citizenQuery.isLoading && (
             <div className="flex items-center justify-center py-12">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent" />
             </div>
           )}
 
           {citizenQuery.data && (
             <>
               {citizenQuery.data.items.length === 0 && (
-                <div className="rounded-lg border py-12 text-center text-muted-foreground">
+                <div className="text-muted-foreground rounded-lg border py-12 text-center">
                   {tCommon('noData')}
                 </div>
               )}
@@ -224,7 +247,7 @@ export default function ReportsPage() {
                 <>
                   <div className="overflow-x-auto rounded-lg border">
                     <table className="w-full text-sm">
-                      <thead className="border-b bg-muted/50">
+                      <thead className="bg-muted/50 border-b">
                         <tr>
                           <th className="px-4 py-3 text-start font-medium">{t('reportCode')}</th>
                           <th className="px-4 py-3 text-start font-medium">{t('type')}</th>
@@ -236,9 +259,12 @@ export default function ReportsPage() {
                       </thead>
                       <tbody>
                         {citizenQuery.data.items.map((report) => (
-                          <tr key={report.id} className="border-b hover:bg-muted/30">
+                          <tr key={report.id} className="hover:bg-muted/30 border-b">
                             <td className="px-4 py-3 font-mono">
-                              <Link href={`/dashboard/reports/${report.id}?type=citizen`} className="text-primary hover:underline">
+                              <Link
+                                href={`/dashboard/reports/${report.id}?type=citizen`}
+                                className="text-primary hover:underline"
+                              >
                                 {report.reportCode}
                               </Link>
                             </td>
@@ -257,9 +283,13 @@ export default function ReportsPage() {
                                 {t(`status_${report.status}`)}
                               </span>
                             </td>
-                            <td className="px-4 py-3">{report.reporterName || report.reporterPhone || '-'}</td>
-                            <td className="px-4 py-3 text-muted-foreground">
-                              {report.createdAt ? new Date(report.createdAt).toLocaleDateString() : '-'}
+                            <td className="px-4 py-3">
+                              {report.reporterName || report.reporterPhone || '-'}
+                            </td>
+                            <td className="text-muted-foreground px-4 py-3">
+                              {report.createdAt
+                                ? new Date(report.createdAt).toLocaleDateString()
+                                : '-'}
                             </td>
                           </tr>
                         ))}
@@ -269,8 +299,9 @@ export default function ReportsPage() {
 
                   {citizenQuery.data.totalPages > 1 && (
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">
-                        {t('page')} {citizenQuery.data.page} / {citizenQuery.data.totalPages} ({citizenQuery.data.total} {t('total')})
+                      <span className="text-muted-foreground text-sm">
+                        {t('page')} {citizenQuery.data.page} / {citizenQuery.data.totalPages} (
+                        {citizenQuery.data.total} {t('total')})
                       </span>
                       <div className="flex gap-2">
                         <button

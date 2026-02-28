@@ -20,7 +20,10 @@ export async function listRescueOperations(
 
   if (input.status) {
     conditions.push(
-      eq(rescueOperations.status, input.status as typeof rescueOperations.status.enumValues[number]),
+      eq(
+        rescueOperations.status,
+        input.status as (typeof rescueOperations.status.enumValues)[number],
+      ),
     );
   }
   if (input.zoneId) {
@@ -31,7 +34,10 @@ export async function listRescueOperations(
   }
   if (input.priority) {
     conditions.push(
-      eq(rescueOperations.priority, input.priority as typeof rescueOperations.priority.enumValues[number]),
+      eq(
+        rescueOperations.priority,
+        input.priority as (typeof rescueOperations.priority.enumValues)[number],
+      ),
     );
   }
 
@@ -127,9 +133,7 @@ export async function createRescueOperation(
   input: CreateRescueOperationInput,
   emergencyCallId?: string,
 ) {
-  const countResult = await db
-    .select({ count: drizzleCount() })
-    .from(rescueOperations);
+  const countResult = await db.select({ count: drizzleCount() }).from(rescueOperations);
   const seq = (countResult[0]?.count ?? 0) + 1;
   const operationCode = generateEntityCode(CODE_PREFIXES.RESCUE_OPERATION, seq);
 
@@ -157,7 +161,10 @@ export async function createRescueOperation(
 
   const newId = (result as unknown as { rows: { id: string }[] }).rows?.[0]?.id;
   if (!newId) {
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create rescue operation' });
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Failed to create rescue operation',
+    });
   }
 
   return getRescueOperationById(db, newId);
@@ -192,7 +199,7 @@ export async function updateRescueStatus(
   await getRescueOperationById(db, input.id);
 
   const updates: Record<string, unknown> = {
-    status: input.status as typeof rescueOperations.status.enumValues[number],
+    status: input.status as (typeof rescueOperations.status.enumValues)[number],
     updatedAt: new Date(),
   };
 
@@ -208,14 +215,15 @@ export async function updateRescueStatus(
     updates.dispatchedAt = new Date();
   } else if (input.status === 'on_site') {
     updates.arrivedAt = new Date();
-  } else if (input.status === 'completed' || input.status === 'failed' || input.status === 'aborted') {
+  } else if (
+    input.status === 'completed' ||
+    input.status === 'failed' ||
+    input.status === 'aborted'
+  ) {
     updates.completedAt = new Date();
   }
 
-  await db
-    .update(rescueOperations)
-    .set(updates)
-    .where(eq(rescueOperations.id, input.id));
+  await db.update(rescueOperations).set(updates).where(eq(rescueOperations.id, input.id));
 
   return getRescueOperationById(db, input.id);
 }
@@ -226,7 +234,8 @@ export async function updateRescueLocation(
 ) {
   throw new TRPCError({
     code: 'NOT_IMPLEMENTED',
-    message: 'Real-time current_location tracking is not yet implemented. The rescue_operations table does not have a current_location column.',
+    message:
+      'Real-time current_location tracking is not yet implemented. The rescue_operations table does not have a current_location column.',
   });
 }
 
@@ -306,7 +315,13 @@ export async function getActiveByZone(db: Database, zoneId: string) {
     .where(
       and(
         eq(rescueOperations.floodZoneId, zoneId),
-        inArray(rescueOperations.status, ['pending', 'dispatched', 'en_route', 'on_site', 'in_progress']),
+        inArray(rescueOperations.status, [
+          'pending',
+          'dispatched',
+          'en_route',
+          'on_site',
+          'in_progress',
+        ]),
       ),
     )
     .orderBy(rescueOperations.priority);
@@ -319,7 +334,13 @@ export async function getRescueStats(db: Database) {
     .select({ count: drizzleCount() })
     .from(rescueOperations)
     .where(
-      inArray(rescueOperations.status, ['pending', 'dispatched', 'en_route', 'on_site', 'in_progress']),
+      inArray(rescueOperations.status, [
+        'pending',
+        'dispatched',
+        'en_route',
+        'on_site',
+        'in_progress',
+      ]),
     );
 
   return {

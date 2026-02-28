@@ -25,37 +25,27 @@ import {
 } from '../services/displaced-person.service.js';
 
 const familyRouter = router({
-  create: protectedProcedure
-    .input(createFamilyGroupSchema)
-    .mutation(async ({ input, ctx }) => {
-      return createFamilyGroup(ctx.db, input);
-    }),
+  create: protectedProcedure.input(createFamilyGroupSchema).mutation(async ({ input, ctx }) => {
+    return createFamilyGroup(ctx.db, input);
+  }),
 
-  addMember: protectedProcedure
-    .input(addFamilyMemberSchema)
-    .mutation(async ({ input, ctx }) => {
-      return addFamilyMember(ctx.db, input);
-    }),
+  addMember: protectedProcedure.input(addFamilyMemberSchema).mutation(async ({ input, ctx }) => {
+    return addFamilyMember(ctx.db, input);
+  }),
 
-  getById: protectedProcedure
-    .input(idParamSchema)
-    .query(async ({ input, ctx }) => {
-      return getFamilyGroupById(ctx.db, input.id);
-    }),
+  getById: protectedProcedure.input(idParamSchema).query(async ({ input, ctx }) => {
+    return getFamilyGroupById(ctx.db, input.id);
+  }),
 });
 
 export const displacedPersonRouter = router({
-  list: protectedProcedure
-    .input(listDisplacedPersonsSchema)
-    .query(async ({ input, ctx }) => {
-      return listDisplacedPersons(ctx.db, input);
-    }),
+  list: protectedProcedure.input(listDisplacedPersonsSchema).query(async ({ input, ctx }) => {
+    return listDisplacedPersons(ctx.db, input);
+  }),
 
-  getById: protectedProcedure
-    .input(idParamSchema)
-    .query(async ({ input, ctx }) => {
-      return getDisplacedPersonById(ctx.db, input.id);
-    }),
+  getById: protectedProcedure.input(idParamSchema).query(async ({ input, ctx }) => {
+    return getDisplacedPersonById(ctx.db, input.id);
+  }),
 
   register: protectedProcedure
     .use(requirePermission('dp:register'))
@@ -85,11 +75,9 @@ export const displacedPersonRouter = router({
       return updateHealth(ctx.db, input);
     }),
 
-  search: protectedProcedure
-    .input(searchSchema)
-    .query(async ({ input, ctx }) => {
-      return searchDisplacedPersons(ctx.db, input.query);
-    }),
+  search: protectedProcedure.input(searchSchema).query(async ({ input, ctx }) => {
+    return searchDisplacedPersons(ctx.db, input.query);
+  }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
     return getDisplacedPersonStats(ctx.db);
