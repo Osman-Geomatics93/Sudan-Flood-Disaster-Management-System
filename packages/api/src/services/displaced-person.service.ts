@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { displacedPersons, familyGroups, shelters } from '@sudanflood/db/schema';
 import type { RegisterDisplacedPersonInput } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 export async function listDisplacedPersons(
   db: Database,
@@ -146,55 +147,58 @@ export async function getDisplacedPersonById(db: Database, id: string) {
 }
 
 export async function registerDisplacedPerson(db: Database, input: RegisterDisplacedPersonInput) {
-  const countResult = await db.select({ count: drizzleCount() }).from(displacedPersons);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const registrationCode = generateEntityCode(CODE_PREFIXES.DISPLACED_PERSON, seq);
+  return withCodeRetry(
+    async (registrationCode) => {
+      const [person] = await db
+        .insert(displacedPersons)
+        .values({
+          registrationCode,
+          firstName_ar: input.firstName_ar,
+          lastName_ar: input.lastName_ar,
+          firstName_en: input.firstName_en ?? null,
+          lastName_en: input.lastName_en ?? null,
+          dateOfBirth: input.dateOfBirth ? input.dateOfBirth.toISOString().split('T')[0] : null,
+          gender: input.gender ?? null,
+          nationalId: input.nationalId ?? null,
+          phone: input.phone ?? null,
+          status: input.shelterId ? 'sheltered' : 'registered',
+          healthStatus: input.healthStatus ?? 'unknown',
+          healthNotes: input.healthNotes ?? null,
+          hasDisability: input.hasDisability ?? false,
+          disabilityNotes: input.disabilityNotes ?? null,
+          isUnaccompaniedMinor: input.isUnaccompaniedMinor ?? false,
+          currentShelterId: input.shelterId ?? null,
+          familyGroupId: input.familyGroupId ?? null,
+          originStateId: input.originStateId ?? null,
+          originLocalityId: input.originLocalityId ?? null,
+          specialNeeds: input.specialNeeds ?? null,
+        })
+        .returning();
 
-  const [person] = await db
-    .insert(displacedPersons)
-    .values({
-      registrationCode,
-      firstName_ar: input.firstName_ar,
-      lastName_ar: input.lastName_ar,
-      firstName_en: input.firstName_en ?? null,
-      lastName_en: input.lastName_en ?? null,
-      dateOfBirth: input.dateOfBirth ? input.dateOfBirth.toISOString().split('T')[0] : null,
-      gender: input.gender ?? null,
-      nationalId: input.nationalId ?? null,
-      phone: input.phone ?? null,
-      status: input.shelterId ? 'sheltered' : 'registered',
-      healthStatus: input.healthStatus ?? 'unknown',
-      healthNotes: input.healthNotes ?? null,
-      hasDisability: input.hasDisability ?? false,
-      disabilityNotes: input.disabilityNotes ?? null,
-      isUnaccompaniedMinor: input.isUnaccompaniedMinor ?? false,
-      currentShelterId: input.shelterId ?? null,
-      familyGroupId: input.familyGroupId ?? null,
-      originStateId: input.originStateId ?? null,
-      originLocalityId: input.originLocalityId ?? null,
-      specialNeeds: input.specialNeeds ?? null,
-    })
-    .returning();
+      if (!person) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to register displaced person',
+        });
+      }
 
-  if (!person) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Failed to register displaced person',
-    });
-  }
+      // Increment shelter occupancy if assigned
+      if (input.shelterId) {
+        await db
+          .update(shelters)
+          .set({
+            currentOccupancy: sql`${shelters.currentOccupancy} + 1`,
+            updatedAt: new Date(),
+          })
+          .where(eq(shelters.id, input.shelterId));
+      }
 
-  // Increment shelter occupancy if assigned
-  if (input.shelterId) {
-    await db
-      .update(shelters)
-      .set({
-        currentOccupancy: sql`${shelters.currentOccupancy} + 1`,
-        updatedAt: new Date(),
-      })
-      .where(eq(shelters.id, input.shelterId));
-  }
-
-  return getDisplacedPersonById(db, person.id);
+      return getDisplacedPersonById(db, person.id);
+    },
+    db,
+    displacedPersons,
+    CODE_PREFIXES.DISPLACED_PERSON,
+  );
 }
 
 export async function updateDisplacedPerson(
@@ -409,39 +413,42 @@ export async function createFamilyGroup(
     notes?: string;
   },
 ) {
-  const countResult = await db.select({ count: drizzleCount() }).from(familyGroups);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const familyCode = generateEntityCode(CODE_PREFIXES.FAMILY_GROUP, seq);
+  return withCodeRetry(
+    async (familyCode) => {
+      const [group] = await db
+        .insert(familyGroups)
+        .values({
+          familyCode,
+          headOfFamilyId: input.headOfFamilyId ?? null,
+          familySize: input.familySize,
+          originStateId: input.originStateId ?? null,
+          originLocalityId: input.originLocalityId ?? null,
+          originAddress: input.originAddress ?? null,
+          notes: input.notes ?? null,
+        })
+        .returning();
 
-  const [group] = await db
-    .insert(familyGroups)
-    .values({
-      familyCode,
-      headOfFamilyId: input.headOfFamilyId ?? null,
-      familySize: input.familySize,
-      originStateId: input.originStateId ?? null,
-      originLocalityId: input.originLocalityId ?? null,
-      originAddress: input.originAddress ?? null,
-      notes: input.notes ?? null,
-    })
-    .returning();
+      if (!group) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create family group',
+        });
+      }
 
-  if (!group) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Failed to create family group',
-    });
-  }
+      // If headOfFamilyId is set, assign the person to this family group
+      if (input.headOfFamilyId) {
+        await db
+          .update(displacedPersons)
+          .set({ familyGroupId: group.id, updatedAt: new Date() })
+          .where(eq(displacedPersons.id, input.headOfFamilyId));
+      }
 
-  // If headOfFamilyId is set, assign the person to this family group
-  if (input.headOfFamilyId) {
-    await db
-      .update(displacedPersons)
-      .set({ familyGroupId: group.id, updatedAt: new Date() })
-      .where(eq(displacedPersons.id, input.headOfFamilyId));
-  }
-
-  return group;
+      return group;
+    },
+    db,
+    familyGroups,
+    CODE_PREFIXES.FAMILY_GROUP,
+  );
 }
 
 export async function addFamilyMember(

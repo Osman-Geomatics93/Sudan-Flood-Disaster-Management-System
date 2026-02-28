@@ -7,7 +7,8 @@ import type {
   CreateFloodZoneInput,
   UpdateFloodZoneInput,
 } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 export async function listFloodZones(db: Database, input: ListFloodZonesInput) {
   const conditions = [isNull(floodZones.deletedAt)];
@@ -157,32 +158,35 @@ export async function getFloodZonesByBounds(db: Database, bbox: [number, number,
 }
 
 export async function createFloodZone(db: Database, input: CreateFloodZoneInput) {
-  const countResult = await db.select({ count: drizzleCount() }).from(floodZones);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const zoneCode = generateEntityCode(CODE_PREFIXES.FLOOD_ZONE, seq);
+  return withCodeRetry(
+    async (zoneCode) => {
+      const geojson = JSON.stringify(input.geometry);
+      const name_ar = input.name_ar ?? null;
+      const localityId = input.localityId ?? null;
+      const incidentId = input.incidentId ?? null;
+      const waterLevel_m = input.waterLevel?.toString() ?? null;
+      const waterLevelTrend = input.waterLevelTrend ?? null;
+      const affectedPopulation = input.affectedPopulation ?? 0;
+      const monitoredByOrgId = input.monitoredByOrgId ?? null;
+      const status = input.status ?? 'monitoring';
 
-  const geojson = JSON.stringify(input.geometry);
-  const name_ar = input.name_ar ?? null;
-  const localityId = input.localityId ?? null;
-  const incidentId = input.incidentId ?? null;
-  const waterLevel_m = input.waterLevel?.toString() ?? null;
-  const waterLevelTrend = input.waterLevelTrend ?? null;
-  const affectedPopulation = input.affectedPopulation ?? 0;
-  const monitoredByOrgId = input.monitoredByOrgId ?? null;
-  const status = input.status ?? 'monitoring';
+      const result = await db.execute(
+        sql`INSERT INTO flood_zones (zone_code, name_en, name_ar, severity, status, state_id, locality_id, incident_id, water_level_m, water_level_trend, affected_population, monitored_by_org_id, geometry)
+            VALUES (${zoneCode}, ${input.name_en}, ${name_ar}, ${input.severity}, ${status}, ${input.stateId}, ${localityId}, ${incidentId}, ${waterLevel_m}, ${waterLevelTrend}, ${affectedPopulation}, ${monitoredByOrgId}, ST_GeomFromGeoJSON(${geojson}))
+            RETURNING id`,
+      );
 
-  const result = await db.execute(
-    sql`INSERT INTO flood_zones (zone_code, name_en, name_ar, severity, status, state_id, locality_id, incident_id, water_level_m, water_level_trend, affected_population, monitored_by_org_id, geometry)
-        VALUES (${zoneCode}, ${input.name_en}, ${name_ar}, ${input.severity}, ${status}, ${input.stateId}, ${localityId}, ${incidentId}, ${waterLevel_m}, ${waterLevelTrend}, ${affectedPopulation}, ${monitoredByOrgId}, ST_GeomFromGeoJSON(${geojson}))
-        RETURNING id`,
+      const zoneId = (result as unknown as { id: string }[])[0]?.id;
+      if (!zoneId) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create flood zone' });
+      }
+
+      return getFloodZoneById(db, zoneId);
+    },
+    db,
+    floodZones,
+    CODE_PREFIXES.FLOOD_ZONE,
   );
-
-  const zoneId = (result as unknown as { id: string }[])[0]?.id;
-  if (!zoneId) {
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create flood zone' });
-  }
-
-  return getFloodZoneById(db, zoneId);
 }
 
 export async function updateFloodZone(db: Database, input: UpdateFloodZoneInput) {

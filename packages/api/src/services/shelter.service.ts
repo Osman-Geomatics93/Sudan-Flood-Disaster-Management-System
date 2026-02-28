@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { shelters } from '@sudanflood/db/schema';
 import type { CreateShelterInput } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 export async function listShelters(
   db: Database,
@@ -169,47 +170,50 @@ export async function getSheltersByBounds(db: Database, bbox: [number, number, n
 }
 
 export async function createShelter(db: Database, input: CreateShelterInput) {
-  const countResult = await db.select({ count: drizzleCount() }).from(shelters);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const shelterCode = generateEntityCode(CODE_PREFIXES.SHELTER, seq);
+  return withCodeRetry(
+    async (shelterCode) => {
+      const [lng, lat] = input.location;
 
-  const [lng, lat] = input.location;
+      const [shelter] = await db
+        .insert(shelters)
+        .values({
+          shelterCode,
+          name_en: input.name_en,
+          name_ar: input.name_ar ?? null,
+          status: 'preparing',
+          address_en: input.address_en ?? null,
+          address_ar: input.address_ar ?? null,
+          stateId: input.stateId,
+          localityId: input.localityId ?? null,
+          managingOrgId: input.managingOrgId,
+          managerUserId: input.managerUserId ?? null,
+          capacity: input.capacity,
+          currentOccupancy: 0,
+          hasWater: input.hasWater ?? false,
+          hasElectricity: input.hasElectricity ?? false,
+          hasMedical: input.hasMedical ?? false,
+          hasSanitation: input.hasSanitation ?? false,
+          hasKitchen: input.hasKitchen ?? false,
+          hasSecurity: input.hasSecurity ?? false,
+          facilityNotes: input.facilityNotes ?? null,
+        })
+        .returning();
 
-  const [shelter] = await db
-    .insert(shelters)
-    .values({
-      shelterCode,
-      name_en: input.name_en,
-      name_ar: input.name_ar ?? null,
-      status: 'preparing',
-      address_en: input.address_en ?? null,
-      address_ar: input.address_ar ?? null,
-      stateId: input.stateId,
-      localityId: input.localityId ?? null,
-      managingOrgId: input.managingOrgId,
-      managerUserId: input.managerUserId ?? null,
-      capacity: input.capacity,
-      currentOccupancy: 0,
-      hasWater: input.hasWater ?? false,
-      hasElectricity: input.hasElectricity ?? false,
-      hasMedical: input.hasMedical ?? false,
-      hasSanitation: input.hasSanitation ?? false,
-      hasKitchen: input.hasKitchen ?? false,
-      hasSecurity: input.hasSecurity ?? false,
-      facilityNotes: input.facilityNotes ?? null,
-    })
-    .returning();
+      if (!shelter) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create shelter' });
+      }
 
-  if (!shelter) {
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create shelter' });
-  }
+      // Set location via raw SQL
+      await db.execute(
+        sql`UPDATE shelters SET location = ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326) WHERE id = ${shelter.id}`,
+      );
 
-  // Set location via raw SQL
-  await db.execute(
-    sql`UPDATE shelters SET location = ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326) WHERE id = ${shelter.id}`,
+      return getShelterById(db, shelter.id);
+    },
+    db,
+    shelters,
+    CODE_PREFIXES.SHELTER,
   );
-
-  return getShelterById(db, shelter.id);
 }
 
 export async function updateShelter(

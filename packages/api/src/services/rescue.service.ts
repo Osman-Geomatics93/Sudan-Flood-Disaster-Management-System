@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { rescueOperations, rescueTeamMembers } from '@sudanflood/db/schema';
 import type { CreateRescueOperationInput } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 export async function listRescueOperations(
   db: Database,
@@ -133,41 +134,44 @@ export async function createRescueOperation(
   input: CreateRescueOperationInput,
   emergencyCallId?: string,
 ) {
-  const countResult = await db.select({ count: drizzleCount() }).from(rescueOperations);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const operationCode = generateEntityCode(CODE_PREFIXES.RESCUE_OPERATION, seq);
+  return withCodeRetry(
+    async (operationCode) => {
+      const [lng, lat] = input.targetLocation;
+      const priority = input.priority ?? 'high';
+      const title_ar = input.title_ar ?? null;
+      const description = input.description ?? null;
+      const estimatedPersonsAtRisk = input.estimatedPersonsAtRisk ?? 0;
+      const teamLeaderId = input.teamLeaderId ?? null;
+      const emergencyCall = emergencyCallId ?? null;
 
-  const [lng, lat] = input.targetLocation;
-  const priority = input.priority ?? 'high';
-  const title_ar = input.title_ar ?? null;
-  const description = input.description ?? null;
-  const estimatedPersonsAtRisk = input.estimatedPersonsAtRisk ?? 0;
-  const teamLeaderId = input.teamLeaderId ?? null;
-  const emergencyCall = emergencyCallId ?? null;
+      const result = await db.execute(
+        sql`INSERT INTO rescue_operations (
+          operation_code, flood_zone_id, assigned_org_id, operation_type,
+          status, priority, title_en, title_ar, description,
+          estimated_persons_at_risk, team_leader_id, emergency_call_id,
+          target_location
+        ) VALUES (
+          ${operationCode}, ${input.floodZoneId}, ${input.assignedOrgId}, ${input.operationType},
+          'pending', ${priority}, ${input.title_en}, ${title_ar}, ${description},
+          ${estimatedPersonsAtRisk}, ${teamLeaderId}, ${emergencyCall},
+          ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)
+        ) RETURNING id`,
+      );
 
-  const result = await db.execute(
-    sql`INSERT INTO rescue_operations (
-      operation_code, flood_zone_id, assigned_org_id, operation_type,
-      status, priority, title_en, title_ar, description,
-      estimated_persons_at_risk, team_leader_id, emergency_call_id,
-      target_location
-    ) VALUES (
-      ${operationCode}, ${input.floodZoneId}, ${input.assignedOrgId}, ${input.operationType},
-      'pending', ${priority}, ${input.title_en}, ${title_ar}, ${description},
-      ${estimatedPersonsAtRisk}, ${teamLeaderId}, ${emergencyCall},
-      ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)
-    ) RETURNING id`,
+      const newId = (result as unknown as { id: string }[])[0]?.id;
+      if (!newId) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create rescue operation',
+        });
+      }
+
+      return getRescueOperationById(db, newId);
+    },
+    db,
+    rescueOperations,
+    CODE_PREFIXES.RESCUE_OPERATION,
   );
-
-  const newId = (result as unknown as { id: string }[])[0]?.id;
-  if (!newId) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Failed to create rescue operation',
-    });
-  }
-
-  return getRescueOperationById(db, newId);
 }
 
 export async function dispatchRescueOperation(db: Database, id: string) {

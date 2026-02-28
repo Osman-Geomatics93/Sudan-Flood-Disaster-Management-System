@@ -29,6 +29,6 @@ export const uploadRouter = router({
   }),
 
   delete: protectedProcedure.input(deleteAttachmentSchema).mutation(async ({ input, ctx }) => {
-    return deleteAttachment(ctx.db, input.id);
+    return deleteAttachment(ctx.db, input.id, ctx.user.id, ctx.user.role);
   }),
 });

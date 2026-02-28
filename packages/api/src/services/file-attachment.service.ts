@@ -65,7 +65,12 @@ export async function getDownloadUrl(db: Database, id: string) {
   return { url, fileName: attachment.fileName, mimeType: attachment.mimeType };
 }
 
-export async function deleteAttachment(db: Database, id: string) {
+export async function deleteAttachment(
+  db: Database,
+  id: string,
+  userId: string,
+  userRole: string,
+) {
   const [attachment] = await db
     .select()
     .from(fileAttachments)
@@ -74,6 +79,12 @@ export async function deleteAttachment(db: Database, id: string) {
 
   if (!attachment) {
     throw new TRPCError({ code: 'NOT_FOUND', message: 'Attachment not found' });
+  }
+
+  // Only the uploader or admins can delete attachments
+  const isAdmin = userRole === 'super_admin' || userRole === 'agency_admin';
+  if (attachment.uploadedByUserId !== userId && !isAdmin) {
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'You can only delete your own attachments' });
   }
 
   await deleteObject(attachment.storageKey, attachment.bucket);

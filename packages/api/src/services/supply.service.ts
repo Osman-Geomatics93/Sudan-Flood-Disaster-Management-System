@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { reliefSupplies, notifications } from '@sudanflood/db/schema';
 import type { RequestSupplyInput } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 export async function listSupplies(
   db: Database,
@@ -119,38 +120,41 @@ export async function getSupplyById(db: Database, id: string) {
 }
 
 export async function requestSupply(db: Database, input: RequestSupplyInput, userId: string) {
-  const countResult = await db.select({ count: drizzleCount() }).from(reliefSupplies);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const trackingCode = generateEntityCode(CODE_PREFIXES.RELIEF_SUPPLY, seq);
+  return withCodeRetry(
+    async (trackingCode) => {
+      const [supply] = await db
+        .insert(reliefSupplies)
+        .values({
+          trackingCode,
+          supplyType: input.supplyType,
+          status: 'requested',
+          itemName_en: input.itemName_en,
+          itemName_ar: input.itemName_ar ?? null,
+          quantity: String(input.quantity),
+          unit: input.unit,
+          sourceOrgId: input.sourceOrgId,
+          destinationOrgId: input.destinationOrgId ?? null,
+          destinationShelterId: input.destinationShelterId ?? null,
+          stateId: input.stateId ?? null,
+          expiryDate: input.expiryDate ? input.expiryDate.toISOString().split('T')[0]! : null,
+          notes: input.notes ?? null,
+          requestedByUserId: userId,
+        })
+        .returning();
 
-  const [supply] = await db
-    .insert(reliefSupplies)
-    .values({
-      trackingCode,
-      supplyType: input.supplyType,
-      status: 'requested',
-      itemName_en: input.itemName_en,
-      itemName_ar: input.itemName_ar ?? null,
-      quantity: String(input.quantity),
-      unit: input.unit,
-      sourceOrgId: input.sourceOrgId,
-      destinationOrgId: input.destinationOrgId ?? null,
-      destinationShelterId: input.destinationShelterId ?? null,
-      stateId: input.stateId ?? null,
-      expiryDate: input.expiryDate ? input.expiryDate.toISOString().split('T')[0]! : null,
-      notes: input.notes ?? null,
-      requestedByUserId: userId,
-    })
-    .returning();
+      if (!supply) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create supply request',
+        });
+      }
 
-  if (!supply) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Failed to create supply request',
-    });
-  }
-
-  return getSupplyById(db, supply.id);
+      return getSupplyById(db, supply.id);
+    },
+    db,
+    reliefSupplies,
+    CODE_PREFIXES.RELIEF_SUPPLY,
+  );
 }
 
 export async function approveSupply(

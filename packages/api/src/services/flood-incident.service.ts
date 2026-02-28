@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { floodIncidents } from '@sudanflood/db/schema';
 import type { CreateFloodIncidentInput } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 export async function listFloodIncidents(
   db: Database,
@@ -64,31 +65,34 @@ export async function createFloodIncident(
   input: CreateFloodIncidentInput,
   declaredByUserId?: string,
 ) {
-  const countResult = await db.select({ count: drizzleCount() }).from(floodIncidents);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const incidentCode = generateEntityCode(CODE_PREFIXES.FLOOD_INCIDENT, seq);
+  return withCodeRetry(
+    async (incidentCode) => {
+      const [incident] = await db
+        .insert(floodIncidents)
+        .values({
+          incidentCode,
+          incidentType: input.incidentType,
+          status: input.status ?? 'reported',
+          title_en: input.title_en,
+          title_ar: input.title_ar ?? null,
+          description_en: input.description_en ?? null,
+          description_ar: input.description_ar ?? null,
+          severity: input.severity,
+          stateId: input.stateId,
+          localityId: input.localityId ?? null,
+          estimatedAffectedPopulation: input.estimatedAffectedPopulation ?? 0,
+          startDate: input.startDate,
+          leadOrgId: input.leadOrgId ?? null,
+          declaredByUserId: declaredByUserId ?? null,
+        })
+        .returning();
 
-  const [incident] = await db
-    .insert(floodIncidents)
-    .values({
-      incidentCode,
-      incidentType: input.incidentType,
-      status: input.status ?? 'reported',
-      title_en: input.title_en,
-      title_ar: input.title_ar ?? null,
-      description_en: input.description_en ?? null,
-      description_ar: input.description_ar ?? null,
-      severity: input.severity,
-      stateId: input.stateId,
-      localityId: input.localityId ?? null,
-      estimatedAffectedPopulation: input.estimatedAffectedPopulation ?? 0,
-      startDate: input.startDate,
-      leadOrgId: input.leadOrgId ?? null,
-      declaredByUserId: declaredByUserId ?? null,
-    })
-    .returning();
-
-  return incident;
+      return incident;
+    },
+    db,
+    floodIncidents,
+    CODE_PREFIXES.FLOOD_INCIDENT,
+  );
 }
 
 export async function updateFloodIncident(

@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { weatherAlerts, states } from '@sudanflood/db/schema';
 import type { CreateWeatherAlertInput, ListWeatherAlertsInput } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 export async function listWeatherAlerts(db: Database, input: ListWeatherAlertsInput) {
   const conditions: ReturnType<typeof eq>[] = [];
@@ -86,28 +87,31 @@ export async function getActiveAlerts(db: Database) {
 }
 
 export async function createWeatherAlert(db: Database, input: CreateWeatherAlertInput) {
-  const countResult = await db.select({ count: drizzleCount() }).from(weatherAlerts);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const alertCode = generateEntityCode(CODE_PREFIXES.WEATHER_ALERT, seq);
+  return withCodeRetry(
+    async (alertCode) => {
+      const [alert] = await db
+        .insert(weatherAlerts)
+        .values({
+          alertCode,
+          alertType: input.alertType,
+          severity: input.severity,
+          stateId: input.stateId,
+          title_en: input.title_en,
+          title_ar: input.title_ar,
+          description_en: input.description_en,
+          description_ar: input.description_ar,
+          source: input.source,
+          expiresAt: input.expiresAt,
+          metadata: input.metadata ?? {},
+        })
+        .returning();
 
-  const [alert] = await db
-    .insert(weatherAlerts)
-    .values({
-      alertCode,
-      alertType: input.alertType,
-      severity: input.severity,
-      stateId: input.stateId,
-      title_en: input.title_en,
-      title_ar: input.title_ar,
-      description_en: input.description_en,
-      description_ar: input.description_ar,
-      source: input.source,
-      expiresAt: input.expiresAt,
-      metadata: input.metadata ?? {},
-    })
-    .returning();
-
-  return alert;
+      return alert;
+    },
+    db,
+    weatherAlerts,
+    CODE_PREFIXES.WEATHER_ALERT,
+  );
 }
 
 export async function deactivateAlert(db: Database, id: string) {

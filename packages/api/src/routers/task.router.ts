@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { router, protectedProcedure, requirePermission } from '../trpc.js';
 import {
   createTaskSchema,
@@ -47,7 +48,13 @@ export const taskRouter = router({
     .use(requirePermission('task:create'))
     .input(createTaskSchema)
     .mutation(async ({ input, ctx }) => {
-      return createTask(ctx.db, input, ctx.user.id, ctx.user.orgId!);
+      if (!ctx.user.orgId) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'You must belong to an organization to create tasks',
+        });
+      }
+      return createTask(ctx.db, input, ctx.user.id, ctx.user.orgId);
     }),
 
   update: protectedProcedure

@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { emergencyCalls } from '@sudanflood/db/schema';
 import type { CreateEmergencyCallInput } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 import { createRescueOperation } from './rescue.service.js';
 
 export async function listEmergencyCalls(
@@ -122,45 +123,48 @@ export async function createEmergencyCall(
   input: CreateEmergencyCallInput,
   receivedByUserId: string,
 ) {
-  const countResult = await db.select({ count: drizzleCount() }).from(emergencyCalls);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const callCode = generateEntityCode(CODE_PREFIXES.EMERGENCY_CALL, seq);
+  return withCodeRetry(
+    async (callCode) => {
+      const [call] = await db
+        .insert(emergencyCalls)
+        .values({
+          callCode,
+          callerName: input.callerName ?? null,
+          callerPhone: input.callerPhone,
+          callerAddress: input.callerAddress ?? null,
+          callNumber: input.callNumber,
+          urgency: input.urgency ?? 'medium',
+          status: 'received',
+          description_ar: input.description_ar ?? null,
+          description_en: input.description_en ?? null,
+          personsAtRisk: input.personsAtRisk ?? 0,
+          floodZoneId: input.floodZoneId ?? null,
+          stateId: input.stateId ?? null,
+          receivedByUserId,
+        })
+        .returning();
 
-  const [call] = await db
-    .insert(emergencyCalls)
-    .values({
-      callCode,
-      callerName: input.callerName ?? null,
-      callerPhone: input.callerPhone,
-      callerAddress: input.callerAddress ?? null,
-      callNumber: input.callNumber,
-      urgency: input.urgency ?? 'medium',
-      status: 'received',
-      description_ar: input.description_ar ?? null,
-      description_en: input.description_en ?? null,
-      personsAtRisk: input.personsAtRisk ?? 0,
-      floodZoneId: input.floodZoneId ?? null,
-      stateId: input.stateId ?? null,
-      receivedByUserId,
-    })
-    .returning();
+      if (!call) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create emergency call',
+        });
+      }
 
-  if (!call) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Failed to create emergency call',
-    });
-  }
+      // Set caller location via raw SQL if provided
+      if (input.callerLocation) {
+        const [lng, lat] = input.callerLocation;
+        await db.execute(
+          sql`UPDATE emergency_calls SET caller_location = ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326) WHERE id = ${call.id}`,
+        );
+      }
 
-  // Set caller location via raw SQL if provided
-  if (input.callerLocation) {
-    const [lng, lat] = input.callerLocation;
-    await db.execute(
-      sql`UPDATE emergency_calls SET caller_location = ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326) WHERE id = ${call.id}`,
-    );
-  }
-
-  return getEmergencyCallById(db, call.id);
+      return getEmergencyCallById(db, call.id);
+    },
+    db,
+    emergencyCalls,
+    CODE_PREFIXES.EMERGENCY_CALL,
+  );
 }
 
 export async function triageEmergencyCall(

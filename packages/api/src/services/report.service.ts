@@ -7,7 +7,8 @@ import type {
   CreateCitizenReportInput,
   ReviewCitizenReportInput,
 } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 // ── Situation Reports ─────────────────────────────────────────────
 
@@ -122,37 +123,39 @@ export async function createSituationReport(
     .where(eq(situationReports.incidentId, input.incidentId));
   const reportNumber = (numberResult?.count ?? 0) + 1;
 
-  // Generate entity code
-  const countResult = await db.select({ count: drizzleCount() }).from(situationReports);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const reportCode = generateEntityCode(CODE_PREFIXES.SITUATION_REPORT, seq);
+  return withCodeRetry(
+    async (reportCode) => {
+      const [report] = await db
+        .insert(situationReports)
+        .values({
+          reportCode,
+          incidentId: input.incidentId,
+          reportType: input.reportType,
+          reportNumber,
+          title_en: input.title_en,
+          title_ar: input.title_ar ?? null,
+          summary_en: input.summary_en ?? null,
+          summary_ar: input.summary_ar ?? null,
+          content: input.content ?? {},
+          stateId: input.stateId ?? null,
+          createdByUserId: userId,
+          createdByOrgId: orgId,
+        })
+        .returning();
 
-  const [report] = await db
-    .insert(situationReports)
-    .values({
-      reportCode,
-      incidentId: input.incidentId,
-      reportType: input.reportType,
-      reportNumber,
-      title_en: input.title_en,
-      title_ar: input.title_ar ?? null,
-      summary_en: input.summary_en ?? null,
-      summary_ar: input.summary_ar ?? null,
-      content: input.content ?? {},
-      stateId: input.stateId ?? null,
-      createdByUserId: userId,
-      createdByOrgId: orgId,
-    })
-    .returning();
+      if (!report) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create situation report',
+        });
+      }
 
-  if (!report) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Failed to create situation report',
-    });
-  }
-
-  return getSituationReportById(db, report.id);
+      return getSituationReportById(db, report.id);
+    },
+    db,
+    situationReports,
+    CODE_PREFIXES.SITUATION_REPORT,
+  );
 }
 
 export async function publishSituationReport(db: Database, id: string) {
@@ -285,60 +288,63 @@ export async function createCitizenReport(
   input: CreateCitizenReportInput,
   userId: string,
 ) {
-  const countResult = await db.select({ count: drizzleCount() }).from(citizenReports);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const reportCode = generateEntityCode(CODE_PREFIXES.CITIZEN_REPORT, seq);
+  return withCodeRetry(
+    async (reportCode) => {
+      if (input.location) {
+        // Use raw SQL for geometry insert
+        const [lng, lat] = input.location;
+        const result = await db.execute(
+          sql`INSERT INTO citizen_reports (
+            report_code, reporter_user_id, reporter_phone, reporter_name,
+            state_id, locality_id, report_type, urgency,
+            description_ar, description_en, status, location
+          ) VALUES (
+            ${reportCode}, ${userId}, ${input.reporterPhone ?? null}, ${input.reporterName ?? null},
+            ${input.stateId ?? null}, ${input.localityId ?? null}, ${input.reportType}, ${input.urgency},
+            ${input.description_ar ?? null}, ${input.description_en ?? null}, 'submitted',
+            ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)
+          ) RETURNING id`,
+        );
+        const id = (result as unknown as { id: string }[])[0]?.id;
+        if (!id) {
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to create citizen report',
+          });
+        }
+        return getCitizenReportById(db, id);
+      }
 
-  if (input.location) {
-    // Use raw SQL for geometry insert
-    const [lng, lat] = input.location;
-    const result = await db.execute(
-      sql`INSERT INTO citizen_reports (
-        report_code, reporter_user_id, reporter_phone, reporter_name,
-        state_id, locality_id, report_type, urgency,
-        description_ar, description_en, status, location
-      ) VALUES (
-        ${reportCode}, ${userId}, ${input.reporterPhone ?? null}, ${input.reporterName ?? null},
-        ${input.stateId ?? null}, ${input.localityId ?? null}, ${input.reportType}, ${input.urgency},
-        ${input.description_ar ?? null}, ${input.description_en ?? null}, 'submitted',
-        ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)
-      ) RETURNING id`,
-    );
-    const id = (result as unknown as { id: string }[])[0]?.id;
-    if (!id) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to create citizen report',
-      });
-    }
-    return getCitizenReportById(db, id);
-  }
+      const [report] = await db
+        .insert(citizenReports)
+        .values({
+          reportCode,
+          reporterUserId: userId,
+          reporterPhone: input.reporterPhone ?? null,
+          reporterName: input.reporterName ?? null,
+          stateId: input.stateId ?? null,
+          localityId: input.localityId ?? null,
+          reportType: input.reportType,
+          urgency: input.urgency,
+          description_ar: input.description_ar ?? null,
+          description_en: input.description_en ?? null,
+          status: 'submitted',
+        })
+        .returning();
 
-  const [report] = await db
-    .insert(citizenReports)
-    .values({
-      reportCode,
-      reporterUserId: userId,
-      reporterPhone: input.reporterPhone ?? null,
-      reporterName: input.reporterName ?? null,
-      stateId: input.stateId ?? null,
-      localityId: input.localityId ?? null,
-      reportType: input.reportType,
-      urgency: input.urgency,
-      description_ar: input.description_ar ?? null,
-      description_en: input.description_en ?? null,
-      status: 'submitted',
-    })
-    .returning();
+      if (!report) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create citizen report',
+        });
+      }
 
-  if (!report) {
-    throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Failed to create citizen report',
-    });
-  }
-
-  return getCitizenReportById(db, report.id);
+      return getCitizenReportById(db, report.id);
+    },
+    db,
+    citizenReports,
+    CODE_PREFIXES.CITIZEN_REPORT,
+  );
 }
 
 export async function reviewCitizenReport(

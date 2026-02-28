@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
 import { ArrowLeft, Phone, Clock, AlertTriangle, Users } from 'lucide-react';
 import { CALL_URGENCIES } from '@sudanflood/shared';
@@ -314,12 +314,12 @@ export default function EmergencyCallDetailPage() {
               <h2 className="font-heading mb-4 text-lg font-semibold tracking-tight">
                 {t('linkedRescue')}
               </h2>
-              <a
+              <Link
                 href={`/dashboard/rescue-operations/${call.rescueOperationId}`}
                 className="text-primary dark:text-primary text-sm hover:underline"
               >
                 {t('viewRescueOp')}
-              </a>
+              </Link>
             </div>
           )}
         </div>

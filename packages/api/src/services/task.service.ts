@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { tasks, taskDependencies, comments, notifications } from '@sudanflood/db/schema';
 import type { CreateTaskInput } from '@sudanflood/shared';
-import { generateEntityCode, CODE_PREFIXES } from '@sudanflood/shared';
+import { CODE_PREFIXES } from '@sudanflood/shared';
+import { withCodeRetry } from '../utils/entity-code.js';
 
 export async function listTasks(
   db: Database,
@@ -128,35 +129,38 @@ export async function createTask(
   userId: string,
   orgId: string,
 ) {
-  const countResult = await db.select({ count: drizzleCount() }).from(tasks);
-  const seq = (countResult[0]?.count ?? 0) + 1;
-  const taskCode = generateEntityCode(CODE_PREFIXES.TASK, seq);
+  return withCodeRetry(
+    async (taskCode) => {
+      const [task] = await db
+        .insert(tasks)
+        .values({
+          taskCode,
+          title_en: input.title_en,
+          title_ar: input.title_ar ?? null,
+          description: input.description ?? null,
+          status: 'draft',
+          priority: input.priority,
+          assignedToOrgId: input.assignedToOrgId,
+          assignedToUserId: input.assignedToUserId ?? null,
+          createdByOrgId: orgId,
+          createdByUserId: userId,
+          incidentId: input.incidentId ?? null,
+          floodZoneId: input.floodZoneId ?? null,
+          parentTaskId: input.parentTaskId ?? null,
+          deadline: input.deadline ?? null,
+        })
+        .returning();
 
-  const [task] = await db
-    .insert(tasks)
-    .values({
-      taskCode,
-      title_en: input.title_en,
-      title_ar: input.title_ar ?? null,
-      description: input.description ?? null,
-      status: 'draft',
-      priority: input.priority,
-      assignedToOrgId: input.assignedToOrgId,
-      assignedToUserId: input.assignedToUserId ?? null,
-      createdByOrgId: orgId,
-      createdByUserId: userId,
-      incidentId: input.incidentId ?? null,
-      floodZoneId: input.floodZoneId ?? null,
-      parentTaskId: input.parentTaskId ?? null,
-      deadline: input.deadline ?? null,
-    })
-    .returning();
+      if (!task) {
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create task' });
+      }
 
-  if (!task) {
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to create task' });
-  }
-
-  return getTaskById(db, task.id);
+      return getTaskById(db, task.id);
+    },
+    db,
+    tasks,
+    CODE_PREFIXES.TASK,
+  );
 }
 
 export async function updateTask(
