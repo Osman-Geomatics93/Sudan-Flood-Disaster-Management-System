@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { trpc } from '@/lib/trpc-client';
 
@@ -79,9 +79,8 @@ export default function AuditLogsPage() {
             </thead>
             <tbody>
               {logs?.items.map((log) => (
-                <>
+                <React.Fragment key={log.id}>
                   <tr
-                    key={log.id}
                     className="hover:bg-accent/50 cursor-pointer border-b transition-colors"
                     onClick={() => setExpandedId(expandedId === log.id ? null : log.id)}
                   >
@@ -100,7 +99,7 @@ export default function AuditLogsPage() {
                     </td>
                   </tr>
                   {expandedId === log.id && (
-                    <tr key={`${log.id}-expanded`} className="bg-muted/20 border-b">
+                    <tr className="bg-muted/20 border-b">
                       <td colSpan={5} className="px-4 py-4">
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                           <div>
@@ -132,7 +131,7 @@ export default function AuditLogsPage() {
                       </td>
                     </tr>
                   )}
-                </>
+                </React.Fragment>
               ))}
             </tbody>
           </table>
