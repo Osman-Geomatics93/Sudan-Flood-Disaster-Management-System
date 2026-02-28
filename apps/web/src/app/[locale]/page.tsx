@@ -14,7 +14,7 @@ export default function HomePage() {
             alt="HRC Sudan - Hydraulics Research Center"
             width={96}
             height={96}
-            className="drop-shadow-md dark:brightness-110 dark:contrast-105"
+            className="dark:contrast-105 drop-shadow-md dark:brightness-110"
             priority
           />
         </div>
