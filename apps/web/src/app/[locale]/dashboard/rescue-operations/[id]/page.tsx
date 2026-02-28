@@ -108,8 +108,6 @@ export default function RescueOperationDetailPage() {
     ? (op.targetLocation as { coordinates: [number, number] }).coordinates
     : null;
 
-  const isDeletable = ['pending', 'aborted', 'failed'].includes(op.status);
-
   const handleDelete = () => {
     if (window.confirm(t('deleteConfirm'))) {
       deleteMutation.mutate({ id: op.id });
@@ -176,16 +174,14 @@ export default function RescueOperationDetailPage() {
             <Pencil className="h-4 w-4" />
             {tCommon('edit')}
           </Link>
-          {isDeletable && (
-            <button
-              onClick={handleDelete}
-              disabled={deleteMutation.isPending}
-              className="border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium disabled:opacity-50"
-            >
-              <Trash2 className="h-4 w-4" />
-              {deleteMutation.isPending ? tCommon('loading') : tCommon('delete')}
-            </button>
-          )}
+          <button
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" />
+            {deleteMutation.isPending ? tCommon('loading') : tCommon('delete')}
+          </button>
         </div>
       </div>
 

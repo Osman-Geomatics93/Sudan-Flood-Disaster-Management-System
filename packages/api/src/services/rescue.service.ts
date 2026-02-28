@@ -206,15 +206,7 @@ export async function updateRescueOperation(db: Database, input: UpdateRescueOpe
 }
 
 export async function deleteRescueOperation(db: Database, id: string) {
-  const op = await getRescueOperationById(db, id);
-
-  const deletableStatuses = ['pending', 'aborted', 'failed'];
-  if (!deletableStatuses.includes(op.status)) {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: `Cannot delete operation in '${op.status}' status. Only pending, aborted, or failed operations can be deleted.`,
-    });
-  }
+  await getRescueOperationById(db, id);
 
   await db.delete(rescueOperations).where(eq(rescueOperations.id, id));
 
