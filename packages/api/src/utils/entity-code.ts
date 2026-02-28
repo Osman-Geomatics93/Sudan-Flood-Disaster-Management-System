@@ -16,7 +16,7 @@ export async function generateUniqueCode(
   options?: { stateCode?: string },
 ): Promise<string> {
   const countResult = await db.select({ count: drizzleCount() }).from(table);
-  let seq = (countResult[0]?.count ?? 0) + 1;
+  const seq = (countResult[0]?.count ?? 0) + 1;
   return generateEntityCode(prefix, seq, options);
 }
 
