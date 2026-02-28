@@ -19,6 +19,23 @@ export const requestSupplySchema = z.object({
 
 export type RequestSupplyInput = z.infer<typeof requestSupplySchema>;
 
+export const updateSupplySchema = z.object({
+  id: uuidSchema,
+  supplyType: z.enum(SUPPLY_TYPES).optional(),
+  itemName_en: z.string().min(1).max(200).optional(),
+  itemName_ar: z.string().max(400).optional(),
+  quantity: z.number().positive().optional(),
+  unit: z.string().min(1).max(50).optional(),
+  sourceOrgId: uuidSchema.optional(),
+  destinationOrgId: uuidSchema.optional(),
+  destinationShelterId: uuidSchema.optional(),
+  stateId: uuidSchema.optional(),
+  expiryDate: z.coerce.date().optional(),
+  notes: z.string().optional(),
+});
+
+export type UpdateSupplyInput = z.infer<typeof updateSupplySchema>;
+
 export const approveSupplySchema = z.object({
   id: uuidSchema,
   unitCostSdg: z.number().min(0).optional(),

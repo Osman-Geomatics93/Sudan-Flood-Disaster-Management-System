@@ -78,6 +78,7 @@ export default function RescueOperationDetailPage() {
 
   const deleteMutation = trpc.rescue.delete.useMutation({
     onSuccess: () => {
+      utils.rescue.list.invalidate();
       router.push('/dashboard/rescue-operations');
     },
     onError: (err) => {

@@ -1,8 +1,8 @@
-import { eq, and, sql, count as drizzleCount } from 'drizzle-orm';
+import { eq, and, sql, isNull, count as drizzleCount } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { reliefSupplies, notifications } from '@sudanflood/db/schema';
-import type { RequestSupplyInput } from '@sudanflood/shared';
+import type { RequestSupplyInput, UpdateSupplyInput } from '@sudanflood/shared';
 import { CODE_PREFIXES } from '@sudanflood/shared';
 import { withCodeRetry } from '../utils/entity-code.js';
 
@@ -17,7 +17,7 @@ export async function listSupplies(
     destOrgId?: string;
   },
 ) {
-  const conditions: ReturnType<typeof eq>[] = [];
+  const conditions: ReturnType<typeof eq>[] = [isNull(reliefSupplies.deletedAt)];
 
   if (input.type) {
     conditions.push(
@@ -109,7 +109,7 @@ export async function getSupplyById(db: Database, id: string) {
       currentLocation: sql<unknown>`ST_AsGeoJSON(current_location)::json`,
     })
     .from(reliefSupplies)
-    .where(eq(reliefSupplies.id, id))
+    .where(and(eq(reliefSupplies.id, id), isNull(reliefSupplies.deletedAt)))
     .limit(1);
 
   if (!supply) {
@@ -286,15 +286,57 @@ export async function cancelSupply(db: Database, id: string) {
   return getSupplyById(db, id);
 }
 
+export async function updateSupply(db: Database, input: UpdateSupplyInput) {
+  const existing = await getSupplyById(db, input.id);
+
+  await db
+    .update(reliefSupplies)
+    .set({
+      ...(input.supplyType !== undefined && {
+        supplyType: input.supplyType as (typeof reliefSupplies.supplyType.enumValues)[number],
+      }),
+      ...(input.itemName_en !== undefined && { itemName_en: input.itemName_en }),
+      ...(input.itemName_ar !== undefined && { itemName_ar: input.itemName_ar }),
+      ...(input.quantity !== undefined && { quantity: String(input.quantity) }),
+      ...(input.unit !== undefined && { unit: input.unit }),
+      ...(input.sourceOrgId !== undefined && { sourceOrgId: input.sourceOrgId }),
+      ...(input.destinationOrgId !== undefined && { destinationOrgId: input.destinationOrgId }),
+      ...(input.destinationShelterId !== undefined && {
+        destinationShelterId: input.destinationShelterId,
+      }),
+      ...(input.stateId !== undefined && { stateId: input.stateId }),
+      ...(input.expiryDate !== undefined && {
+        expiryDate: input.expiryDate.toISOString().split('T')[0],
+      }),
+      ...(input.notes !== undefined && { notes: input.notes }),
+      updatedAt: new Date(),
+    })
+    .where(eq(reliefSupplies.id, existing.id));
+
+  return getSupplyById(db, input.id);
+}
+
+export async function deleteSupply(db: Database, id: string) {
+  await getSupplyById(db, id);
+  await db
+    .update(reliefSupplies)
+    .set({ deletedAt: new Date() })
+    .where(eq(reliefSupplies.id, id));
+  return { success: true };
+}
+
 export async function getSupplyStats(db: Database) {
+  const baseCondition = isNull(reliefSupplies.deletedAt);
+
   const [totalResult, byStatusResult, byTypeResult] = await Promise.all([
-    db.select({ count: drizzleCount() }).from(reliefSupplies),
+    db.select({ count: drizzleCount() }).from(reliefSupplies).where(baseCondition),
     db
       .select({
         status: reliefSupplies.status,
         count: drizzleCount(),
       })
       .from(reliefSupplies)
+      .where(baseCondition)
       .groupBy(reliefSupplies.status),
     db
       .select({
@@ -302,6 +344,7 @@ export async function getSupplyStats(db: Database) {
         count: drizzleCount(),
       })
       .from(reliefSupplies)
+      .where(baseCondition)
       .groupBy(reliefSupplies.supplyType),
   ]);
 

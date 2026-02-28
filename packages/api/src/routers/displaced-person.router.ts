@@ -17,6 +17,7 @@ import {
   updateDisplacedPerson,
   assignShelter,
   updateHealth,
+  deleteDisplacedPerson,
   searchDisplacedPersons,
   getDisplacedPersonStats,
   createFamilyGroup,
@@ -59,6 +60,13 @@ export const displacedPersonRouter = router({
     .input(updateDisplacedPersonSchema)
     .mutation(async ({ input, ctx }) => {
       return updateDisplacedPerson(ctx.db, input);
+    }),
+
+  delete: protectedProcedure
+    .use(requirePermission('dp:update'))
+    .input(idParamSchema)
+    .mutation(async ({ input, ctx }) => {
+      return deleteDisplacedPerson(ctx.db, input.id);
     }),
 
   assignShelter: protectedProcedure

@@ -19,10 +19,12 @@ export default function FloodZoneDetailPage() {
   const router = useRouter();
 
   const tCommon = useTranslations('common');
+  const utils = trpc.useUtils();
   const zoneQuery = trpc.floodZone.getById.useQuery({ id });
 
   const archiveMutation = trpc.floodZone.archive.useMutation({
     onSuccess: () => {
+      utils.floodZone.list.invalidate();
       router.push('/dashboard/flood-zones');
     },
     onError: (err) => {

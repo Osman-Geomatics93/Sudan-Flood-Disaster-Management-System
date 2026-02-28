@@ -2,9 +2,9 @@
 
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/navigation';
+import { useRouter, Link } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, CheckCircle, XCircle, Truck, Package, Ban } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, Truck, Package, Ban, Pencil, Trash2 } from 'lucide-react';
 
 const STATUS_STYLES: Record<string, string> = {
   requested: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
@@ -22,9 +22,26 @@ export default function SupplyDetailPage() {
   const { id } = useParams<{ id: string }>();
   const t = useTranslations('supply');
   const tCommon = useTranslations('common');
+  const router = useRouter();
   const utils = trpc.useUtils();
 
   const supplyQuery = trpc.supply.getById.useQuery({ id });
+
+  const deleteMutation = trpc.supply.delete.useMutation({
+    onSuccess: () => {
+      utils.supply.list.invalidate();
+      router.push('/dashboard/supplies');
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
+  const handleDelete = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      deleteMutation.mutate({ id });
+    }
+  };
 
   const approveMutation = trpc.supply.approve.useMutation({
     onSuccess: () => utils.supply.getById.invalidate({ id }),
@@ -59,13 +76,32 @@ export default function SupplyDetailPage() {
 
   return (
     <div className="animate-in mx-auto max-w-3xl">
-      <div className="mb-6 flex items-center gap-3">
-        <Link href="/dashboard/supplies" className="hover:bg-accent rounded-md p-1">
-          <ArrowLeft className="h-5 w-5" />
-        </Link>
-        <div>
-          <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
-          <p className="text-muted-foreground font-mono text-sm">{supply.trackingCode}</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Link href="/dashboard/supplies" className="hover:bg-accent rounded-md p-1">
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <div>
+            <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
+            <p className="text-muted-foreground font-mono text-sm">{supply.trackingCode}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/dashboard/supplies/${id}/edit`}
+            className="btn-secondary flex items-center gap-1.5"
+          >
+            <Pencil className="h-4 w-4" />
+            {tCommon('edit')}
+          </Link>
+          <button
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" />
+            {deleteMutation.isPending ? tCommon('loading') : tCommon('delete')}
+          </button>
         </div>
       </div>
 

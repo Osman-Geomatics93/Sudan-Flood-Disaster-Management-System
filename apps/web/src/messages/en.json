@@ -415,7 +415,12 @@
     "status_delivered": "Delivered",
     "status_distributed": "Distributed",
     "status_expired": "Expired",
-    "status_damaged": "Damaged"
+    "status_damaged": "Damaged",
+    "editTitle": "Edit Supply",
+    "editSupply": "Edit Supply",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "deleteConfirm": "Are you sure you want to delete this supply? This action cannot be undone."
   },
   "task": {
     "title": "Tasks",

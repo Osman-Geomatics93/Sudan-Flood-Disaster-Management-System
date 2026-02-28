@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter, Link } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, Heart, Home, Pencil, Users } from 'lucide-react';
+import { ArrowLeft, Heart, Home, Pencil, Trash2, Users } from 'lucide-react';
 import { HEALTH_STATUSES } from '@sudanflood/shared';
 import type { HealthStatus } from '@sudanflood/shared';
 
@@ -37,6 +37,23 @@ export default function DisplacedPersonDetailPage() {
   const personQuery = trpc.displacedPerson.getById.useQuery({ id });
   const sheltersQuery = trpc.shelter.list.useQuery({ page: 1, limit: 100, hasCapacity: true });
   const utils = trpc.useUtils();
+
+  // Delete mutation
+  const deleteMutation = trpc.displacedPerson.delete.useMutation({
+    onSuccess: () => {
+      utils.displacedPerson.list.invalidate();
+      router.push('/dashboard/displaced-persons');
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
+  const handleDelete = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      deleteMutation.mutate({ id });
+    }
+  };
 
   // Assign shelter state
   const [selectedShelterId, setSelectedShelterId] = useState('');
@@ -125,13 +142,23 @@ export default function DisplacedPersonDetailPage() {
             <p className="text-muted-foreground font-mono text-sm">{person.registrationCode}</p>
           </div>
         </div>
-        <Link
-          href={`/dashboard/displaced-persons/${id}/edit`}
-          className="btn-secondary flex items-center gap-1.5"
-        >
-          <Pencil className="h-4 w-4" />
-          {tCommon('edit')}
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/dashboard/displaced-persons/${id}/edit`}
+            className="btn-secondary flex items-center gap-1.5"
+          >
+            <Pencil className="h-4 w-4" />
+            {tCommon('edit')}
+          </Link>
+          <button
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20 inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" />
+            {deleteMutation.isPending ? tCommon('loading') : tCommon('delete')}
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

@@ -70,6 +70,23 @@ async function migrate() {
       }
     }
 
+    // Add missing columns (schema drift fixes)
+    const alterStatements = [
+      `ALTER TABLE relief_supplies ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ`,
+    ];
+    for (const stmt of alterStatements) {
+      try {
+        await sql.unsafe(stmt);
+      } catch (e) {
+        if (e instanceof Error && e.message.includes('already exists')) {
+          // Column already exists, skip
+        } else {
+          throw e;
+        }
+      }
+    }
+    console.log('Schema drift fixes applied.');
+
     console.log('All migrations completed!');
   } catch (error) {
     console.error('Migration failed:', error);

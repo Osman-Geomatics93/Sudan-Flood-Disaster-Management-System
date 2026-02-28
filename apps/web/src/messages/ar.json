@@ -415,7 +415,12 @@
     "status_delivered": "تم التسليم",
     "status_distributed": "تم التوزيع",
     "status_expired": "منتهي الصلاحية",
-    "status_damaged": "تالف"
+    "status_damaged": "تالف",
+    "editTitle": "تعديل الإمداد",
+    "editSupply": "تعديل الإمداد",
+    "saving": "جاري الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "deleteConfirm": "هل أنت متأكد من حذف هذا الإمداد؟ لا يمكن التراجع عن هذا الإجراء."
   },
   "task": {
     "title": "المهام",

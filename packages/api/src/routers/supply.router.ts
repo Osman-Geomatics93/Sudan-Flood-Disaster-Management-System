@@ -1,6 +1,7 @@
 import { router, protectedProcedure, requirePermission } from '../trpc.js';
 import {
   requestSupplySchema,
+  updateSupplySchema,
   approveSupplySchema,
   shipSupplySchema,
   updateSupplyLocationSchema,
@@ -11,6 +12,8 @@ import {
   listSupplies,
   getSupplyById,
   requestSupply,
+  updateSupply,
+  deleteSupply,
   approveSupply,
   rejectSupply,
   shipSupply,
@@ -40,6 +43,20 @@ export const supplyRouter = router({
     .input(requestSupplySchema)
     .mutation(async ({ input, ctx }) => {
       return requestSupply(ctx.db, input, ctx.user.id);
+    }),
+
+  update: protectedProcedure
+    .use(requirePermission('supply:update'))
+    .input(updateSupplySchema)
+    .mutation(async ({ input, ctx }) => {
+      return updateSupply(ctx.db, input);
+    }),
+
+  delete: protectedProcedure
+    .use(requirePermission('supply:update'))
+    .input(idParamSchema)
+    .mutation(async ({ input, ctx }) => {
+      return deleteSupply(ctx.db, input.id);
     }),
 
   approve: protectedProcedure

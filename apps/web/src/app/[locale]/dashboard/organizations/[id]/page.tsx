@@ -28,9 +28,11 @@ export default function OrganizationDetailPage() {
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  const utils = trpc.useUtils();
   const orgQuery = trpc.organization.getById.useQuery({ id });
   const deleteMutation = trpc.organization.delete.useMutation({
     onSuccess: () => {
+      utils.organization.list.invalidate();
       router.push('/dashboard/organizations');
     },
   });

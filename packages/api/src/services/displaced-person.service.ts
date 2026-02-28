@@ -332,6 +332,15 @@ export async function updateHealth(
   return getDisplacedPersonById(db, input.id);
 }
 
+export async function deleteDisplacedPerson(db: Database, id: string) {
+  await getDisplacedPersonById(db, id);
+  await db
+    .update(displacedPersons)
+    .set({ deletedAt: new Date() })
+    .where(eq(displacedPersons.id, id));
+  return { success: true };
+}
+
 export async function searchDisplacedPersons(db: Database, query: string) {
   const pattern = `%${query}%`;
 
