@@ -226,7 +226,7 @@ export const AUDIT_ACTIONS = [
 ] as const;
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
 
-export const GENDERS = ['male', 'female', 'other'] as const;
+export const GENDERS = ['male', 'female'] as const;
 export type Gender = (typeof GENDERS)[number];
 
 export const NOTIFICATION_SEVERITIES = ['info', 'warning', 'critical'] as const;
