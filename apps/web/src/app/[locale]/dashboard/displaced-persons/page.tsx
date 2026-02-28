@@ -8,6 +8,7 @@ import { trpc } from '@/lib/trpc-client';
 import { ChevronLeft, ChevronRight, Plus, Search } from 'lucide-react';
 import type { DisplacedPersonStatus, HealthStatus } from '@sudanflood/shared';
 import { DISPLACED_PERSON_STATUSES, HEALTH_STATUSES } from '@sudanflood/shared';
+import ExportButton from '@/components/common/ExportButton';
 
 const STATUS_STYLES: Record<string, string> = {
   registered: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
@@ -38,6 +39,8 @@ export default function DisplacedPersonsPage() {
   const [searchInput, setSearchInput] = useState('');
   const shelterIdParam = searchParams.get('shelterId') ?? undefined;
 
+  const exportMutation = trpc.export.displacedPersons.useMutation();
+
   const listQuery = trpc.displacedPerson.list.useQuery({
     page,
     limit: 20,
@@ -52,6 +55,7 @@ export default function DisplacedPersonsPage() {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <div className="flex items-center gap-3">
+          <ExportButton onExport={(format) => exportMutation.mutateAsync({ format })} />
           <Link
             href="/dashboard/displaced-persons/search"
             className="btn-secondary flex items-center gap-1.5"

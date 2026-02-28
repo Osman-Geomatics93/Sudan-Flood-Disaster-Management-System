@@ -7,6 +7,8 @@ import { routing } from '@/i18n/routing';
 import { SessionProvider } from '@/providers/session-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
 import { TRPCProvider } from '@/providers/trpc-provider';
+import InstallPrompt from '@/components/pwa/InstallPrompt';
+import OfflineIndicator from '@/components/pwa/OfflineIndicator';
 import '@/styles/globals.css';
 
 const fontHeading = Plus_Jakarta_Sans({
@@ -52,6 +54,10 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
 
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0d9488" />
+      </head>
       <body
         className={`${fontHeading.variable} ${fontBody.variable} ${fontArabic.variable} min-h-screen bg-background font-sans antialiased`}
       >
@@ -60,10 +66,23 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
             <TRPCProvider>
               <NextIntlClientProvider messages={messages}>
                 {children}
+                <InstallPrompt />
+                <OfflineIndicator />
               </NextIntlClientProvider>
             </TRPCProvider>
           </ThemeProvider>
         </SessionProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('/sw.js').catch(() => {});
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

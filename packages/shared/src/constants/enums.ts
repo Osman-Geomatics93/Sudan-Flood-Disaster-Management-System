@@ -245,3 +245,21 @@ export const CITIZEN_REPORT_STATUSES = [
   'rejected',
 ] as const;
 export type CitizenReportStatus = (typeof CITIZEN_REPORT_STATUSES)[number];
+
+export const WEATHER_ALERT_TYPES = [
+  'flood_warning',
+  'flash_flood',
+  'heavy_rain',
+  'river_overflow',
+  'dam_alert',
+  'tropical_storm',
+] as const;
+export type WeatherAlertType = (typeof WEATHER_ALERT_TYPES)[number];
+
+export const WEATHER_ALERT_SEVERITIES = [
+  'advisory',
+  'watch',
+  'warning',
+  'emergency',
+] as const;
+export type WeatherAlertSeverity = (typeof WEATHER_ALERT_SEVERITIES)[number];

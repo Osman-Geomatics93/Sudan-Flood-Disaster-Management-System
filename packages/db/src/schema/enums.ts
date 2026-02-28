@@ -226,3 +226,19 @@ export const auditActionEnum = pgEnum('audit_action', [
   'DISPATCH',
   'STATUS_CHANGE',
 ]);
+
+export const weatherAlertTypeEnum = pgEnum('weather_alert_type', [
+  'flood_warning',
+  'flash_flood',
+  'heavy_rain',
+  'river_overflow',
+  'dam_alert',
+  'tropical_storm',
+]);
+
+export const weatherAlertSeverityEnum = pgEnum('weather_alert_severity', [
+  'advisory',
+  'watch',
+  'warning',
+  'emergency',
+]);

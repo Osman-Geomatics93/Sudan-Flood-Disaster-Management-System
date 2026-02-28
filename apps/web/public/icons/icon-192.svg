@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <!-- Teal rounded rectangle background -->
+  <rect width="192" height="192" rx="32" ry="32" fill="#0d9488"/>
+  <!-- White water droplet -->
+  <path d="M96 36
+    C96 36 56 88 56 118
+    C56 140.1 74.0 156 96 156
+    C118.0 156 136 140.1 136 118
+    C136 88 96 36 96 36Z"
+    fill="#ffffff"/>
+  <!-- Inner highlight on droplet -->
+  <ellipse cx="82" cy="112" rx="10" ry="14" fill="#0d9488" opacity="0.18"/>
+</svg>

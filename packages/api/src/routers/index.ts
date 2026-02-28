@@ -10,6 +10,12 @@ import { supplyRouter } from './supply.router.js';
 import { taskRouter } from './task.router.js';
 import { notificationRouter } from './notification.router.js';
 import { reportRouter } from './report.router.js';
+import { auditLogRouter } from './audit-log.router.js';
+import { weatherAlertRouter } from './weather-alert.router.js';
+import { uploadRouter } from './upload.router.js';
+import { analyticsRouter } from './analytics.router.js';
+import { resourcePlannerRouter } from './resource-planner.router.js';
+import { exportRouter } from './export.router.js';
 
 export const appRouter = router({
   auth: authRouter,
@@ -23,8 +29,12 @@ export const appRouter = router({
   task: taskRouter,
   notification: notificationRouter,
   report: reportRouter,
-  // Remaining routers added in later milestones:
-  // infrastructure, weather, uavSurvey, upload
+  auditLog: auditLogRouter,
+  weatherAlert: weatherAlertRouter,
+  upload: uploadRouter,
+  analytics: analyticsRouter,
+  resourcePlanner: resourcePlannerRouter,
+  export: exportRouter,
 });
 
 export type AppRouter = typeof appRouter;

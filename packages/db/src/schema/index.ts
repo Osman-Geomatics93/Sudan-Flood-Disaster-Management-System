@@ -14,3 +14,5 @@ export * from './notifications.js';
 export * from './relief-supplies.js';
 export * from './comments.js';
 export * from './reports.js';
+export * from './file-attachments.js';
+export * from './weather-alerts.js';

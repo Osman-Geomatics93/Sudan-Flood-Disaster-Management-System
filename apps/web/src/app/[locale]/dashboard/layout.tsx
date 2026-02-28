@@ -7,6 +7,7 @@ import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import {
   LayoutDashboard,
   Map,
+  MapPin,
   LifeBuoy,
   Phone,
   Home,
@@ -22,6 +23,11 @@ import {
   X,
   ChevronDown,
   Bell,
+  BarChart3,
+  CloudLightning,
+  Heart,
+  Calculator,
+  Shield,
 } from 'lucide-react';
 import { useState, type ComponentType } from 'react';
 import { trpc } from '@/lib/trpc-client';
@@ -45,6 +51,12 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/dashboard/tasks', labelKey: 'tasks', icon: CheckSquare, roles: ['super_admin', 'agency_admin', 'field_worker'] },
   { href: '/dashboard/organizations', labelKey: 'organizations', icon: Building2, roles: ['super_admin', 'agency_admin', 'field_worker'] },
   { href: '/dashboard/reports', labelKey: 'reports', icon: FileText, roles: ['super_admin', 'agency_admin', 'field_worker'] },
+  { href: '/dashboard/analytics', labelKey: 'analytics', icon: BarChart3, roles: ['super_admin', 'agency_admin'] },
+  { href: '/dashboard/map', labelKey: 'commandCenter', icon: MapPin, roles: ['super_admin', 'agency_admin', 'field_worker'] },
+  { href: '/dashboard/weather-alerts', labelKey: 'weatherAlerts', icon: CloudLightning, roles: ['super_admin', 'agency_admin', 'field_worker', 'citizen'] },
+  { href: '/dashboard/family-reunification', labelKey: 'familyReunification', icon: Heart, roles: ['super_admin', 'agency_admin', 'field_worker'] },
+  { href: '/dashboard/resource-planner', labelKey: 'resourcePlanner', icon: Calculator, roles: ['super_admin', 'agency_admin'] },
+  { href: '/dashboard/audit-logs', labelKey: 'auditLogs', icon: Shield, roles: ['super_admin'] },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

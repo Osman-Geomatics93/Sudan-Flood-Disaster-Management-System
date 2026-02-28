@@ -7,6 +7,7 @@ import { trpc } from '@/lib/trpc-client';
 import { Plus, ChevronLeft, ChevronRight, LayoutGrid, List } from 'lucide-react';
 import type { TaskStatus, TaskPriority } from '@sudanflood/shared';
 import { TASK_STATUSES, TASK_PRIORITIES } from '@sudanflood/shared';
+import ExportButton from '@/components/common/ExportButton';
 
 type ViewMode = 'kanban' | 'list';
 
@@ -42,6 +43,8 @@ export default function TasksPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
 
+  const exportMutation = trpc.export.tasks.useMutation();
+
   const listQuery = trpc.task.list.useQuery({
     page,
     limit: 100,
@@ -56,6 +59,7 @@ export default function TasksPage() {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
         <div className="flex items-center gap-3">
+          <ExportButton onExport={(format) => exportMutation.mutateAsync({ format })} />
           <Link
             href="/dashboard/tasks/create"
             className="btn-primary flex items-center gap-1.5"

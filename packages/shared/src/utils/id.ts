@@ -36,4 +36,5 @@ export const CODE_PREFIXES = {
   TASK: 'TK',
   SITUATION_REPORT: 'SR',
   CITIZEN_REPORT: 'CR',
+  WEATHER_ALERT: 'WA',
 } as const;

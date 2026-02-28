@@ -7,6 +7,7 @@ import { trpc } from '@/lib/trpc-client';
 import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { SupplyType, SupplyStatus } from '@sudanflood/shared';
 import { SUPPLY_TYPES, SUPPLY_STATUSES } from '@sudanflood/shared';
+import ExportButton from '@/components/common/ExportButton';
 
 const STATUS_STYLES: Record<string, string> = {
   requested: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
@@ -26,6 +27,8 @@ export default function SuppliesPage() {
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
+  const exportMutation = trpc.export.supplies.useMutation();
+
   const listQuery = trpc.supply.list.useQuery({
     page,
     limit: 20,
@@ -37,13 +40,16 @@ export default function SuppliesPage() {
     <div className="animate-in">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('title')}</h1>
-        <Link
-          href="/dashboard/supplies/request"
-          className="btn-primary flex items-center gap-1.5"
-        >
-          <Plus className="h-4 w-4" />
-          {t('requestSupply')}
-        </Link>
+        <div className="flex items-center gap-3">
+          <ExportButton onExport={(format) => exportMutation.mutateAsync({ format })} />
+          <Link
+            href="/dashboard/supplies/request"
+            className="btn-primary flex items-center gap-1.5"
+          >
+            <Plus className="h-4 w-4" />
+            {t('requestSupply')}
+          </Link>
+        </div>
       </div>
 
       <div className="mb-4 flex gap-3">
