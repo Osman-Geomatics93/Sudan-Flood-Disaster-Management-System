@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { trpc } from '@/lib/trpc-client';
 import { Link } from '@/i18n/navigation';
@@ -7,10 +8,37 @@ import dynamic from 'next/dynamic';
 
 const WeatherAlertBanner = dynamic(() => import('./WeatherAlertBanner'), { ssr: false });
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), { ssr: false });
+const FloodZoneLayer = dynamic(() => import('@/components/map/FloodZoneLayer'), { ssr: false });
+const ShelterMarkerLayer = dynamic(() => import('@/components/map/ShelterMarkerLayer'), {
+  ssr: false,
+});
 const MapLegend = dynamic(() => import('@/components/map/MapLegend'), { ssr: false });
 
 export default function AdminDashboard() {
   const t = useTranslations();
+  const [bbox, setBbox] = useState<[number, number, number, number] | null>(null);
+
+  const handleBoundsChange = (b: { north: number; south: number; east: number; west: number }) => {
+    setBbox([b.west, b.south, b.east, b.north]);
+  };
+
+  const floodZoneQuery = trpc.floodZone.getByBounds.useQuery(
+    { bbox: bbox! },
+    { enabled: bbox !== null },
+  );
+
+  const shelterQuery = trpc.shelter.list.useQuery({ page: 1, limit: 200 });
+
+  const shelterData = (shelterQuery.data?.items ?? []) as {
+    id: string;
+    shelterCode: string;
+    name_en: string;
+    name_ar?: string | null;
+    status: string;
+    capacity: number;
+    currentOccupancy: number;
+    location: { type: 'Point'; coordinates: [number, number] } | null;
+  }[];
 
   const statsQuery = trpc.floodZone.stats.useQuery(undefined, { refetchInterval: 30_000 });
   const rescueStatsQuery = trpc.rescue.stats.useQuery(undefined, { refetchInterval: 30_000 });
@@ -112,7 +140,10 @@ export default function AdminDashboard() {
       </div>
 
       <div className="relative mt-8 overflow-hidden rounded-lg border">
-        <LeafletMap className="h-[400px] w-full" />
+        <LeafletMap className="h-[400px] w-full" onBoundsChange={handleBoundsChange}>
+          <FloodZoneLayer data={floodZoneQuery.data ?? null} />
+          <ShelterMarkerLayer shelters={shelterData} />
+        </LeafletMap>
         <MapLegend />
       </div>
     </div>

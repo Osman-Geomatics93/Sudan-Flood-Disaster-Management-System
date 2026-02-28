@@ -159,7 +159,7 @@ export async function createRescueOperation(
     ) RETURNING id`,
   );
 
-  const newId = (result as unknown as { rows: { id: string }[] }).rows?.[0]?.id;
+  const newId = (result as unknown as { id: string }[])[0]?.id;
   if (!newId) {
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',

@@ -304,7 +304,7 @@ export async function createCitizenReport(
         ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)
       ) RETURNING id`,
     );
-    const id = (result as unknown as { rows: { id: string }[] }).rows?.[0]?.id;
+    const id = (result as unknown as { id: string }[])[0]?.id;
     if (!id) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',

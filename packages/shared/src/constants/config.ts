@@ -6,7 +6,7 @@ export const APP_VERSION = '0.1.0';
 export const PAGINATION = {
   DEFAULT_PAGE: 1,
   DEFAULT_LIMIT: 20,
-  MAX_LIMIT: 100,
+  MAX_LIMIT: 200,
 } as const;
 
 export const JWT = {

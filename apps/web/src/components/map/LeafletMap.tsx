@@ -40,6 +40,19 @@ function BoundsTracker({
       });
     },
   });
+
+  // Fire initial bounds on mount so queries that depend on bbox are enabled immediately
+  useEffect(() => {
+    const bounds = map.getBounds();
+    onBoundsChange({
+      north: bounds.getNorth(),
+      south: bounds.getSouth(),
+      east: bounds.getEast(),
+      west: bounds.getWest(),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return null;
 }
 
