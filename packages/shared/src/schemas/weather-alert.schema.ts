@@ -26,6 +26,21 @@ export const listWeatherAlertsSchema = paginationSchema.extend({
 
 export type ListWeatherAlertsInput = z.infer<typeof listWeatherAlertsSchema>;
 
+export const updateWeatherAlertSchema = z.object({
+  id: uuidSchema,
+  alertType: z.enum(WEATHER_ALERT_TYPES).optional(),
+  severity: z.enum(WEATHER_ALERT_SEVERITIES).optional(),
+  stateId: uuidSchema.optional(),
+  title_en: z.string().min(1).max(300).optional(),
+  title_ar: z.string().max(600).optional(),
+  description_en: z.string().optional(),
+  description_ar: z.string().optional(),
+  source: z.string().max(200).optional(),
+  expiresAt: z.coerce.date().optional(),
+});
+
+export type UpdateWeatherAlertInput = z.infer<typeof updateWeatherAlertSchema>;
+
 export const deactivateWeatherAlertSchema = z.object({
   id: uuidSchema,
 });

@@ -4,7 +4,9 @@ import type { Database } from '@sudanflood/db';
 import { situationReports, citizenReports } from '@sudanflood/db/schema';
 import type {
   CreateSituationReportInput,
+  UpdateSituationReportInput,
   CreateCitizenReportInput,
+  UpdateCitizenReportInput,
   ReviewCitizenReportInput,
 } from '@sudanflood/shared';
 import { CODE_PREFIXES } from '@sudanflood/shared';
@@ -171,6 +173,32 @@ export async function publishSituationReport(db: Database, id: string) {
     .where(eq(situationReports.id, id));
 
   return getSituationReportById(db, id);
+}
+
+export async function updateSituationReport(db: Database, input: UpdateSituationReportInput) {
+  await getSituationReportById(db, input.id);
+
+  await db
+    .update(situationReports)
+    .set({
+      ...(input.title_en !== undefined && { title_en: input.title_en }),
+      ...(input.title_ar !== undefined && { title_ar: input.title_ar }),
+      ...(input.summary_en !== undefined && { summary_en: input.summary_en }),
+      ...(input.summary_ar !== undefined && { summary_ar: input.summary_ar }),
+      ...(input.content !== undefined && { content: input.content }),
+      ...(input.stateId !== undefined && { stateId: input.stateId }),
+      ...(input.reportType !== undefined && { reportType: input.reportType }),
+      updatedAt: new Date(),
+    })
+    .where(eq(situationReports.id, input.id));
+
+  return getSituationReportById(db, input.id);
+}
+
+export async function deleteSituationReport(db: Database, id: string) {
+  await getSituationReportById(db, id);
+  await db.delete(situationReports).where(eq(situationReports.id, id));
+  return { success: true };
 }
 
 // ── Citizen Reports ───────────────────────────────────────────────
@@ -366,6 +394,33 @@ export async function reviewCitizenReport(
     .where(eq(citizenReports.id, input.id));
 
   return getCitizenReportById(db, input.id);
+}
+
+export async function updateCitizenReport(db: Database, input: UpdateCitizenReportInput) {
+  await getCitizenReportById(db, input.id);
+
+  await db
+    .update(citizenReports)
+    .set({
+      ...(input.description_en !== undefined && { description_en: input.description_en }),
+      ...(input.description_ar !== undefined && { description_ar: input.description_ar }),
+      ...(input.urgency !== undefined && { urgency: input.urgency }),
+      ...(input.reporterName !== undefined && { reporterName: input.reporterName }),
+      ...(input.reporterPhone !== undefined && { reporterPhone: input.reporterPhone }),
+      ...(input.stateId !== undefined && { stateId: input.stateId }),
+      ...(input.localityId !== undefined && { localityId: input.localityId }),
+      ...(input.reportType !== undefined && { reportType: input.reportType }),
+      updatedAt: new Date(),
+    })
+    .where(eq(citizenReports.id, input.id));
+
+  return getCitizenReportById(db, input.id);
+}
+
+export async function deleteCitizenReport(db: Database, id: string) {
+  await getCitizenReportById(db, id);
+  await db.delete(citizenReports).where(eq(citizenReports.id, id));
+  return { success: true };
 }
 
 // ── Stats ─────────────────────────────────────────────────────────

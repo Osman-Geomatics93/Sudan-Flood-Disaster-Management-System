@@ -5,7 +5,8 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft } from 'lucide-react';
+import { useRouter } from '@/i18n/navigation';
+import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 import { CITIZEN_REPORT_STATUSES } from '@sudanflood/shared';
 
 const STATUS_STYLES: Record<string, string> = {
@@ -29,6 +30,7 @@ export default function ReportDetailPage() {
   const reportType = searchParams.get('type') ?? 'sitrep';
   const t = useTranslations('report');
   const tCommon = useTranslations('common');
+  const router = useRouter();
   const utils = trpc.useUtils();
 
   const [selectedStatus, setSelectedStatus] = useState('');
@@ -56,6 +58,38 @@ export default function ReportDetailPage() {
     },
   });
 
+  const deleteSitrepMutation = trpc.report.sitrep.delete.useMutation({
+    onSuccess: () => {
+      utils.report.sitrep.list.invalidate();
+      router.push('/dashboard/reports');
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
+  const deleteCitizenMutation = trpc.report.citizen.delete.useMutation({
+    onSuccess: () => {
+      utils.report.citizen.list.invalidate();
+      router.push('/dashboard/reports');
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
+  const handleDeleteSitrep = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      deleteSitrepMutation.mutate({ id });
+    }
+  };
+
+  const handleDeleteCitizen = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      deleteCitizenMutation.mutate({ id });
+    }
+  };
+
   const isLoading = reportType === 'sitrep' ? sitrepQuery.isLoading : citizenQuery.isLoading;
   const hasError = reportType === 'sitrep' ? sitrepQuery.error : citizenQuery.error;
 
@@ -76,13 +110,32 @@ export default function ReportDetailPage() {
     const report = sitrepQuery.data;
     return (
       <div className="animate-in mx-auto max-w-3xl">
-        <div className="mb-6 flex items-center gap-3">
-          <Link href="/dashboard/reports" className="btn-secondary rounded-md p-1">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <div>
-            <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
-            <p className="text-muted-foreground font-mono text-sm">{report.reportCode}</p>
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard/reports" className="btn-secondary rounded-md p-1">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <div>
+              <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
+              <p className="text-muted-foreground font-mono text-sm">{report.reportCode}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/dashboard/reports/sitrep/${id}/edit`}
+              className="btn-secondary flex items-center gap-1.5"
+            >
+              <Pencil className="h-4 w-4" />
+              {tCommon('edit')}
+            </Link>
+            <button
+              onClick={handleDeleteSitrep}
+              disabled={deleteSitrepMutation.isPending}
+              className="btn-ghost text-destructive flex items-center gap-1.5"
+            >
+              <Trash2 className="h-4 w-4" />
+              {tCommon('delete')}
+            </button>
           </div>
         </div>
 
@@ -178,13 +231,32 @@ export default function ReportDetailPage() {
 
     return (
       <div className="animate-in mx-auto max-w-3xl">
-        <div className="mb-6 flex items-center gap-3">
-          <Link href="/dashboard/reports" className="btn-secondary rounded-md p-1">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <div>
-            <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
-            <p className="text-muted-foreground font-mono text-sm">{report.reportCode}</p>
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard/reports" className="btn-secondary rounded-md p-1">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <div>
+              <h1 className="font-heading text-2xl font-semibold tracking-tight">{t('details')}</h1>
+              <p className="text-muted-foreground font-mono text-sm">{report.reportCode}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/dashboard/reports/citizen/${id}/edit`}
+              className="btn-secondary flex items-center gap-1.5"
+            >
+              <Pencil className="h-4 w-4" />
+              {tCommon('edit')}
+            </Link>
+            <button
+              onClick={handleDeleteCitizen}
+              disabled={deleteCitizenMutation.isPending}
+              className="btn-ghost text-destructive flex items-center gap-1.5"
+            >
+              <Trash2 className="h-4 w-4" />
+              {tCommon('delete')}
+            </button>
           </div>
         </div>
 

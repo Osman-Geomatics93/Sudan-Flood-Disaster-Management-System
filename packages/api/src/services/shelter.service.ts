@@ -298,6 +298,15 @@ export async function updateShelterStatus(
   return getShelterById(db, id);
 }
 
+export async function deleteShelter(db: Database, id: string) {
+  await getShelterById(db, id);
+  await db
+    .update(shelters)
+    .set({ deletedAt: new Date() })
+    .where(eq(shelters.id, id));
+  return { success: true };
+}
+
 export async function getShelterStats(db: Database) {
   const baseCondition = isNull(shelters.deletedAt);
 

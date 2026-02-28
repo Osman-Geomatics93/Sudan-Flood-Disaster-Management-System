@@ -18,6 +18,7 @@ import {
   updateShelter,
   updateOccupancy,
   updateShelterStatus,
+  deleteShelter,
   getShelterStats,
 } from '../services/shelter.service.js';
 
@@ -64,6 +65,13 @@ export const shelterRouter = router({
     .input(updateShelterStatusSchema)
     .mutation(async ({ input, ctx }) => {
       return updateShelterStatus(ctx.db, input.id, input.status);
+    }),
+
+  delete: adminProcedure
+    .use(requirePermission('shelter:create'))
+    .input(idParamSchema)
+    .mutation(async ({ input, ctx }) => {
+      return deleteShelter(ctx.db, input.id);
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {

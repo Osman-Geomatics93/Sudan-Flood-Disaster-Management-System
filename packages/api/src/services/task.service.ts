@@ -300,6 +300,23 @@ export async function getTaskComments(db: Database, taskId: string) {
     .orderBy(comments.createdAt);
 }
 
+export async function deleteTask(db: Database, id: string) {
+  const task = await getTaskById(db, id);
+
+  if (task.status !== 'draft' && task.status !== 'cancelled') {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Only tasks in draft or cancelled status can be deleted',
+    });
+  }
+
+  await db.delete(taskDependencies).where(eq(taskDependencies.taskId, id));
+  await db.delete(comments).where(eq(comments.taskId, id));
+  await db.delete(tasks).where(eq(tasks.id, id));
+
+  return { success: true };
+}
+
 export async function getTaskStats(db: Database) {
   const [totalResult, byStatusResult, byPriorityResult] = await Promise.all([
     db.select({ count: drizzleCount() }).from(tasks),

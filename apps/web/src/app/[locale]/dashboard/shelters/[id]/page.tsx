@@ -16,6 +16,7 @@ import {
   Shield,
   Users,
   Pencil,
+  Trash2,
 } from 'lucide-react';
 import { Marker, Popup } from 'react-leaflet';
 
@@ -46,7 +47,24 @@ export default function ShelterDetailPage() {
   const router = useRouter();
 
   const tCommon = useTranslations('common');
+  const utils = trpc.useUtils();
   const shelterQuery = trpc.shelter.getById.useQuery({ id });
+
+  const deleteMutation = trpc.shelter.delete.useMutation({
+    onSuccess: () => {
+      utils.shelter.list.invalidate();
+      router.push('/dashboard/shelters');
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
+  const handleDelete = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      deleteMutation.mutate({ id });
+    }
+  };
 
   if (shelterQuery.isLoading) {
     return (
@@ -102,6 +120,14 @@ export default function ShelterDetailPage() {
             <Pencil className="h-4 w-4" />
             {tCommon('edit')}
           </Link>
+          <button
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="btn-ghost text-destructive inline-flex items-center gap-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            {tCommon('delete')}
+          </button>
           <span
             className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${STATUS_STYLES[shelter.status] ?? ''}`}
           >

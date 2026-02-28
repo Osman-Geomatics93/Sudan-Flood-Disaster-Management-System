@@ -2,7 +2,7 @@ import { eq, and, desc, count as drizzleCount } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import type { Database } from '@sudanflood/db';
 import { weatherAlerts, states } from '@sudanflood/db/schema';
-import type { CreateWeatherAlertInput, ListWeatherAlertsInput } from '@sudanflood/shared';
+import type { CreateWeatherAlertInput, ListWeatherAlertsInput, UpdateWeatherAlertInput } from '@sudanflood/shared';
 import { CODE_PREFIXES } from '@sudanflood/shared';
 import { withCodeRetry } from '../utils/entity-code.js';
 
@@ -112,6 +112,66 @@ export async function createWeatherAlert(db: Database, input: CreateWeatherAlert
     weatherAlerts,
     CODE_PREFIXES.WEATHER_ALERT,
   );
+}
+
+export async function getWeatherAlertById(db: Database, id: string) {
+  const [alert] = await db
+    .select({
+      id: weatherAlerts.id,
+      alertCode: weatherAlerts.alertCode,
+      alertType: weatherAlerts.alertType,
+      severity: weatherAlerts.severity,
+      stateId: weatherAlerts.stateId,
+      stateName: states.name_en,
+      title_en: weatherAlerts.title_en,
+      title_ar: weatherAlerts.title_ar,
+      description_en: weatherAlerts.description_en,
+      description_ar: weatherAlerts.description_ar,
+      source: weatherAlerts.source,
+      isActive: weatherAlerts.isActive,
+      issuedAt: weatherAlerts.issuedAt,
+      expiresAt: weatherAlerts.expiresAt,
+      createdAt: weatherAlerts.createdAt,
+      updatedAt: weatherAlerts.updatedAt,
+    })
+    .from(weatherAlerts)
+    .leftJoin(states, eq(weatherAlerts.stateId, states.id))
+    .where(eq(weatherAlerts.id, id))
+    .limit(1);
+
+  if (!alert) {
+    throw new TRPCError({ code: 'NOT_FOUND', message: 'Weather alert not found' });
+  }
+
+  return alert;
+}
+
+export async function updateWeatherAlert(db: Database, input: UpdateWeatherAlertInput) {
+  await getWeatherAlertById(db, input.id);
+
+  await db
+    .update(weatherAlerts)
+    .set({
+      ...(input.alertType !== undefined && { alertType: input.alertType }),
+      ...(input.severity !== undefined && { severity: input.severity }),
+      ...(input.stateId !== undefined && { stateId: input.stateId }),
+      ...(input.title_en !== undefined && { title_en: input.title_en }),
+      ...(input.title_ar !== undefined && { title_ar: input.title_ar }),
+      ...(input.description_en !== undefined && { description_en: input.description_en }),
+      ...(input.description_ar !== undefined && { description_ar: input.description_ar }),
+      ...(input.source !== undefined && { source: input.source }),
+      ...(input.expiresAt !== undefined && { expiresAt: input.expiresAt }),
+      updatedAt: new Date(),
+    })
+    .where(eq(weatherAlerts.id, input.id));
+
+  return getWeatherAlertById(db, input.id);
+}
+
+export async function deleteWeatherAlert(db: Database, id: string) {
+  await getWeatherAlertById(db, id);
+  await db.delete(weatherAlerts).where(eq(weatherAlerts.id, id));
+  return { success: true };
 }
 
 export async function deactivateAlert(db: Database, id: string) {

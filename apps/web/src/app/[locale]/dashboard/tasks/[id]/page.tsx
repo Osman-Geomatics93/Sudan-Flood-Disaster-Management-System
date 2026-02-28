@@ -5,7 +5,8 @@ import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { trpc } from '@/lib/trpc-client';
-import { ArrowLeft, Pencil, Send } from 'lucide-react';
+import { useRouter } from '@/i18n/navigation';
+import { ArrowLeft, Pencil, Send, Trash2 } from 'lucide-react';
 import { TASK_STATUSES } from '@sudanflood/shared';
 
 const STATUS_STYLES: Record<string, string> = {
@@ -29,6 +30,7 @@ export default function TaskDetailPage() {
   const { id } = useParams<{ id: string }>();
   const t = useTranslations('task');
   const tCommon = useTranslations('common');
+  const router = useRouter();
   const utils = trpc.useUtils();
 
   const [newComment, setNewComment] = useState('');
@@ -50,6 +52,22 @@ export default function TaskDetailPage() {
       setNewComment('');
     },
   });
+
+  const deleteMutation = trpc.task.delete.useMutation({
+    onSuccess: () => {
+      utils.task.list.invalidate();
+      router.push('/dashboard/tasks');
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
+
+  const handleDelete = () => {
+    if (window.confirm(t('deleteConfirm'))) {
+      deleteMutation.mutate({ id });
+    }
+  };
 
   if (taskQuery.isLoading) {
     return (
@@ -91,13 +109,25 @@ export default function TaskDetailPage() {
             <p className="text-muted-foreground font-mono text-sm">{task.taskCode}</p>
           </div>
         </div>
-        <Link
-          href={`/dashboard/tasks/${id}/edit`}
-          className="btn-secondary flex items-center gap-1.5"
-        >
-          <Pencil className="h-4 w-4" />
-          {tCommon('edit')}
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/dashboard/tasks/${id}/edit`}
+            className="btn-secondary flex items-center gap-1.5"
+          >
+            <Pencil className="h-4 w-4" />
+            {tCommon('edit')}
+          </Link>
+          {(task.status === 'draft' || task.status === 'cancelled') && (
+            <button
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+              className="btn-ghost text-destructive flex items-center gap-1.5"
+            >
+              <Trash2 className="h-4 w-4" />
+              {tCommon('delete')}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Status & Priority */}

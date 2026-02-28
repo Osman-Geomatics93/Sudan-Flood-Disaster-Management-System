@@ -101,7 +101,12 @@ export default function WeatherAlertsPage() {
                 <div className="flex items-start gap-3">
                   <SeverityIcon className="mt-0.5 h-5 w-5 shrink-0" />
                   <div>
-                    <h3 className="font-medium">{alert.title_en}</h3>
+                    <Link
+                      href={`/dashboard/weather-alerts/${alert.id}`}
+                      className="font-medium hover:underline"
+                    >
+                      {alert.title_en}
+                    </Link>
                     {alert.title_ar && (
                       <p className="text-muted-foreground font-arabic text-sm">{alert.title_ar}</p>
                     )}

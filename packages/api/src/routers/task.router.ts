@@ -21,6 +21,7 @@ import {
   removeDependency,
   addComment,
   getTaskComments,
+  deleteTask,
   getTaskStats,
 } from '../services/task.service.js';
 
@@ -104,6 +105,13 @@ export const taskRouter = router({
     .input(idParamSchema)
     .query(async ({ input, ctx }) => {
       return getTaskComments(ctx.db, input.id);
+    }),
+
+  delete: protectedProcedure
+    .use(requirePermission('task:create'))
+    .input(idParamSchema)
+    .mutation(async ({ input, ctx }) => {
+      return deleteTask(ctx.db, input.id);
     }),
 
   stats: protectedProcedure.use(requirePermission('task:read')).query(async ({ ctx }) => {

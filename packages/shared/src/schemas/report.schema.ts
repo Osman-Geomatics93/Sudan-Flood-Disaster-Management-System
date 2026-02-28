@@ -31,6 +31,19 @@ export const createSituationReportSchema = z.object({
 
 export type CreateSituationReportInput = z.infer<typeof createSituationReportSchema>;
 
+export const updateSituationReportSchema = z.object({
+  id: uuidSchema,
+  title_en: z.string().min(1).max(300).optional(),
+  title_ar: z.string().max(600).optional(),
+  summary_en: z.string().optional(),
+  summary_ar: z.string().optional(),
+  content: z.record(z.unknown()).optional(),
+  stateId: uuidSchema.optional(),
+  reportType: z.enum(REPORT_TYPES).optional(),
+});
+
+export type UpdateSituationReportInput = z.infer<typeof updateSituationReportSchema>;
+
 export const publishReportSchema = z.object({
   id: uuidSchema,
 });
@@ -61,6 +74,20 @@ export const createCitizenReportSchema = z.object({
 });
 
 export type CreateCitizenReportInput = z.infer<typeof createCitizenReportSchema>;
+
+export const updateCitizenReportSchema = z.object({
+  id: uuidSchema,
+  description_en: z.string().optional(),
+  description_ar: z.string().optional(),
+  urgency: z.enum(CALL_URGENCIES).optional(),
+  reporterName: z.string().max(200).optional(),
+  reporterPhone: z.string().max(20).optional(),
+  stateId: uuidSchema.optional(),
+  localityId: uuidSchema.optional(),
+  reportType: z.enum(CITIZEN_REPORT_TYPES).optional(),
+});
+
+export type UpdateCitizenReportInput = z.infer<typeof updateCitizenReportSchema>;
 
 export const reviewCitizenReportSchema = z.object({
   id: uuidSchema,
