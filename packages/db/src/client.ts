@@ -10,17 +10,22 @@ function getConnectionString(): string {
   return url;
 }
 
+const isProduction = process.env['NODE_ENV'] === 'production';
+
 // Lazy singleton for the query client so it doesn't crash at build time
 let _db: ReturnType<typeof drizzle<typeof schema>> | null = null;
+let _sql: ReturnType<typeof postgres> | null = null;
 
 export function getDb() {
   if (!_db) {
-    const queryClient = postgres(getConnectionString(), {
-      max: 10,
-      idle_timeout: 20,
-      connect_timeout: 10,
+    _sql = postgres(getConnectionString(), {
+      max: parseInt(process.env['DB_POOL_MAX'] ?? '10', 10),
+      idle_timeout: parseInt(process.env['DB_IDLE_TIMEOUT'] ?? '20', 10),
+      connect_timeout: parseInt(process.env['DB_CONNECT_TIMEOUT'] ?? '10', 10),
+      ...(isProduction && { ssl: { rejectUnauthorized: false } }),
+      onnotice: () => {},
     });
-    _db = drizzle(queryClient, { schema });
+    _db = drizzle(_sql, { schema });
   }
   return _db;
 }
@@ -46,6 +51,24 @@ export type Database = ReturnType<typeof drizzle<typeof schema>>;
 export function createMigrationClient() {
   const migrationClient = postgres(getConnectionString(), { max: 1 });
   return drizzle(migrationClient, { schema });
+}
+
+// Graceful shutdown — close the connection pool
+export async function closeDb() {
+  if (_sql) {
+    await _sql.end();
+    _sql = null;
+    _db = null;
+  }
+}
+
+// Auto-cleanup on process termination
+if (typeof process !== 'undefined') {
+  const shutdown = () => {
+    closeDb().catch(() => {});
+  };
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 }
 
 export { schema };

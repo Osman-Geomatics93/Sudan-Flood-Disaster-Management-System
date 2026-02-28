@@ -112,6 +112,7 @@ export const infrastructureTypeEnum = pgEnum('infrastructure_type', [
 ]);
 
 export const damageLevelEnum = pgEnum('damage_level', [
+  'not_assessed',
   'none',
   'minor',
   'moderate',

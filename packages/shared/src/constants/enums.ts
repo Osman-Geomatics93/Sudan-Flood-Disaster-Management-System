@@ -111,7 +111,7 @@ export const INFRASTRUCTURE_TYPES = [
 ] as const;
 export type InfrastructureType = (typeof INFRASTRUCTURE_TYPES)[number];
 
-export const DAMAGE_LEVELS = ['none', 'minor', 'moderate', 'major', 'destroyed'] as const;
+export const DAMAGE_LEVELS = ['not_assessed', 'none', 'minor', 'moderate', 'major', 'destroyed'] as const;
 export type DamageLevel = (typeof DAMAGE_LEVELS)[number];
 
 export const REPAIR_PRIORITIES = ['p0_critical', 'p1_high', 'p2_medium', 'p3_low'] as const;
